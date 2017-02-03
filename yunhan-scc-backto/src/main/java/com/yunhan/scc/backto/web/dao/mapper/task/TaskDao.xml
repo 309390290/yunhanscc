@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunhan.scc.backto.web.dao.mapper.task.TaskDao" >
+	<!-- 在写查询sql时结果字段别名要和column一致 -->
+	<resultMap type="Task" id="taskResult">
+		<!-- 用户code -->
+		<result property="userCode" column="USERCODE" />
+		<!-- 采购商id -->
+		<result property="purchaserId" column="PURCHASERID" />
+		<!-- 仓位编码 -->
+		<result property="wareHouse" column="WAREHOUSE" />
+		<!-- 仓位名称 -->
+		<result property="wareHouseStr" column="WAREHOUSESTR" />
+		<!-- 订单种类 -->
+		<result property="orderType" column="ORDERTYPE" />
+		<!-- 订单种类描述 -->
+		<result property="orderTypeStr" column="ORDERTYPESTR" />
+		<!-- 待处理数 -->
+		<result property="unDealCount" column="UNDEALCOUNT" />
+		<!-- 未回告数  -->
+		<result property="unResponselCount" column="UNRESPONSELCOUNT" />
+		<!-- 预计可发货数 -->
+		<result property="expectedDeliveryCount" column="EXPECTEDDELIVERYCOUNT" />
+		<!-- 暂时缺货数 -->
+		<result property="tempNoGoodsCount" column="TEMPNOGOODSCOUNT" />
+		<!-- 新书待入库数 -->
+		<result property="newWaitWarehousingCount" column="NEWWAITWAREHOUSINGCOUNT" />
+		<!-- 待处理订单数 -->
+		<result property="unDealOrderCount" column="UNDEALORDERCOUNT" />
+		<!-- 部分处理订单数 -->
+		<result property="partDealOrderCount" column="PARTDEALORDERCOUNT" />
+		
+	</resultMap>
+	
+	<!-- 分仓位统计待处理品种 -->
+	<select id="getUnDealWareHouse" parameterType="java.util.Map" resultMap="taskResult">
+		SELECT SUM(TT.UNDEALCOUNT) UNDEALCOUNT,
+			       to_char(wm_concat(tt.WAREHOUSE)) WAREHOUSE,
+			       TT.WAREHOUSESTR
+			  FROM (SELECT count(1) as UNDEALCOUNT, nvl(WH.code,'QITA') WAREHOUSE,nvl(WH.NAME,'其他仓位') as WAREHOUSESTR
+					  FROM PRO_PUR_ORDER_ITEMS TPPOI,
+					       PRO_PUR_ORDER_SUMMARY TPPOS,
+					       (SELECT T.NAME, T.CODE
+					          FROM DC_LOCATION T
+					         WHERE T.PARENT_ID IN
+					               (SELECT T1.ID
+					                  FROM DC_LOCATION T1
+					                 WHERE T1.PARENT_ID =
+					                       (SELECT T2.ID
+					                          FROM DC_LOCATION T2
+					                         WHERE T2.CODE = #{purchaserId}))
+					           AND T.STATUS = 0 and t.code != 'QITA') WH
+					 WHERE TPPOI.PURCHASE_ORDER_CODE = TPPOS.PURCHASE_ORDER_CODE
+					   AND TPPOS.PURCHASER_ID = TPPOI.PURCHASER_ID
+					   AND TPPOI.SUPPLIER_ID = TPPOS.SUPPLIER_ID
+					   AND TPPOS.WAREHOUSE = WH.CODE(+)
+					   AND TPPOI.IS_DEAL = 'N'
+					   AND TPPOI.IS_VALID = 'Y'
+					   AND TPPOI.STATUS NOT IN ('50')
+					   AND TPPOI.PURCHASER_ID = #{purchaserId}
+					   <!-- AND TPPOS.SEND_GOODS_TYPE = 1 -->
+					   AND TPPOS.ORDER_STATUS NOT IN (0, 5, 40, 45, 47, 50)
+					   AND TPPOS.IS_SUPPLEMENT != 'Y'
+			  			<include refid="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao.isExists"></include>
+			 		GROUP BY nvl(WH.code,'QITA'),nvl(WH.NAME,'其他仓位')) TT
+ 			GROUP BY TT.WAREHOUSESTR
+			   	<!-- UNION ALL
+			   	SELECT count(1) as UNDEALCOUNT,'ZG' as WAREHOUSE,'直供仓' as WAREHOUSESTR
+					  FROM PRO_PUR_ORDER_ITEMS TPPOI, PRO_PUR_ORDER_SUMMARY TPPOS
+					 WHERE TPPOI.PURCHASE_ORDER_CODE = TPPOS.PURCHASE_ORDER_CODE
+					   AND TPPOS.PURCHASER_ID = TPPOI.PURCHASER_ID
+					   AND TPPOI.SUPPLIER_ID = TPPOS.SUPPLIER_ID
+					   AND TPPOI.IS_DEAL = 'N'
+					   AND TPPOI.IS_VALID = 'Y'
+					   AND TPPOI.PURCHASER_ID = #{purchaserId}
+					   AND TPPOS.SEND_GOODS_TYPE = 2
+					   AND TPPOS.ORDER_STATUS IN (10,13,15,20,30,35)
+						<include refid="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao.isExists"></include>	    -->
+	</select>
+	
+	<!-- 分仓位统计待处理订单数 add by xiongmingbao 2016-10-20 -->
+	<select id="getUnDealWareHouseOrder" parameterType="java.util.Map" resultMap="taskResult">
+		SELECT SUM(TT.UNDEALCOUNT) UNDEALCOUNT,
+			       to_char(wm_concat(tt.WAREHOUSE)) WAREHOUSE,
+			       TT.WAREHOUSESTR
+			  FROM (SELECT count(1) as UNDEALCOUNT, nvl(WH.code,'QITA') WAREHOUSE,nvl(WH.NAME,'其他仓位') as WAREHOUSESTR
+					  FROM PRO_PUR_ORDER_SUMMARY TPPOS,
+					       (SELECT T.NAME, T.CODE
+					          FROM DC_LOCATION T
+					         WHERE T.PARENT_ID IN
+					               (SELECT T1.ID
+					                  FROM DC_LOCATION T1
+					                 WHERE T1.PARENT_ID =
+					                       (SELECT T2.ID
+					                          FROM DC_LOCATION T2
+					                         WHERE T2.CODE = #{purchaserId}))
+					           AND T.STATUS = 0 and t.code != 'QITA') WH
+					 WHERE TPPOS.WAREHOUSE = WH.CODE(+)
+					   AND TPPOS.ORDER_STATUS NOT IN (0, 5, 40, 45, 47, 50)
+					   AND TPPOS.IS_SUPPLEMENT = 'N'
+					   AND TPPOS.IS_DEAL = 'N'
+					   AND TPPOS.PURCHASER_ID = #{purchaserId}
+			  			<include refid="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao.isExists"></include>
+			 		GROUP BY nvl(WH.code,'QITA'),nvl(WH.NAME,'其他仓位')) TT
+ 			GROUP BY TT.WAREHOUSESTR
+	</select>
+	
+	<select id="getUnDealWareHouseForOrderType" parameterType="java.util.Map" resultMap="taskResult">
+		SELECT PP.ORDER_TYPE ORDERTYPE,
+			DECODE(PP.ORDER_TYPE,
+              '1',
+              '直供订单',
+              '2',
+              '大中专订单',
+              '3',
+              '馆配订单',
+              '零售\电商\团购\活动\文教') ORDERTYPESTR,
+       SUM(CASE
+             WHEN PP.IS_DEAL = 'N' THEN
+              1
+             ELSE
+              0
+           END) UNDEALCOUNT,
+       SUM(CASE
+             WHEN PP.PRIID IS NULL THEN
+              1
+             ELSE
+              0
+           END) UNRESPONSELCOUNT,
+       SUM(CASE
+             WHEN PP.OTHER_AVAILABLE_REASON = '0' THEN
+              1
+             ELSE
+              0
+           END) EXPECTEDDELIVERYCOUNT,
+       SUM(CASE
+             WHEN PP.OTHER_AVAILABLE_REASON = '1' THEN
+              1
+             ELSE
+              0
+           END) TEMPNOGOODSCOUNT,
+       SUM(CASE
+             WHEN PP.OTHER_AVAILABLE_REASON = '8' THEN
+              1
+             ELSE
+              0
+           END) NEWWAITWAREHOUSINGCOUNT
+  		FROM (SELECT CASE
+                 WHEN TPPOS.SEND_GOODS_TYPE = '2' THEN
+                  1
+                 WHEN TPPOS.ORDER_TYPE = '15' AND TPPOS.SEND_GOODS_TYPE = '1' THEN
+                  2
+                 WHEN TPPOS.ORDER_TYPE = '25' AND TPPOS.SEND_GOODS_TYPE = '1' THEN
+                  3
+                 ELSE
+                  4
+               END ORDER_TYPE,
+               PPOI.*,
+               PRI.ID PRIID,
+               PRI.OTHER_AVAILABLE_REASON,
+               PRI.RESPONSE_STATUS
+          FROM PRO_PUR_ORDER_ITEMS   PPOI,
+               PRO_PUR_ORDER_SUMMARY TPPOS,
+               PRO_RESPONSE_ITEMS    PRI
+         <where>
+         	PPOI.PURCHASE_ORDER_CODE = TPPOS.PURCHASE_ORDER_CODE
+           AND PPOI.PURCHASER_ID = TPPOS.PURCHASER_ID
+           AND PPOI.SUPPLIER_ID = TPPOS.SUPPLIER_ID
+           AND PPOI.ID = PRI.PRO_PUR_ORDER_ITEMS_ID(+)
+           AND PRI.RESPONSE_STATUS(+) = 5
+           AND PPOI.STATUS NOT IN ('50')
+           AND PRI.IS_VALID(+) = 'Y'
+           AND PPOI.IS_DEAL='N'
+           AND PPOI.IS_VALID = 'Y'
+           AND TPPOS.ORDER_STATUS NOT IN (0, 5, 40, 45, 47, 50)
+		   AND TPPOS.IS_SUPPLEMENT != 'Y'
+           <if test="purchaserId!=null">
+           		AND TPPOS.PURCHASER_ID=#{purchaserId}
+           </if>
+			<if test="wareHouse!=null">
+				<if test="wareHouse== 'QITA'">
+					AND (TPPOS.WAREHOUSE NOT IN (
+					SELECT T.CODE
+					FROM DC_LOCATION T
+					WHERE T.NODE_LEVEL = 3
+					START WITH T.CODE = #{purchaserId}
+					AND T.STATUS = 0
+					CONNECT BY PRIOR T.ID = T.PARENT_ID
+					) or TPPOS.WAREHOUSE is null)
+				</if>
+				<if test="wareHouse!='QITA'">
+					AND TPPOS.WAREHOUSE = #{wareHouse}
+				</if>
+			</if>
+           <!-- <if test="wareHouse=='ZG'">
+           		AND TPPOS.SEND_GOODS_TYPE=2
+           	</if>
+           	<if test="wareHouse!='ZG'">
+           		AND TPPOS.SEND_GOODS_TYPE=1
+           		<if test="wareHouse!=null">
+           			AND TPPOS.WAREHOUSE=#{wareHouse}
+           		</if>
+           </if> -->
+           <include refid="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao.isExists"></include>
+           AND NVL(PRI.ID, 0) =
+               NVL((SELECT MAX(PS.ID) ID
+                     FROM PRO_RESPONSE_ITEMS PS
+                    WHERE PS.PRO_PUR_ORDER_ITEMS_ID = PPOI.ID
+                    AND PS.RESPONSE_STATUS = 5 AND PS.IS_VALID = 'Y'),
+                   0)) PP
+         </where>
+		 GROUP BY PP.ORDER_TYPE
+		 ORDER BY PP.ORDER_TYPE ASC
+	</select>
+	<!-- 待办通过仓位统计，订单种类统计待处理数量（品种方式）由原来的getUnDealWareHouseForOrderType复制过来的 add by xiongmingbao 2016-10-21 -->
+	<select id="getUnDealWareHouseItemForOrderType" parameterType="TaskCondition" resultMap="taskResult">
+		SELECT PP.ORDER_TYPE ORDERTYPE,
+			DECODE(PP.ORDER_TYPE,
+              '1',
+              '直供订单',
+              '2',
+              '大中专订单',
+              '3',
+              '馆配订单',
+              '零售\电商\团购\活动\文教') ORDERTYPESTR,
+       SUM(CASE
+             WHEN PP.IS_DEAL = 'N' THEN
+              1
+             ELSE
+              0
+           END) UNDEALCOUNT,
+       SUM(CASE
+             WHEN PP.PRIID IS NULL THEN
+              1
+             ELSE
+              0
+           END) UNRESPONSELCOUNT,
+       SUM(CASE
+             WHEN PP.OTHER_AVAILABLE_REASON = '0' THEN
+              1
+             ELSE
+              0
+           END) EXPECTEDDELIVERYCOUNT,
+       SUM(CASE
+             WHEN PP.OTHER_AVAILABLE_REASON = '1' THEN
+              1
+             ELSE
+              0
+           END) TEMPNOGOODSCOUNT,
+       SUM(CASE
+             WHEN PP.OTHER_AVAILABLE_REASON = '8' THEN
+              1
+             ELSE
+              0
+           END) NEWWAITWAREHOUSINGCOUNT,
+           #{wareHouse} as WAREHOUSE
+  		FROM (SELECT CASE
+                 WHEN TPPOS.SEND_GOODS_TYPE = '2' THEN
+                  1
+                 WHEN TPPOS.ORDER_TYPE = '15' AND TPPOS.SEND_GOODS_TYPE = '1' THEN
+                  2
+                 WHEN TPPOS.ORDER_TYPE = '25' AND TPPOS.SEND_GOODS_TYPE = '1' THEN
+                  3
+                 ELSE
+                  4
+               END ORDER_TYPE,
+               PPOI.*,
+               PRI.ID PRIID,
+               PRI.OTHER_AVAILABLE_REASON,
+               PRI.RESPONSE_STATUS
+          FROM PRO_PUR_ORDER_ITEMS   PPOI,
+               PRO_PUR_ORDER_SUMMARY TPPOS,
+               PRO_RESPONSE_ITEMS    PRI
+         <where>
+         	PPOI.PURCHASE_ORDER_CODE = TPPOS.PURCHASE_ORDER_CODE
+           AND PPOI.PURCHASER_ID = TPPOS.PURCHASER_ID
+           AND PPOI.SUPPLIER_ID = TPPOS.SUPPLIER_ID
+           AND PPOI.ID = PRI.PRO_PUR_ORDER_ITEMS_ID(+)
+           AND PRI.RESPONSE_STATUS(+) = 5
+           AND PPOI.STATUS NOT IN ('50')
+           AND PRI.IS_VALID(+) = 'Y'
+           AND PPOI.IS_DEAL='N'
+           AND PPOI.IS_VALID = 'Y'
+           AND TPPOS.ORDER_STATUS NOT IN (0, 5, 40, 45, 47, 50)
+		   AND TPPOS.IS_SUPPLEMENT != 'Y'
+           <if test="purchaserId!=null">
+           		AND TPPOS.PURCHASER_ID=#{purchaserId}
+           </if>
+			<if test="wareHouse!=null">
+				<if test="wareHouse== 'QITA'">
+					AND (TPPOS.WAREHOUSE NOT IN (
+					SELECT T.CODE
+					FROM DC_LOCATION T
+					WHERE T.NODE_LEVEL = 3
+					START WITH T.CODE = #{purchaserId}
+					AND T.STATUS = 0
+					CONNECT BY PRIOR T.ID = T.PARENT_ID
+					) or TPPOS.WAREHOUSE is null)
+				</if>
+				<if test="wareHouse!='QITA'">
+					<!-- AND TPPOS.WAREHOUSE = #{wareHouse} -->
+				</if>
+			</if>
+			<if  test="wareHouses!=null">
+				AND TPPOS.WAREHOUSE in
+				<foreach collection="wareHouses" item="wareHouseItem"  open="(" separator="," close=")">  
+			           #{wareHouseItem}  
+			     </foreach>	
+			</if>
+           <!-- <if test="wareHouse=='ZG'">
+           		AND TPPOS.SEND_GOODS_TYPE=2
+           	</if>
+           	<if test="wareHouse!='ZG'">
+           		AND TPPOS.SEND_GOODS_TYPE=1
+           		<if test="wareHouse!=null">
+           			AND TPPOS.WAREHOUSE=#{wareHouse}
+           		</if>
+           </if> -->
+           <include refid="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao.isExists"></include>
+           AND NVL(PRI.ID, 0) =
+               NVL((SELECT MAX(PS.ID) ID
+                     FROM PRO_RESPONSE_ITEMS PS
+                    WHERE PS.PRO_PUR_ORDER_ITEMS_ID = PPOI.ID
+                    AND PS.RESPONSE_STATUS = 5 AND PS.IS_VALID = 'Y'),
+                   0)) PP
+         </where>
+		 GROUP BY PP.ORDER_TYPE
+		 ORDER BY PP.ORDER_TYPE ASC
+	</select>
+
+	<select id="getUnDealWareHouseItemForOrderType_count" parameterType="TaskCondition" resultType="java.lang.Integer" >
+		SELECT 1 FROM dual
+	</select>
+	
+	<!-- 待办通过仓位统计，订单种类统计待处理和部分处理的订单数量（订单方式） add by xiongmingbao 2016-10-20 -->
+	<select id="getUnDealWareHouseOrderForOrderType" parameterType="TaskCondition" resultMap="taskResult">
+		SELECT PP.ORDER_TYPE ORDERTYPE,
+			DECODE(PP.ORDER_TYPE,
+              '1',
+              '直供订单',
+              '2',
+              '大中专订单',
+              '3',
+              '馆配订单',
+              '零售\电商\团购\活动\文教') ORDERTYPESTR,
+       SUM(CASE
+             WHEN CONTROL_FLAG = 0 THEN
+              1
+             ELSE
+              0
+           END) UNDEALORDERCOUNT,
+       SUM(CASE
+             WHEN CONTROL_FLAG > 0 THEN
+              1
+             ELSE
+              0
+           END) PARTDEALORDERCOUNT,
+           #{wareHouse} as WAREHOUSE
+  		FROM (SELECT CASE
+                 WHEN TPP.SEND_GOODS_TYPE = '2' THEN
+                  1
+                 WHEN TPP.ORDER_TYPE = '15' AND TPP.SEND_GOODS_TYPE = '1' THEN
+                  2
+                 WHEN TPP.ORDER_TYPE = '25' AND TPP.SEND_GOODS_TYPE = '1' THEN
+                  3
+                 ELSE
+                  4
+               END ORDER_TYPE,
+               TPP.CONTROL_FLAG
+          FROM 
+          	(SELECT CASE
+                         WHEN SUM(PPOI.CONTROL_FLAG) > 0 THEN
+                          1
+                         ELSE
+                          0
+                       END CONTROL_FLAG,
+                       TPPOS.SEND_GOODS_TYPE,
+                       TPPOS.ORDER_TYPE
+          	FROM PRO_PUR_ORDER_SUMMARY TPPOS, PRO_PUR_ORDER_ITEMS PPOI
+         <where>
+         	PPOI.PURCHASE_ORDER_CODE = TPPOS.PURCHASE_ORDER_CODE
+           AND PPOI.PURCHASER_ID = TPPOS.PURCHASER_ID
+           AND PPOI.SUPPLIER_ID = TPPOS.SUPPLIER_ID
+           AND PPOI.STATUS NOT IN ('50')
+           AND TPPOS.IS_DEAL = 'N'
+           AND TPPOS.ORDER_STATUS NOT IN (0, 5, 40, 45, 47, 50)
+           AND TPPOS.IS_SUPPLEMENT != 'Y'
+           <if test="purchaserId!=null">
+           		AND TPPOS.PURCHASER_ID=#{purchaserId}
+           </if>
+			<if test="wareHouse!=null">
+				<if test="wareHouse== 'QITA'">
+					AND (TPPOS.WAREHOUSE NOT IN (
+					SELECT T.CODE
+					FROM DC_LOCATION T
+					WHERE T.NODE_LEVEL = 3
+					START WITH T.CODE = #{purchaserId}
+					AND T.STATUS = 0
+					CONNECT BY PRIOR T.ID = T.PARENT_ID
+					) or TPPOS.WAREHOUSE is null)
+				</if>
+				<if test="wareHouse!='QITA'">
+					<!-- AND TPPOS.WAREHOUSE = #{wareHouse} -->
+				</if>
+			</if>
+			<if  test="wareHouses!=null">
+				AND TPPOS.WAREHOUSE in
+				<foreach collection="wareHouses" item="wareHouseItem"  open="(" separator="," close=")">  
+			           #{wareHouseItem}  
+			     </foreach>	
+			</if>
+           <include refid="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao.isExists"></include>
+          GROUP BY TPPOS.PURCHASE_ORDER_CODE,
+                          TPPOS.ORDER_TYPE,
+                          TPPOS.SEND_GOODS_TYPE
+           )TPP) PP
+         </where>
+		 GROUP BY PP.ORDER_TYPE
+		 ORDER BY PP.ORDER_TYPE ASC
+	</select>
+	<select id="getUnDealWareHouseOrderForOrderType_count" parameterType="TaskCondition" resultType="java.lang.Integer" >
+		SELECT 1 FROM dual
+	</select>
+
+	<!-- 订单待办查询 -->
+	<select id="selectTodoTask" parameterType="TodoTaskBacktoCondition" resultType="TodoTaskBacktoVo">
+		 SELECT TPPOS.PURCHASER_ID AS purchaserId,
+		       TDM.NAME AS purchaserNm,
+		       COUNT(1) AS dbs
+		  FROM PRO_PUR_ORDER_ITEMS   PPOI,
+		       PRO_PUR_ORDER_SUMMARY TPPOS,
+		       T_DEPARTMENT          TDM
+		 WHERE PPOI.PURCHASE_ORDER_CODE = TPPOS.PURCHASE_ORDER_CODE
+		   AND PPOI.PURCHASER_ID = TPPOS.PURCHASER_ID
+		   AND PPOI.SUPPLIER_ID = TPPOS.SUPPLIER_ID
+		   AND PPOI.PURCHASER_ID = TDM.SAPVENDORID
+		   AND PPOI.STATUS NOT IN ('50')
+		   AND PPOI.IS_DEAL = 'N'
+		   AND PPOI.IS_VALID = 'Y'
+		   AND TPPOS.ORDER_STATUS IN (10, 13, 15, 20, 30, 35)
+		   AND TPPOS.IS_SUPPLEMENT != 'Y'
+		   <include refid="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao.isExists"></include>
+		 GROUP BY TPPOS.PURCHASER_ID, TDM.NAME
+	</select>
+	
+	<!-- 采购商关闭发货品种统计 -->
+	<select id="getCloseOrderItemsCount" parameterType="TodoTaskBacktoCondition" resultType="TodoTaskBacktoVo">
+		SELECT COUNT(1) DBS,
+				TPPOS.PURCHASER_ID as purchaserId,
+				TDM.NAME AS purchaserNm,
+				WM_CONCAT(TPPOS.Purchase_Order_Code) as purchseOrderCodes
+		  FROM PRO_PUR_ORDER_ITEMS    TPPOI,
+		       PRO_PUR_ORDER_SUMMARY  TPPOS,
+		       T_DEPARTMENT TDM
+		 WHERE TPPOI.PURCHASE_ORDER_CODE = TPPOS.PURCHASE_ORDER_CODE 
+		 	AND TPPOS.PURCHASER_ID = TPPOI.PURCHASER_ID
+		 	AND TPPOS.SUPPLIER_ID = TPPOI.SUPPLIER_ID
+		 	AND TPPOS.PURCHASER_ID = TDM.SAPVENDORID(+)
+		   AND TPPOI.STATUS NOT IN('0','5','50')
+		   <!-- AND TPPOI.STATUS = 40 -->
+		   AND TPPOI.IS_VIEW = 'N'
+		   AND TPPOI.IS_VALID='N'
+   		   AND TPPOI.is_deal = 'Y'
+   		   <!-- yangtao 2016-11-14 去掉补单标识的品种 -->
+   		   AND TPPOS.IS_SUPPLEMENT = 'N'
+		   AND TPPOS.SUPPLIER_ID = #{supplierId}
+		   <!-- 用于待办中间页，查询当前采购商关闭的发货品种 add by xiongmingbao 2016-10-25 -->
+		   <if test="purchaserId!=null">
+           		AND TPPOS.PURCHASER_ID=#{purchaserId}
+           </if>
+		   <include refid="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao.isExists"></include>
+		   GROUP BY TPPOS.PURCHASER_ID,TDM.NAME
+	</select>
+</mapper>

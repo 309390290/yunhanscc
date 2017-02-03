@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao" >
+
+	<resultMap type="com.yunhan.scc.oauth2.web.entities.security.Department" id="departmentResult">
+		<id property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<result property="sapName" column="SAPNAME"/>
+		<result property="level" column="LEVELE" />
+		<result property="sapvendorId" column="SAPVENDORID" />
+		<result property="orgCode" column="ORGCODE" />
+		<result property="taxRegisterNumber" column="TAXREGISTERNUMBER" />
+		<result property="phoneNumber" column="PHONENUMBER" />
+		<result property="address" column="ADDRESS" />
+		<result property="postCode" column="POSTCODE" />
+		<result property="email" column="EMAIL" />
+		<result property="bankAddress" column="BANKADDRESS" />
+		<result property="accountNumber" column="ACCOUNTNUMBER" />
+		<result property="vendorGroup" column="VENDORGROUP" />
+		<result property="groupName" column="GROUPNAME" />
+		<result property="merchantType" column="MERCHANTTYPE" />
+		<result property="mobile" column="MOBILE" />
+		<result property="memo" column="MEMO" />
+		<result property="city" column="CITY" />
+		<result property="area" column="AREA" />
+		<result property="sdSelfId" column="SD_SELF_ID" />
+		<result property="operatorId" column="OPERATORID" />
+		<result property="salerId" column="SALERID" />
+		<result property="parentName" column="parentName" />
+		<result property="procurementType" column="PROCUREMENTTYPE" />
+		<result property="storeChar" column="STORE_CHAR" />
+		<result property="shrtnmNm" column="SHRTNM_NM" />   <!-- 商家简称 -->
+		<result property="strusInd" column="STRUS_IND" />
+		<result property="parentId" column="PARENT_ID" />
+<!-- 		add by swb 2015/7/8 -->
+		<result property="stgEcd" column="STG_ECD" />
+		<result property="ctcPsnNm" column="CTC_PSN_NM" />
+		<result property="instCharCd" column="INST_CHAR_CD" />
+<!-- 		add by swb 2015/07/14   用于门店收订处理-->
+		<result property="rqmNum" column="RQM_NUM"/>
+		<result property="storePcsInd" column="STORE_PCS_IND"/>
+		<result property="purCfmNum" column="PUR_CFM_NUM"/>
+		<result property="stoupChgagnNum" column="STOUP_CHGAGN_NUM"/>
+		<result property="rqmTpCd" column="RQM_TP_CD"/>
+		<result property="rqmId" column="rqmId"/>
+<!-- 		add by zzp 2016-01-19 -->
+		<result property="supplierId" column="supplierId"/>
+		<result property="supplierName" column="supplierName"/>
+		<result property="supplierShortName" column="supplierShortName"/>
+<!-- 		add by zzp 2016-01-19 -->
+		<!-- add by wangtao 2016年4月16日15:21:04 -->
+		<result property="value" column="SAPVENDORID"/>
+		<result/>
+		
+	</resultMap>
+
+	<!-- 供应商查询所管采购商订单数据权限 by pangzhenhua 20160224 -->
+	<sql id="isExists">
+	AND TPPOS.SUPPLIER_ID = (select op.SAPVENDORID from t_operator op WHERE op.SO_NAME=#{userCode,jdbcType=VARCHAR})
+    AND EXISTS (SELECT 1
+          FROM T_CONFIG_PARAMETER TCP
+         WHERE TCP.USER_CODE = #{userCode,jdbcType=VARCHAR}
+           AND (TCP.PARAMETER_CODE1 = 'PURCHASER_ID' AND
+               TCP.PARAMETER_VALUE1 = TPPOS.PURCHASER_ID)
+           AND ((TCP.PARAMETER_CODE2 = 'ORDER_TYPE' AND
+               TCP.PARAMETER_VALUE2 = TPPOS.ORDER_TYPE) OR
+               TCP.PARAMETER_CODE2 IS NULL))
+	</sql>
+	<!-- 供应商查询发货单数据权限 by wangtao 2016年7月11日15:18:16 -->
+	<sql id="isPssPower">
+		and TPSS.SUPPLIER_ID= (select op.SAPVENDORID from t_operator op WHERE op.SO_NAME=#{userCode,jdbcType=VARCHAR})
+		and EXISTS(
+			select 1 from T_CONFIG_PARAMETER TCP
+			where TCP.USER_CODE = #{userCode,jdbcType=VARCHAR}
+			and TCP.PARAMETER_CODE1 = 'PURCHASER_ID' AND
+               TCP.PARAMETER_VALUE1 = TPSS.PURCHASER_ID
+		)		
+	</sql>
+	
+	<select id="getDepartmentBySapverdorId" parameterType="java.lang.String" resultMap="departmentResult">
+		select d.* from T_DEPARTMENT d where d.SAPVENDORID = #{purchaserId}
+	</select>
+	
+	<!-- 供应商查询所管采购商 by pangzhenhua 20160225 -->
+	<select id="selectMyPur" parameterType="java.lang.String" resultMap="departmentResult">
+    SELECT TDM.ID,
+    		TDM.NAME,
+    		TDM.LEVELE,
+    		TDM.PARENT_ID,
+    		TDM.SAPVENDORID,
+    		TDM.ORGCODE
+	  FROM T_CONFIG_PARAMETER TCP,
+	       T_DEPARTMENT       TDM
+	 WHERE TCP.USER_CODE = #{userCode,jdbcType=VARCHAR}
+	   AND TCP.PARAMETER_CODE1 = 'PURCHASER_ID'
+	   AND TCP.IS_VALID = 'Y'
+	   AND TCP.PARAMETER_VALUE1 = TDM.SAPVENDORID
+	 GROUP BY TDM.ID,
+    		TDM.NAME,
+    		TDM.LEVELE,
+    		TDM.PARENT_ID,
+    		TDM.SAPVENDORID,
+    		TDM.ORGCODE
+	</select>
+	
+	
+	<!-- 查询已关闭品种待办统计 by pangzhenhua 20160307-->
+	<select id="getCloseOrderItemsCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(1) DBS
+		  FROM PRO_PUR_ORDER_ITEMS    TPPOI,
+		       PRO_PUR_ORDER_SUMMARY  TPPOS
+		 WHERE TPPOI.YUNHAN_ORDER_CODE = TPPOS.YUNHAN_ORDER_CODE AND TPPOS.PURCHASER_ID = TPPOI.PURCHASER_ID
+		   AND TPPOI.STATUS NOT IN('0','5','50')
+		   <!-- AND TPPOI.STATUS = 40 -->
+		   AND TPPOI.IS_VIEW = 'N'
+		   AND TPPOI.IS_VALID='N'
+   		   AND TPPOI.is_deal = 'Y'
+		   AND TPPOI.PURCHASER_ID = #{purchaserId}
+		   <include refid="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao.isExists"></include>
+	</select>
+	
+	<!-- 更新从待办进入查看已关闭品种为已查看，待办清零 by pangzhenhua 20160307-->
+	<select id="updateOrderItemViewed" parameterType="java.util.Map">
+		UPDATE PRO_PUR_ORDER_ITEMS T
+		   SET T.IS_VIEW = 'Y'
+		 WHERE T.IS_VIEW = 'N'
+		   AND T.IS_VALID='N'
+   		   AND T.is_deal = 'Y'
+		   AND T.PURCHASER_ID = #{purchaserId}
+		   AND EXISTS (
+		SELECT 1
+		  FROM PRO_PUR_ORDER_ITEMS TPPOI,
+		       PRO_PUR_ORDER_SUMMARY  TPPOS
+		 WHERE TPPOI.YUNHAN_ORDER_CODE = TPPOS.YUNHAN_ORDER_CODE  and TPPOS.purchaser_id = TPPOI.purchaser_id
+		   AND TPPOI.ID= T.ID
+		  <include refid="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao.isExists"></include>
+		 ) 
+	</select>
+	
+	<!-- 调用存储过程设置订单状态 by wangtao 2016年7月20日16:34:35 -->
+	<update id="setOrderStatus" statementType="CALLABLE" parameterType="java.util.Map" >
+		{call Pur_Order_Manage_Pkg.Upd_Order_Send_Status_New2_p(
+			#{proPurOrderItemsId,	jdbcType=VARCHAR,mode=IN}, <!-- 订单细目id -->
+			#{purchaserId,		jdbcType=VARCHAR,mode=IN}, <!-- 0-回告发货,1-删除回告发货  -->
+			#{userCode,			jdbcType=VARCHAR,mode=IN},<!-- 当前登陆人编码 -->
+			#{iOpFlag,			jdbcType=VARCHAR,mode=IN},<!-- 0-回告发货,1-删除回告发货 -->
+			#{oReturnInt,		jdbcType=INTEGER,mode=OUT},<!-- -0-成功，1-失败 -->
+			#{oReturnStr,		jdbcType=VARCHAR,mode=OUT}<!-- 错误信息 -->
+		)}
+	</update>
+	
+	<!-- 下载标识记录（新增或修改）by回告发货2.0版本   wangtao 2016年7月26日10:50:41 -->
+	<update id="saveOrUpdateNodeUp" parameterType="java.util.Map">
+		insert into NODE_USER_DATA_REL
+		(ID,
+		DATA_TYPE,
+		NODE_BSN_TP_CD,
+		USER_CODE,
+		DATA_ID,
+		IS_EXPORT,
+		EXPORT_DATE)
+		select NODE_USER_DATA_REL_SEQ.NEXTVAL,
+		'ORDER',
+		'HGFH',
+		#{userCode},
+		T.ID,
+		'Y',
+		SYSDATE
+		from pro_pur_order_items t
+		where
+		to_char(t.id) in
+		<foreach collection="dataIds" separator="," item="dataId"
+			open="(" close=")">
+			trim(#{dataId})
+		</foreach>
+		and not exists
+		(select 1
+		from NODE_USER_DATA_REL p
+		where p.data_id = t.id
+		and p.DATA_TYPE = 'ORDER'
+		and p.NODE_BSN_TP_CD = 'HGFH'
+		and p.user_code = #{userCode}
+		and p.IS_EXPORT = 'Y')
+
+
+		<!-- merge into NODE_USER_DATA_REL node using （ select #{dataType} data_type, 
+			#{nodeTp} NODE_TP, #{userCode} userCode, to_char(t.id) dataId from pro_pur_order_items 
+			t where to_char(t.id) in <foreach collection="dataIds" separator="," item="dataId" 
+			open="(" close=")"> trim(#{dataId}) </foreach> ） node1 on (node.data_type 
+			= node1.data_type and node.node_bsn_tp_cd=node1.node_tp and node.user_code 
+			= node1.userCode and node.data_id = node1.dataId ) when matched then update 
+			set node.is_export = 'Y',node.export_date = sysdate when not matched then 
+			insert values (node_user_data_rel_seq.nextval, node1.data_type, node1.node_tp, 
+			node1.userCode, node1.dataId , 'Y', sysdate) -->
+	</update>
+	
+	
+	<!-- 下载标识记录（新增或修改）by回告发货2.0版本   wangtao 2016年7月26日10:50:41 -->
+	<update id="saveOrUpdateNodeUpByOrderSum" parameterType="java.util.Map">
+		insert into NODE_USER_DATA_REL
+		(ID,
+		DATA_TYPE,
+		NODE_BSN_TP_CD,
+		USER_CODE,
+		DATA_ID,
+		IS_EXPORT,
+		EXPORT_DATE)
+		select NODE_USER_DATA_REL_SEQ.NEXTVAL,
+		'ORDER',
+		'HGFH',
+		#{userCode},
+		T.ID,
+		'Y',
+		SYSDATE
+		from  pro_pur_order_items t,pro_pur_order_summary ppos
+		where ppos.purchase_order_code = t.purchase_order_code
+		and t.purchaser_id = ppos.purchaser_id
+		and ppos.supplier_id = t.supplier_id
+		and to_char(ppos.id) in
+		<foreach collection="dataIds" separator="," item="dataId"
+			open="(" close=")">
+			trim(#{dataId})
+		</foreach>
+		and not exists
+		(select 1
+		from NODE_USER_DATA_REL p
+		where p.data_id = t.id
+		and p.DATA_TYPE = 'ORDER'
+		and p.NODE_BSN_TP_CD = 'HGFH'
+		and p.user_code = #{userCode}
+		and p.IS_EXPORT = 'Y')
+		<!-- merge into NODE_USER_DATA_REL node
+		using （
+		select
+		#{dataType} data_type,
+		#{nodeTp} NODE_TP,
+		#{userCode} userCode,
+		to_char(t.id) dataId
+		from pro_pur_order_items t,pro_pur_order_summary ppos
+		where ppos.purchase_order_code = t.purchase_order_code
+		and t.purchaser_id = ppos.purchaser_id
+		and ppos.supplier_id = t.supplier_id
+		and to_char(ppos.id) in
+		<foreach collection="dataIds" separator="," item="dataId"
+			open="(" close=")">
+			trim(#{dataId})
+		</foreach>
+		） node1
+		on (node.data_type = node1.data_type and
+		node.node_bsn_tp_cd=node1.node_tp and node.user_code = node1.userCode
+		and node.data_id = node1.dataId )
+		when matched then
+		update set node.is_export = 'Y',node.export_date = sysdate
+		when not matched then
+		insert
+		values
+		(node_user_data_rel_seq.nextval,
+		node1.data_type,
+		node1.node_tp,
+		node1.userCode,
+		node1.dataId ,
+		'Y',
+		sysdate) -->
+	</update>
+	
+	
+
+	<!-- 保存需要计算订单状态的细目id -->
+	<insert id="saveTmpOrderIds" parameterType="java.util.List" useGeneratedKeys="false">
+		insert into T_TMP_ORDER_ITEMS(BATCH_NO,PRO_PUR_ORDER_ITEMS_ID)
+		select BATCH_NO,PRO_PUR_ORDER_ITEMS_ID from(
+		<foreach collection="list" item="item" index="index"
+			separator="union all">
+			select '${item.batchNo}' BATCH_NO,${item.proPurOrderItemsId} PRO_PUR_ORDER_ITEMS_ID from dual
+		</foreach>)
+	</insert>
+	
+	<!-- 调用存储过程设置订单状态 (批量)by wangtao 2016年7月20日16:34:35 -->
+	<update id="setOrderStatusByBatch" statementType="CALLABLE" parameterType="java.util.Map" >
+		{call Pur_Order_Manage_Pkg.Upd_Order_Send_Status_Batch_p(
+			#{i_batch_no,	jdbcType=VARCHAR,mode=IN}, <!-- 批次号 -->
+			#{purchaserId,		jdbcType=VARCHAR,mode=IN}, <!-- 0-回告发货,1-删除回告发货  -->
+			#{userCode,			jdbcType=VARCHAR,mode=IN},<!-- 当前登陆人编码 -->
+			#{iOpFlag,			jdbcType=VARCHAR,mode=IN},<!-- 0-回告发货,1-删除回告发货 -->
+			#{oReturnInt,		jdbcType=INTEGER,mode=OUT},<!-- -0-成功，1-失败 -->
+			#{oReturnStr,		jdbcType=VARCHAR,mode=OUT}<!-- 错误信息 -->
+		)}
+	</update>
+	
+</mapper>

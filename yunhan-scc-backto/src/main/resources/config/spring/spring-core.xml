@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	
+	<!-- <bean id="springSecurityFilterChain" class="org.springframework.web.filter.DelegatingFilterProxy"/>
+ -->
+ 	<context:annotation-config/>
+ 	
+ 	<!-- 参数工具 by pangzhenhua 20160104-->
+	<bean id="parameterTool" class="com.yunhan.scc.tools.properties.ParameterTool" init-method="init">
+		<property name="resources">
+			<list>
+				<value>classpath*:config/constant/*.properties</value>
+			</list>
+		</property>
+	</bean>
+ 	
+    <!-- 配置自动扫描的包 -->
+	<context:component-scan base-package="com.yunhan.scc.*.*.service,com.yunhan.scc.*.*.dao"></context:component-scan>
+<!-- 	<context:component-scan base-package="com.yunhan.scc.oauth2.springoauth.service"/> -->
+	<!-- 自动扫描通用查询包  -->
+	<context:component-scan base-package="com.yunhan.scc.tools.component" />
+	
+	
+	<!-- 导入配置资源文件 -->
+	<context:property-placeholder location="classpath:config/properties/jdbc.properties" />
+	
+	
+    <!-- 在代码中读取属性内容  -->
+    <bean id="properties" class="com.yunhan.scc.oauth2.web.utils.spring.config.SystemPropertiesFactoryBean">
+	    <property name="propagateToSystemProperties" value="true" />
+	    <property name="locations">
+	        <list>
+	             <value>classpath:config/properties/spring-oauth-client.properties</value>
+	        </list>
+	    </property>
+	</bean>
+	
+	<!-- 消息队列配置 -->
+<!-- 	<import resource="spring-activeMQ.xml"></import> -->
+	<!-- 配置数据源 -->	
+	<import resource="spring-mybatis.xml"></import>
+	<import resource="spring-datasource.xml"></import>
+	
+</beans>

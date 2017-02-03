@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	@author xiongmingbao
+	@version 2016-3-16 11:31:38 
+-->
+<mapper namespace="com.yunhan.scc.backto.web.dao.mapper.system.ConfigParameterDao">
+
+	<resultMap type="ConfigParameter" id="ConfigParameterResult">
+			<result property="id" column="ID" />
+			<result property="isValid" column="IS_VALID" />
+			<result property="parameterCode1" column="PARAMETER_CODE1" />
+			<result property="parameterCode2" column="PARAMETER_CODE2" />
+			<result property="parameterName1" column="PARAMETER_NAME1" />
+			<result property="parameterName2" column="PARAMETER_NAME2" />
+			<result property="parameterValue1" column="PARAMETER_VALUE1" />
+			<result property="parameterValue2" column="PARAMETER_VALUE2" />
+			<result property="userCode" column="USER_CODE" />
+			
+			<result property="userName" column="USER_NAME" />
+			<result property="userPurName" column="USER_PUR_NAME" />
+			<result property="configType" column="CONFIG_TYPE" />
+	</resultMap>
+	<select id="findConfigParameters" resultMap="ConfigParameterResult" 
+		parameterType="ConfigParameterCondition">
+		SELECT 
+			ID ,
+			IS_VALID ,
+			PARAMETER_CODE1 ,
+			PARAMETER_CODE2 ,
+			PARAMETER_NAME1 ,
+			PARAMETER_NAME2 ,
+			PARAMETER_VALUE1 ,
+			PARAMETER_VALUE2 ,
+			USER_CODE 
+		FROM T_CONFIG_PARAMETER 
+		<where>
+		    <trim prefixOverrides="AND">
+				<if  test="id!=null">
+					AND ID = #{id}
+				</if>
+				<if  test="isValid!=null">
+					AND IS_VALID = #{isValid}
+				</if>
+				<if  test="parameterCode1!=null">
+					AND lower(PARAMETER_CODE1) like '%'||lower(#{parameterCode1})||'%' 
+				</if>
+				<if  test="parameterCode2!=null">
+					AND lower(PARAMETER_CODE2) like '%'||lower(#{parameterCode2})||'%' 
+				</if>
+				<if  test="parameterName1!=null">
+					AND PARAMETER_NAME1 = #{parameterName1}
+				</if>
+				<if  test="parameterName2!=null">
+					AND PARAMETER_NAME2 = #{parameterName2}
+				</if>
+				<if  test="parameterValue1!=null">
+					AND PARAMETER_VALUE1 = #{parameterValue1}
+				</if>
+				<if  test="parameterValue2!=null">
+					AND PARAMETER_VALUE2 = #{parameterValue2}
+				</if>
+				<if  test="userCode!=null">
+					AND lower(USER_CODE) like '%'||lower(#{userCode})||'%' 
+				</if>
+			</trim>
+		</where> 
+		order by   ID desc
+	</select>
+	
+	<select id="findConfigParameters_count" resultType="java.lang.Integer" 
+		parameterType="ConfigParameterCondition">
+		SELECT count(1) 
+		FROM T_CONFIG_PARAMETER 
+		<where>
+		     <trim prefixOverrides="AND">
+				<if  test="id!=null">
+					AND ID = #{id}
+				</if>
+				<if  test="isValid!=null">
+					AND IS_VALID = #{isValid}
+				</if>
+				<if  test="parameterCode1!=null">
+					AND lower(PARAMETER_CODE1) like '%'||lower(#{parameterCode1})||'%' 
+				</if>
+				<if  test="parameterCode2!=null">
+					AND lower(PARAMETER_CODE2) like '%'||lower(#{parameterCode2})||'%' 
+				</if>
+				<if  test="parameterName1!=null">
+					AND PARAMETER_NAME1 = #{parameterName1}
+				</if>
+				<if  test="parameterName2!=null">
+					AND PARAMETER_NAME2 = #{parameterName2}
+				</if>
+				<if  test="parameterValue1!=null">
+					AND PARAMETER_VALUE1 = #{parameterValue1}
+				</if>
+				<if  test="parameterValue2!=null">
+					AND PARAMETER_VALUE2 = #{parameterValue2}
+				</if>
+				<if  test="userCode!=null">
+					AND lower(USER_CODE) like '%'||lower(#{userCode})||'%' 
+				</if>
+			</trim>
+		</where>   	
+	</select>
+	
+	<select id="getConfigParameterById"  resultType="ConfigParameter"	parameterType="long">
+		SELECT 
+			ID ,
+			IS_VALID ,
+			PARAMETER_CODE1 ,
+			PARAMETER_CODE2 ,
+			PARAMETER_NAME1 ,
+			PARAMETER_NAME2 ,
+			PARAMETER_VALUE1 ,
+			PARAMETER_VALUE2 ,
+			USER_CODE 
+		FROM T_CONFIG_PARAMETER 
+		<where>
+				ID = #{id}
+		</where>   		
+	</select>
+	
+	<update id="updateConfigParameter" parameterType="ConfigParameter">
+		UPDATE T_CONFIG_PARAMETER
+		<set>
+								<if test="isValid!=null">
+									IS_VALID =upper(#{isValid}),
+								</if>
+								<if test="parameterCode1!=null">
+									PARAMETER_CODE1 =upper(#{parameterCode1}),
+								</if>
+								<if test="parameterCode2!=null">
+									PARAMETER_CODE2 =upper(#{parameterCode2}),
+								</if>
+								<if test="parameterName1!=null">
+									PARAMETER_NAME1 =upper(#{parameterName1}),
+								</if>
+								<if test="parameterName2!=null">
+									PARAMETER_NAME2 =upper(#{parameterName2}),
+								</if>
+								<if test="parameterValue1!=null">
+									PARAMETER_VALUE1 =upper(#{parameterValue1}),
+								</if>
+								<if test="parameterValue2!=null">
+									PARAMETER_VALUE2 =upper(#{parameterValue2}),
+								</if>
+								<if test="userCode!=null">
+									USER_CODE =upper(#{userCode}),
+								</if>
+		</set>
+		<where>
+				ID=#{id}   
+		</where>
+	</update>
+	
+	<insert id="saveConfigParameter" parameterType="ConfigParameter">
+		<selectKey resultType="java.lang.Long" order="BEFORE"
+			keyProperty="id">
+			SELECT t_config_parameter_seq.nextval AS 
+															id
+														 FROM dual
+		</selectKey>
+		INSERT INTO  T_CONFIG_PARAMETER 
+		(
+			<trim suffixOverrides=",">
+				<if test="id!=null">
+					ID,
+				</if>
+				<if test="isValid!=null">
+					IS_VALID,
+				</if>
+				<if test="parameterCode1!=null">
+					PARAMETER_CODE1,
+				</if>
+				<if test="parameterCode2!=null">
+					PARAMETER_CODE2,
+				</if>
+				<if test="parameterName1!=null">
+					PARAMETER_NAME1,
+				</if>
+				<if test="parameterName2!=null">
+					PARAMETER_NAME2,
+				</if>
+				<if test="parameterValue1!=null">
+					PARAMETER_VALUE1,
+				</if>
+				<if test="parameterValue2!=null">
+					PARAMETER_VALUE2,
+				</if>
+				<if test="userCode!=null">
+					USER_CODE,
+				</if>
+			</trim>
+		) VALUES (
+			<trim suffixOverrides=",">
+				<if test="id!=null">
+					#{id},
+				</if>
+				<if test="isValid!=null">
+					upper(#{isValid}),
+				</if>
+				<if test="parameterCode1!=null">
+					upper(#{parameterCode1}),
+				</if>
+				<if test="parameterCode2!=null">
+					upper(#{parameterCode2}),
+				</if>
+				<if test="parameterName1!=null">
+					upper(#{parameterName1}),
+				</if>
+				<if test="parameterName2!=null">
+					upper(#{parameterName2}),
+				</if>
+				<if test="parameterValue1!=null">
+					upper(#{parameterValue1}),
+				</if>
+				<if test="parameterValue2!=null">
+					upper(#{parameterValue2}),
+				</if>
+				<if test="userCode!=null">
+					upper(#{userCode}),
+				</if>
+			</trim>
+		)
+	</insert>
+	
+	<delete id="deleteConfigParameter" parameterType="ConfigParameter">
+		DELETE FROM  T_CONFIG_PARAMETER  d
+		<where>
+			<if test="id!=null"> d.id = ${id}</if>
+			<if test="ids!=null"> d.id in
+				<foreach collection="ids" separator="," item="id" open="(" close=") ">
+		   	   	  #{id}
+		  	   </foreach>
+			</if>
+		</where>
+	</delete>
+
+	<!-- 修改参数值配置有效性 -->
+	<update id="updateConfigParameterStatus" parameterType="ConfigParameter">
+		update T_CONFIG_PARAMETER d set d.IS_VALID = #{isValid}
+		<where>
+			<if test="id!=null">d.id = #{id}</if>
+			<if test="ids!=null"> d.id in 
+				<foreach collection="ids" separator="," item="id" open="(" close=") ">
+		   	   	  #{id}
+		  	   </foreach>
+			</if>
+		</where>
+	</update>
+</mapper>

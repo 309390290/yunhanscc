@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	@author shiwenbo
+	@version 2016-2-23 
+-->
+<mapper namespace="com.yunhan.scc.backto.web.dao.mapper.system.DcLocationBacktoDao">
+
+	<resultMap type="DcLocationBacktoDo" id="DcLocationBacktoDoResult">
+			<result property="id" column="ID" />
+			<result property="parentId" column="PARENT_ID" />
+			<result property="nodeLevel" column="NODE_LEVEL" />
+			<result property="name" column="NAME" />
+			<result property="code" column="CODE" />
+			<result property="status" column="STATUS" />
+			<result property="index" column="D_INDEX" />
+			<result property="paddr" column="PADDR" />
+			<result property="contact" column="CONTACT" />
+			<result property="contactNumber" column="CONTACT_NUMBER" />
+			<result property="stgTpCd" column="STG_TP_CD" />
+			<result property="dataNumbs" column="dataNumbs" /> <!-- 所在仓位数据条数  (非数据库字段)added by luohoudong -->
+			<result property="isSupplement" column="IS_SUPPLEMENT" /> <!-- 是否补单标记)added by wld -->
+	</resultMap>
+	
+	<select id="getLastLevelDcLocationsByPurchaserId" resultMap="DcLocationBacktoDoResult">
+			select tt.name,
+		       min(tt.D_INDEX) D_INDEX,
+		       to_char(wm_concat(tt.code)) code,
+		       min(tt.paddr) paddr,
+		       min(tt.CONTACT) CONTACT,
+		       min(tt.CONTACT_NUMBER) CONTACT_NUMBER
+		  	from (
+				<include refid="queryDcByPur"></include>
+				) tt
+			 group by tt.name
+			 order by D_INDEX
+	</select>
+	
+	<!-- 通过商家id和仓位code获取本层仓位  -->
+ 	<select id="getDCByCodeAndSapId" resultMap="DcLocationBacktoDoResult" >
+ 		select t.* from DC_LOCATION t 
+	     where t.parent_id in 
+				(
+				select t1.id from DC_LOCATION t1 where t1.parent_id=
+				       (
+				            select t2.id from DC_LOCATION t2 where t2.code = #{purchaserId}
+				       )
+				)
+		   and code = #{code}
+ 	</select>
+	<!-- 根据采购商获取仓位 -->
+	<sql id="queryDcByPur">
+		SELECT T.NAME, T.CODE, T.PADDR, T.CONTACT, T.CONTACT_NUMBER,t.D_INDEX
+         FROM DC_LOCATION T
+         WHERE T.PARENT_ID IN
+               (SELECT T1.ID
+                  FROM DC_LOCATION T1
+                 WHERE T1.PARENT_ID =
+                       (SELECT T2.ID
+                          FROM DC_LOCATION T2
+                         WHERE T2.CODE = #{purchaserId}))
+           AND T.STATUS = 0
+           union
+		select '其他仓位', 'QITA', '直供', '', '',999 from dual
+		order by D_INDEX
+	</sql>
+	
+	<!-- 获取仓位和该仓位未处理的品种数 -->
+	<!-- update by xiongmingbao 合并仓位名称一样的仓位（细目相加，仓位编码以逗号分隔拼接） -->
+	<select id="getDcLocationsAndItmesCount" parameterType="map" resultMap="DcLocationBacktoDoResult">
+		 select tt.name,
+		       sum(tt.DATANUMBS) DATANUMBS,
+		       to_char(wm_concat(tt.code)) code,
+		       min(tt.paddr) paddr,
+		       min(tt.CONTACT) CONTACT,
+		       min(tt.CONTACT_NUMBER) CONTACT_NUMBER
+		  from (SELECT NVL(PR.DATACOUNT,0)          AS DATANUMBS,
+				       WH.CODE,          
+				       WH.NAME, 
+				       WH.PADDR,
+				       WH.CONTACT,
+				       WH.CONTACT_NUMBER
+				  FROM (<include refid="queryDcByPur"></include>) WH
+				  LEFT JOIN (SELECT COUNT(1) as dataCount,  nvl(dc.code,'QITA') warehouse
+				               FROM PRO_PUR_ORDER_SUMMARY TPPOS, PRO_PUR_ORDER_ITEMS TPPOI,DC_LOCATION dc
+				              WHERE TPPOI.Purchase_Order_Code = TPPOS.Purchase_Order_Code
+				                AND TPPOS.PURCHASER_ID = TPPOI.PURCHASER_ID
+				                AND TPPOS.SUPPLIER_ID = TPPOI.SUPPLIER_ID
+				                and TPPOS.WAREHOUSE = dc.code(+)
+				                AND TPPOS.PURCHASER_ID = #{purchaserId}
+				                AND TPPOS.ORDER_STATUS IN (10, 13, 15, 20, 30, 35)
+				                AND TPPOI.STATUS NOT IN ('50')
+				                AND TPPOI.IS_DEAL = 'N'
+				                AND TPPOI.IS_VALID = 'Y'
+				                and TPPOS.IS_SUPPLEMENT='N'<!-- modify by wld 2016-10-17 排除补单数据 -->
+				                <include refid="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao.isExists"></include>
+				              GROUP BY nvl(dc.code,'QITA')) pr 
+				    ON PR.WAREHOUSE = WH.CODE) tt
+ 			group by tt.name
+	</select>
+	
+	
+	
+	<!-- 获取仓位和该仓位未处理的品种数 -->
+	<!-- update by xiongmingbao 2016-12-21 将查询出的数据根据仓位名称进行分组，相同仓位名称的订单数量相加，仓位编码以逗号分隔进行拼接 -->
+	<select id="getDcLocationsAndOrderCount"  resultMap="DcLocationBacktoDoResult">
+		 select tt.name,
+			       sum(tt.DATANUMBS) DATANUMBS,
+			       to_char(wm_concat(tt.code)) code,
+			       min(tt.paddr) paddr,
+			       min(tt.CONTACT) CONTACT,
+			       min(tt.CONTACT_NUMBER) CONTACT_NUMBER
+			  from (SELECT NVL(PR.DATACOUNT,0)          AS DATANUMBS,
+				       WH.CODE,          
+				       WH.NAME,  
+				       WH.PADDR,
+				       WH.CONTACT,
+				       WH.CONTACT_NUMBER
+				  FROM (<include refid="queryDcByPur"></include>) WH
+				  LEFT JOIN (
+				  SELECT COUNT(1) as dataCount,  tmp.warehouse
+				  from(
+				  <!-- modify by wld 2016-10-17 排除补单数据 -->
+				  SELECT  nvl(dc.code,'QITA') warehouse
+				               FROM PRO_PUR_ORDER_SUMMARY TPPOS, 
+				                (SELECT  
+				                PI.PURCHASE_ORDER_CODE,
+						       PI.PURCHASER_ID,
+							   PI.SUPPLIER_ID,pi.IS_VALID,
+							   sum(CONTROL_FLAG) CONTROL_FLAG
+							  FROM PRO_PUR_ORDER_ITEMS PI
+							 where PI.STATUS not in ('50')
+							 GROUP BY PI.PURCHASE_ORDER_CODE, PI.PURCHASER_ID, PI.SUPPLIER_ID,pi.IS_VALID)  TPPOI,
+				               DC_LOCATION dc
+				              WHERE TPPOI.Purchase_Order_Code = TPPOS.Purchase_Order_Code
+				                AND TPPOS.PURCHASER_ID = TPPOI.PURCHASER_ID
+				                AND TPPOS.SUPPLIER_ID = TPPOI.SUPPLIER_ID
+				                and TPPOS.WAREHOUSE = dc.code(+)
+				                AND TPPOS.PURCHASER_ID = #{purchaserId}
+				               AND TPPOS.ORDER_STATUS NOT IN (0,5,40,45,47,50)
+				                AND TPPOS.IS_DEAL = 'N'
+				                AND TPPOI.IS_VALID = 'Y'
+				                and TPPOI.CONTROL_FLAG>=0
+				                and TPPOS.IS_SUPPLEMENT = 'N'
+				                <include refid="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao.isExists"></include>
+				                ) tmp
+									GROUP BY
+										tmp.warehouse
+				               ) pr
+				    ON PR.WAREHOUSE = WH.CODE) tt
+ 			group by tt.name
+	</select>
+</mapper>

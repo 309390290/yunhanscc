@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	@author luohoudong
+	@version 2016-7-14 9:52:28 
+-->
+<mapper namespace="com.yunhan.scc.backto.web.dao.mapper.masterdata.MasterdataDao">
+
+	<resultMap type="MasterdataBacktoDO" id="MasterdataResult">
+			<result property="affiliateseries" column="AFFILIATESERIES" />
+			<result property="amazonmedium" column="AMAZONMEDIUM" />
+			<result property="amazonversion" column="AMAZONVERSION" />
+			<result property="annotations" column="ANNOTATIONS" />
+			<result property="arrivedadvancetime" column="ARRIVEDADVANCETIME" />
+			<result property="assistbooktitle" column="ASSISTBOOKTITLE" />
+			<result property="audience" column="AUDIENCE" />
+			<result property="authorcitizen" column="AUTHORCITIZEN" />
+			<result property="authoreditor" column="AUTHOREDITOR" />
+			<result property="bagPernum" column="BAG_PERNUM" />
+			<result property="bodylanguage" column="BODYLANGUAGE" />
+			<result property="bonus" column="BONUS" />
+			<result property="bonusnum" column="BONUSNUM" />
+			<result property="bookletnum" column="BOOKLETNUM" />
+			<result property="booktitle" column="BOOKTITLE" />
+			<result property="brandname" column="BRANDNAME" />
+			<result property="childrentpublishercode" column="CHILDRENTPUBLISHERCODE" />
+			<result property="cipnum" column="CIPNUM" />
+			<result property="classification" column="CLASSIFICATION" />
+			<result property="coverbooktitle" column="COVERBOOKTITLE" />
+			<result property="creator" column="CREATOR" />
+			<result property="disciplinekeyword" column="DISCIPLINEKEYWORD" />
+			<result property="drawing" column="DRAWING" />
+			<result property="edition" column="EDITION" />
+			<result property="editionyearmonth" column="EDITIONYEARMONTH" />
+			<result property="editor" column="EDITOR" />
+			<result property="emendation" column="EMENDATION" />
+			<result property="enbookname" column="ENBOOKNAME" />
+			<result property="eventkeyword" column="EVENTKEYWORD" />
+			<result property="firsteditionyearmonth" column="FIRSTEDITIONYEARMONTH" />
+			<result property="firstpulish" column="FIRSTPULISH" />
+			<result property="format" column="FORMAT" />
+			<result property="goodsmedium" column="GOODSMEDIUM" />
+			<result property="goodsvariety" column="GOODSVARIETY" />
+			<result property="high" column="HIGH" />
+			<result property="historonlybook" column="HISTORONLYBOOK" />
+			<result property="historybooktitle" column="HISTORYBOOKTITLE" />
+			<result property="historyisbn" column="HISTORYISBN" />
+			<result property="historyrice" column="HISTORYRICE" />
+			<result property="id" column="ID" />
+			<result property="impression" column="IMPRESSION" />
+			<result property="isadvance" column="ISADVANCE" />
+			<result property="isbn" column="ISBN" />
+			<result property="isimportant" column="ISIMPORTANT" />
+			<result property="isoveronlybook" column="ISOVERONLYBOOK" />
+			<result property="issuitbook" column="ISSUITBOOK" />
+			<result property="keyword" column="KEYWORD" />
+			<result property="length" column="LENGTH" />
+			<result property="marketingcategories" column="MARKETINGCATEGORIES" />
+			<result property="mastercommoditycode" column="MASTERCOMMODITYCODE" />
+			<result property="ordinarykeyword" column="ORDINARYKEYWORD" />
+			<result property="origbooktitle" column="ORIGBOOKTITLE" />
+			<result property="pagenumber" column="PAGENUMBER" />
+			<result property="paper" column="PAPER" />
+			<result property="paperback" column="PAPERBACK" />
+			<result property="parentpublishercode" column="PARENTPUBLISHERCODE" />
+			<result property="placepublished" column="PLACEPUBLISHED" />
+			<result property="price" column="PRICE" />
+			<result property="printyearmonth" column="PRINTYEARMONTH" />
+			<result property="publisherassigneecountry" column="PUBLISHERASSIGNEECOUNTRY" />
+			<result property="publishercode" column="PUBLISHERCODE" />
+			<result property="recommendSaleGroup" column="RECOMMEND_SALE_GROUP" />
+			<result property="rememo" column="REMEMO" />
+			<result property="replacebooktitle" column="REPLACEBOOKTITLE" />
+			<result property="sheet" column="SHEET" />
+			<result property="state" column="STATE" />
+			<result property="taken" column="TAKEN" />
+			<result property="taxrate" column="TAXRATE" />
+			<result property="translator" column="TRANSLATOR" />
+			<result property="typeandquantity" column="TYPEANDQUANTITY" />
+			<result property="uploaddate" column="UPLOADDATE" />
+			<result property="version" column="VERSION" />
+			<result property="versionnotes" column="VERSIONNOTES" />
+			<result property="weight" column="WEIGHT" />
+			<result property="wide" column="WIDE" />
+			<result property="wordnumber" column="WORDNUMBER" />
+			<result property="yunhanId" column="YUNHAN_ID" />
+			
+			<result property="discountrate" column="DISCOUNTRATE" />
+			<result property="supplierid" column="SUPPLIERID" />
+			<result property="purchaserid" column="PURCHASERID" />
+			<result property="keyId" column="KEY_ID" />
+			
+	</resultMap>
+	<!-- 查看供应商商品  added by luohoudong -->
+	<select id="findSupplierMasterDatasByPage" resultMap="MasterdataResult" 
+		parameterType="MasterdataBacktoCondition">
+		SELECT 
+			MU.AFFILIATESERIES ,
+			MU.AMAZONMEDIUM ,
+			MU.AMAZONVERSION ,
+			MU.ANNOTATIONS ,
+			MU.ARRIVEDADVANCETIME ,
+			MU.ASSISTBOOKTITLE ,
+			MU.AUDIENCE ,
+			MU.AUTHORCITIZEN ,
+			MU.AUTHOREDITOR ,
+			MU.BAG_PERNUM ,
+			MU.BODYLANGUAGE ,
+			MU.BONUS ,
+			MU.BONUSNUM ,
+			MU.BOOKLETNUM ,
+			MU.BOOKTITLE ,
+			MU.BRANDNAME ,
+			MU.CHILDRENTPUBLISHERCODE ,
+			MU.CIPNUM ,
+			MU.CLASSIFICATION ,
+			MU.COVERBOOKTITLE ,
+			MU.CREATOR ,
+			MU.DISCIPLINEKEYWORD ,
+			MU.DRAWING ,
+			MU.EDITION ,
+			MU.EDITIONYEARMONTH ,
+			MU.EDITOR ,
+			MU.EMENDATION ,
+			MU.ENBOOKNAME ,
+			MU.EVENTKEYWORD ,
+			MU.FIRSTEDITIONYEARMONTH ,
+			MU.FIRSTPULISH ,
+			MU.FORMAT ,
+			MU.GOODSMEDIUM ,
+			MU.GOODSVARIETY ,
+			MU.HIGH ,
+			MU.HISTORONLYBOOK ,
+			MU.HISTORYBOOKTITLE ,
+			MU.HISTORYISBN ,
+			MU.HISTORYRICE ,
+			MU.ID ,
+			MU.IMPRESSION ,
+			MU.ISADVANCE ,
+			MU.ISBN ,
+			MU.ISIMPORTANT ,
+			MU.ISOVERONLYBOOK ,
+			MU.ISSUITBOOK ,
+			MU.KEYWORD ,
+			MU.LENGTH ,
+			MU.MARKETINGCATEGORIES ,
+			MU.MASTERCOMMODITYCODE ,
+			MU.ORDINARYKEYWORD ,
+			MU.ORIGBOOKTITLE ,
+			MU.PAGENUMBER ,
+			MU.PAPER ,
+			MU.PAPERBACK ,
+			MU.PARENTPUBLISHERCODE ,
+			MU.PLACEPUBLISHED ,
+			MU.PRICE ,
+			MU.PRINTYEARMONTH ,
+			MU.PUBLISHERASSIGNEECOUNTRY ,
+			MU.PUBLISHERCODE ,
+			MU.RECOMMEND_SALE_GROUP ,
+			MU.REMEMO ,
+			MU.REPLACEBOOKTITLE ,
+			MU.SHEET ,
+			MU.STATE ,
+			MU.TAKEN ,
+			MU.TAXRATE ,
+			MU.TRANSLATOR ,
+			MU.TYPEANDQUANTITY ,
+			MU.UPLOADDATE ,
+			MU.VERSION ,
+			MU.VERSIONNOTES ,
+			MU.WEIGHT ,
+			MU.WIDE ,
+			MU.WORDNUMBER ,
+			MU.YUNHAN_ID,
+			M.DISCOUNTRATE 
+		FROM MASTERDATA_UNIQUE_INFO MU join MASTERDATA_MARKEINFO M
+			ON MU.ID=M.PRO_ID
+			<where>
+					m.SUPPLIERID = '${supplierid}'
+				<if test="booktitle != null">
+					and upper(mu.booktitle) like '%'||upper(#{booktitle})||'%'
+				</if>
+				<if  test="isbn!=null">
+					AND MU.ISBN like '%${isbn}%'
+				</if>
+			</where>
+		</select>
+		<!-- 查看供应商商品 统计 added by luohoudong -->
+	<select id="findSupplierMasterDatasByPage_count" resultType="java.lang.Integer" 
+		parameterType="MasterdataBacktoCondition">
+		SELECT 
+			count(1)
+		FROM MASTERDATA_UNIQUE_INFO MU join MASTERDATA_MARKEINFO M
+			ON MU.ID=M.PRO_ID
+			<where>
+					m.SUPPLIERID = '${supplierid}'
+				<if test="booktitle != null">
+					and upper(mu.booktitle) like '%'||upper(#{booktitle})||'%'
+				</if>
+				<if  test="isbn!=null">
+					AND MU.ISBN like '%${isbn}%'
+				</if>
+			</where>
+		</select>
+	
+	
+
+</mapper>

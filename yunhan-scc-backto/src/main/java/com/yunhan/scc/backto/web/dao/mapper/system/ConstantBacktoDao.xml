@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	@author luohoudong
+-->
+<mapper namespace="com.yunhan.scc.backto.web.dao.mapper.system.ConstantBacktoDao">
+
+	<resultMap type="ConstantBacktoDo" id="ConstantBacktoDoResult">
+			<result property="consCode" column="CONS_CODE" />
+			<result property="consName" column="CONS_NAME" />
+			<result property="consValue" column="CONS_VALUE" />
+			<result property="control" column="CONTROL" />
+			<result property="id" column="ID" />
+			<result property="objEcd" column="OBJ_ECD" />
+			<result property="remark" column="REMARK" />
+			<result property="sortnum" column="SORTNUM" />
+			<result property="typeCode" column="TYPE_CODE" />
+			<result property="value" column="value" />
+			<result property="name" column="name" />
+	</resultMap>
+	
+<!-- 	根据常数类型获取常数 add by luohoudong-->
+	<select id="getConstantsByType" parameterType="map" resultMap="ConstantBacktoDoResult">
+		select 
+			t.cons_code,
+			t.cons_name name,
+			t.cons_value value,
+			t.remark,
+			t.obj_ecd
+		 from T_CONSTANT t where  t.control = 1
+		<if test="typeCode !=null"> and t.type_Code = #{typeCode}</if>
+		 order by t.sortnum asc
+	</select>
+	
+	<!-- 获取常数 -->
+	<select id="getConstantByTypeAndCode" parameterType="map" resultMap="ConstantBacktoDoResult">
+		select t.type_code,
+			t.cons_code,
+			t.cons_name,
+			t.cons_value
+		 from T_CONSTANT t where  t.control = 1
+		<if test="typeCode !=null"> 
+			and t.type_Code = #{typeCode}
+		</if>
+		<if test="consName!=null">
+			and t.cons_name = #{consName}
+		</if>
+	</select>
+	
+
+</mapper>

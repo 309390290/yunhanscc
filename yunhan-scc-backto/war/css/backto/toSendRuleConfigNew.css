@@ -1,0 +1,64 @@
+.btn_white {
+    padding: 0 5px;
+    margin: 5px;
+    color: #333 !important;
+}
+.addBox{
+	overflow: hidden;
+}
+#myModal{
+	width: 280px;
+}
+#myModal .modal-body .addBox ul{
+	padding: 10px;
+}
+#myModal .modal-body .addBox ul li{
+	padding-bottom: 10px;
+	width: 272px;
+	overflow: hidden;
+	
+}
+#myModal .modal-body .addBox ul li .name {
+	width:30%;
+   float: left;
+   text-align: right;
+   line-height: 24px;
+   min-width: 70px;
+}
+#myModal .modal-body .addBox ul li .right {
+    width:70%;
+    float: left;
+}
+#myModal .modal-body .addBox ul li .right .choiceBox{
+    width: 91px;
+    float: left;
+    padding-left: 4px;
+}
+#myModal .modal-body .addBox ul li .right .choiceBox .multTyp{
+	width: 95px !important;
+}
+#myModal .modal-body .addBox ul li .right input {
+	width: 172px;
+}
+#myModal .modal-body .addBox ul li .right .purchaserId{
+    width: 177px;
+}
+#myModal .modal-body .addBox ul li .right #lengthRule{
+   width: 78px;
+}
+#myModal .modal-body .addBox ul li .right #lengthFormat{
+   float: left;
+   width: 78px;
+}
+#myModal .modal-body .addBox ul li .right #ruleLength{
+   width: 95px;
+}
+#myModal .modal-body .addBox ul li .right #isValid{
+    width: 176px;
+}
+.multTyp{
+    width: 94px;
+}
+.AllSelect_title span{
+	width: 81% !important;
+}

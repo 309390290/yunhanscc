@@ -1,0 +1,938 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	@author wangtao
+	@version 2016-7-6 15:29:49 
+-->
+<mapper namespace="com.yunhan.scc.backto.web.dao.mapper.sendgoods.ProSendoutItemsDao">
+
+	<resultMap type="ProSendoutItemsBacktoDO" id="proSendoutItemsResult">
+			<result property="addTime" column="ADD_TIME" />
+			<result property="addUserCode" column="ADD_USER_CODE" />
+			<result property="affiliateSeries" column="AFFILIATE_SERIES" />
+			<result property="authorEditor" column="AUTHOR_EDITOR" />
+			<result property="bookTitle" column="BOOK_TITLE" />
+			<result property="id" column="ID" />
+			<result property="impression" column="IMPRESSION" />
+			<result property="isbn" column="ISBN" />
+			<result property="isrc" column="ISRC" />
+			<result property="isDelete" column="IS_DELETE" />
+			<result property="isDiffExport" column="IS_DIFF_EXPORT" />
+			<result property="isExport" column="IS_EXPORT" />
+			<result property="isForeverOosExport" column="IS_FOREVER_OOS_EXPORT" />
+			<result property="isInitiative" column="IS_INITIATIVE" />
+			<result property="isSupplierAddProduct" column="IS_SUPPLIER_ADD_PRODUCT" />
+			<result property="notEnoughFlag" column="NOT_ENOUGH_FLAG" />
+			<result property="packageId" column="PACKAGE_ID" />
+			<result property="pakageNum" column="PAKAGE_NUM" />
+			<result property="paperback" column="PAPERBACK" />
+			<result property="price" column="PRICE" />
+			<result property="proPurOrderItemsId" column="PRO_PUR_ORDER_ITEMS_ID" />
+			<result property="publisher" column="PUBLISHER" />
+			<result property="purchaserCommoditiesId" column="PURCHASER_COMMODITIES_ID" />
+			<result property="purchaserId" column="PURCHASER_ID" />
+			<result property="purchaseOrderCode" column="PURCHASE_ORDER_CODE" />
+			<result property="receiveDate" column="RECEIVE_DATE" />
+			<result property="receiveQty" column="RECEIVE_QTY" />
+			<result property="remark" column="REMARK" />
+			<result property="responseStatus" column="RESPONSE_STATUS" />
+			<result property="responseType" column="RESPONSE_TYPE" />
+			<result property="rowUniqueNo" column="ROW_UNIQUE_NO" />
+			<result property="salesPrices" column="SALES_PRICES" />
+			<result property="sendoutDiscountrate" column="SENDOUT_DISCOUNTRATE" />
+			<result property="sendoutGoodsCode" column="SENDOUT_GOODS_CODE" />
+			<result property="sendoutPrice" column="SENDOUT_PRICE" />
+			<result property="sendoutQty" column="SENDOUT_QTY" />
+			<result property="seriesTitle" column="SERIES_TITLE" />
+			<result property="sourceType" column="SOURCE_TYPE" />
+			<result property="status" column="STATUS" />
+			<result property="subscriptionCode" column="SUBSCRIPTION_CODE" />
+			<result property="supplierCommoditiesId" column="SUPPLIER_COMMODITIES_ID" />
+			<result property="supplierId" column="SUPPLIER_ID" />
+			<result property="updateTime" column="UPDATE_TIME" />
+			<result property="updateUserCode" column="UPDATE_USER_CODE" />
+			<result property="versionNo" column="VERSION_NO" />
+			<result property="volumes" column="VOLUMES" />
+			<result property="yunhanId" column="YUNHAN_ID" />
+			<result property="yunhanOrderCode" column="YUNHAN_ORDER_CODE" />
+			<result property="yunhanSendoutCode" column="YUNHAN_SENDOUT_CODE" />
+			<result property="orderQty" column="ORDER_QTY" /><!-- add by yangtao 20160801 订数  -->
+			<result property="historyOrderQty" column="HISTORYORDERQTY" /><!--add by yangtao 20160801 已发数  -->
+			<result property="thisSendQty" column="THIS_SEND_QTY" /><!-- add by yangtao 20160801 本次发货数  -->
+			<result property="otherAvailableReason" column="OTHER_AVAILABLE_REASON" /><!-- add by yangtao 20160801其余满足情况  -->
+			<result property="preSendDate" column="PRE_SEND_DATE" /><!-- add by yangtao 20160801预计发货日期  -->
+			<result property="responseId" column="responseId" /><!-- add by yangtao 20160802回告ID  -->
+			<result property="isFrist" column="isFrist" /><!-- add by yangtao 20160802是否是第一次回告发货  -->
+			<result property="discountrate" column="DISCOUNTRATE" />
+			
+			
+	</resultMap>
+	
+	
+	
+	 
+	 
+	 <!-- 匹配发货单规则（规则按优先级匹配，如匹配不上，依次延用下一条规则）：
+	  (1) 订单号+订单细目id+发货单号+发货价+发货折扣； 
+	  （2）订单号+供应商商品ID+发货单号+发货价+发货折扣； 
+ 	（ 3）订单号+ISBN+书名+发货单号+发货价+发货折扣；
+ 		没有订单号的就用没订单号的匹配
+	  -->
+	  <!-- 根据订单细目和供应商发货单号查找发货单细目 added by luohoudong copy from wangtao -->
+	 <select id="findSendOutItemsByOrderCodeAndItemsId" resultMap="proSendoutItemsResult" 
+				parameterType="ProSendoutItemsBacktoDO">
+	 	select * from pro_sendout_items t 
+	 	<where>
+	 		t.sendout_goods_code = #{sendoutGoodsCode}
+ 			and t.pro_pur_order_items_id = #{proPurOrderItemsId}
+ 			<if test="purchaseOrderCode!=null">
+		 		and t.purchase_order_code = #{purchaseOrderCode}
+ 			</if>
+ 			<if test="purchaseOrderCode==null">
+		 		and t.purchase_order_code is null
+ 			</if>
+	 		and t.purchaser_id = #{purchaserId}
+	 		and t.supplier_id = #{supplierId}
+	 		and t.SENDOUT_PRICE = #{sendoutPrice}
+	 		and t.SENDOUT_DISCOUNTRATE = #{sendoutDiscountrate}
+	 		and t.STATUS != '0'
+	 		and t.IS_DELETE != 'Y'
+	 	</where>
+	 </select>
+	 
+	 
+	  <!-- 根据订单号+供应商商品ID+发货单号+发货价+发货折扣查找发货单细目  added by luohoudong  copy from wangtao -->
+	 <select id="findSendOutItemsByOrderCodeAndSupplier" resultMap="proSendoutItemsResult" 
+				parameterType="ProSendoutItemsBacktoDO">
+	 	select * from pro_sendout_items t 
+	 	<where>
+	 		t.sendout_goods_code = #{sendoutGoodsCode}
+ 			and t.SUPPLIER_COMMODITIES_ID = #{supplierCommoditiesId}
+	 		<if test="purchaseOrderCode!=null">
+		 		and t.purchase_order_code = #{purchaseOrderCode}
+ 			</if>
+ 			<if test="purchaseOrderCode==null">
+		 		and t.purchase_order_code is null
+ 			</if>
+	 		and t.purchaser_id = #{purchaserId}
+	 		and t.supplier_id = #{supplierId}
+	 		and t.SENDOUT_PRICE = #{sendoutPrice}
+	 		and t.SENDOUT_DISCOUNTRATE = #{sendoutDiscountrate}
+	 		and t.STATUS != '0'
+	 		and t.IS_DELETE != 'Y'
+	 	</where>
+	 </select>
+	 
+	 <select id="findMaxIdByProPurOrderItemsId"  resultMap="proSendoutItemsResult" 
+				parameterType="ProSendoutItemsBacktoDO" >
+	 select max(p.id)  as id,count(1) as isFrist  from pro_sendout_items p
+	 	<where>
+			 p.PRO_PUR_ORDER_ITEMS_ID =#{proPurOrderItemsId}
+			 and p.IS_DELETE= 'N' 
+	 	</where>
+	 </select>
+	 
+	 
+	 
+	 <!-- 根据订单号+ISBN+书名+发货单号+发货价+发货折扣查找发货单细目  added by luohoudong  copy from wangtao -->
+	 <select id="findSendOutItemsByOrderCodeAndIsbnBook" resultMap="proSendoutItemsResult" 
+				parameterType="ProSendoutItemsBacktoDO">
+	 	select * from pro_sendout_items t 
+	 	<where>
+	 		trim(t.sendout_goods_code) = trim(#{sendoutGoodsCode})
+ 			and t.ISBN = #{isbn}
+ 			and trim(t.BOOK_TITLE) = trim(#{bookTitle})
+	 		<if test="purchaseOrderCode!=null">
+		 		and t.purchase_order_code = #{purchaseOrderCode}
+ 			</if>
+ 			<if test="purchaseOrderCode==null">
+		 		and t.purchase_order_code is null
+ 			</if>
+	 		and t.purchaser_id = #{purchaserId}
+	 		and t.supplier_id = #{supplierId}
+	 		and t.SENDOUT_PRICE = #{sendoutPrice}
+	 		and t.SENDOUT_DISCOUNTRATE = #{sendoutDiscountrate}
+	 		and t.STATUS != '0'
+	 		and t.IS_DELETE != 'Y'
+	 	</where>
+	 </select>
+	
+	
+	 <!-- 	根据id删除发货单细目 状态为0的  added by luohoudong  copy from wangtao-->
+	<delete id="delSendoutItemsByIdByStatus" parameterType="ProSendoutItemsBacktoDO">
+		DELETE FROM  PRO_SENDOUT_ITEMS  WHERE 
+		ID = ${id} and STATUS = '0'
+	</delete>
+	<!-- 新增发货时根据规则检查出若是追加发货则进行数量累加  added by luohoudong  copy from wangtao -->
+	<update id="updateSendoutItemsBySave" parameterType="ProSendoutItemsBacktoDO">
+		UPDATE PRO_SENDOUT_ITEMS
+		<set>
+				SENDOUT_QTY = SENDOUT_QTY+#{sendoutQty,jdbcType=NUMERIC},
+				UPDATE_TIME =sysdate,
+				UPDATE_USER_CODE = #{addUserCode,jdbcType=VARCHAR}
+		</set>
+		<where>
+				and ID=#{id}   
+		</where>
+	</update>
+	
+	<!-- 根据发货单号查询发货单细目  added by luohoudong -->
+	<select id="queryProSendoutItemsBySendcode" resultMap="proSendoutItemsResult" 
+				parameterType="ProSendoutItemsBacktoCondition">
+		SELECT 
+		    IT.ID ,
+		    IT.PURCHASE_ORDER_CODE,
+		    IT.ISBN ,
+		    IT.BOOK_TITLE ,
+		    IT.SENDOUT_PRICE,
+		    IT.SENDOUT_DISCOUNTRATE,
+		    IT.SENDOUT_QTY,
+		    IT.SENDOUT_GOODS_CODE ,
+		    IT.IS_INITIATIVE,
+		    IT.PRO_PUR_ORDER_ITEMS_ID,
+		    IT.YUNHAN_ORDER_CODE,
+		    it.price,
+		    IT.STATUS,
+		    IT.IS_SUPPLIER_ADD_PRODUCT,
+		    IT.SUPPLIER_ID,
+		    IT.PURCHASER_ID
+		FROM PRO_SENDOUT_ITEMS  IT
+		WHERE 
+		IT.IS_DELETE='N'
+		<if  test="id!=null">
+			AND IT.ID = ${id}
+		</if>
+		<if  test="sendoutGoodsCode!=null">
+			AND IT.SENDOUT_GOODS_CODE = '${sendoutGoodsCode}'
+		</if>
+		<if test="supplierId!=null">
+			and it.supplier_Id =#{supplierId}
+		</if>
+		<if test="purchaserId!=null">
+			and it.PURCHASER_ID =#{purchaserId}
+		</if>
+		<if test="proPurOrderItemsId!=null">
+			and	it.PRO_PUR_ORDER_ITEMS_ID =#{proPurOrderItemsId}
+		</if>
+		 <!-- <include refid="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao.isExists"></include> -->
+		ORDER BY IT.PURCHASE_ORDER_CODE DESC	
+	 </select>
+	 
+	 
+	 <!-- YangTao 20160801 根据ID查询发货单信息 -->
+	 <select id="findSendOrderByID" resultMap="proSendoutItemsResult"  parameterType="ProSendoutItemsBacktoCondition">
+		select * from (SELECT 
+			psi.id,<!-- 发货单ID -->
+			pri.id as responseId ,<!-- 回告ID -->
+		    nvl(ppoi.ORDER_QTY,0) ORDER_QTY,<!-- 订数 -->
+		    nvl(ppoi.SENDOUT_QTY,0) as HISTORYORDERQTY,<!-- 已发数，对应数据库中发货数 每次发货后累加 -->
+		    nvl(ppoi.RECEIVE_QTY,0) RECEIVE_QTY, <!-- 已收数，对应数据库中的售后数量，每次累加 -->
+		    psi.sendout_qty THIS_SEND_QTY,<!-- 本次发货数  -->
+		    pri.OTHER_AVAILABLE_REASON,<!--其余满足情况: 0-预计可发、1-暂时缺货、2、已停产，3、改版，4、版权到期，5、商品无效，6、销售受限（后面5个都属于永久缺货类型）  -->
+		    pri.PRE_SEND_DATE,<!-- 预计发货日期  -->
+		    pri.RESPONSE_REMARK as REMARK,<!-- 备注 -->
+		    psi.SENDOUT_PRICE,<!-- 发货价 -->
+		    psi.SENDOUT_DISCOUNTRATE,<!-- 发货折扣 -->
+		    psi.PRO_PUR_ORDER_ITEMS_ID<!-- 订单细目ID -->
+		FROM PRO_SENDOUT_ITEMS  psi
+		left JOIN PRO_PUR_ORDER_ITEMS ppoi
+		ON  psi.PRO_PUR_ORDER_ITEMS_ID = ppoi.id
+		left JOIN PRO_RESPONSE_ITEMS pri
+		on psi.PRO_PUR_ORDER_ITEMS_ID = pri.PRO_PUR_ORDER_ITEMS_ID
+		and psi.id  = pri.pro_sendout_items_id
+		WHERE  psi.ID = #{id}
+		 order by responseId desc)
+		where rownum = 1
+		
+	 </select>
+	 <select id="findSendOrderByID_count" resultMap="proSendoutItemsResult"  parameterType="ProSendoutItemsBacktoCondition">
+		SELECT 
+			count(1)
+		FROM PRO_SENDOUT_ITEMS  psi
+		WHERE 
+		<if  test="id!=null">
+			 psi.ID = ${id}
+		</if>
+	 </select>
+	 
+	 
+	 <!-- 更新发货单细目  added by luohoudong  -->
+	 <update id="updateSendoutItems" parameterType="ProSendoutItemsBacktoDO">
+		UPDATE PRO_SENDOUT_ITEMS
+		<set>
+				<if test="addUserCode!=null">
+					ADD_USER_CODE =#{addUserCode},
+				</if>
+				<if test="affiliateSeries!=null">
+					AFFILIATE_SERIES =#{affiliateSeries},
+				</if>
+				<if test="authorEditor!=null">
+					AUTHOR_EDITOR =#{authorEditor},
+				</if>
+				<if test="bookTitle!=null">
+					BOOK_TITLE =#{bookTitle},
+				</if>
+				<if test="impression!=null">
+					IMPRESSION =#{impression},
+				</if>
+				<if test="isbn!=null">
+					ISBN =#{isbn},
+				</if>
+				<if test="isrc!=null">
+					ISRC =#{isrc},
+				</if>
+				<if test="isDelete!=null">
+					IS_DELETE =#{isDelete},
+				</if>
+				<if test="isDiffExport!=null">
+					IS_DIFF_EXPORT =#{isDiffExport},
+				</if>
+				<if test="isExport!=null">
+					IS_EXPORT =#{isExport},
+				</if>
+				<if test="isForeverOosExport!=null">
+					IS_FOREVER_OOS_EXPORT =#{isForeverOosExport},
+				</if>
+				<if test="isInitiative!=null">
+					IS_INITIATIVE =#{isInitiative},
+				</if>
+				<if test="isSupplierAddProduct!=null">
+					IS_SUPPLIER_ADD_PRODUCT =#{isSupplierAddProduct},
+				</if>
+				<if test="notEnoughFlag!=null">
+					NOT_ENOUGH_FLAG =#{notEnoughFlag},
+				</if>
+				<if test="packageId!=null">
+					PACKAGE_ID =#{packageId},
+				</if>
+				<if test="pakageNum!=null">
+					PAKAGE_NUM =#{pakageNum},
+				</if>
+				<if test="paperback!=null">
+					PAPERBACK =#{paperback},
+				</if>
+				<if test="price!=null">
+					PRICE =#{price},
+				</if>
+				<if test="proPurOrderItemsId!=null">
+					PRO_PUR_ORDER_ITEMS_ID =#{proPurOrderItemsId},
+				</if>
+				
+				<if test="purchaserCommoditiesId!=null">
+					PURCHASER_COMMODITIES_ID =#{purchaserCommoditiesId},
+				</if>
+				<if test="purchaserId!=null">
+					PURCHASER_ID =#{purchaserId},
+				</if>
+				<if test="purchaseOrderCode!=null">
+					PURCHASE_ORDER_CODE =#{purchaseOrderCode},
+				</if>
+				<if test="receiveDate!=null">
+					RECEIVE_DATE =#{receiveDate},
+				</if>
+				<if test="receiveQty!=null">
+					RECEIVE_QTY =#{receiveQty},
+				</if>
+				<if test="remark!=null">
+					REMARK =#{remark},
+				</if>
+				<if test="responseStatus!=null">
+					RESPONSE_STATUS =#{responseStatus},
+				</if>
+				<if test="responseType!=null">
+					RESPONSE_TYPE =#{responseType},
+				</if>
+				<if test="rowUniqueNo!=null">
+					ROW_UNIQUE_NO =#{rowUniqueNo},
+				</if>
+				<if test="salesPrices!=null">
+					SALES_PRICES =#{salesPrices},
+				</if>
+				<if test="sendoutDiscountrate!=null">
+					SENDOUT_DISCOUNTRATE =#{sendoutDiscountrate},
+				</if>
+				<if test="sendoutGoodsCode!=null">
+					SENDOUT_GOODS_CODE =#{sendoutGoodsCode},
+				</if>
+				<if test="sendoutPrice!=null">
+					SENDOUT_PRICE =#{sendoutPrice},
+				</if>
+				<if test="sendoutQty!=null">
+					SENDOUT_QTY =#{sendoutQty},
+				</if>
+				<if test="seriesTitle!=null">
+					SERIES_TITLE =#{seriesTitle},
+				</if>
+				<if test="sourceType!=null">
+					SOURCE_TYPE =#{sourceType},
+				</if>
+				<if test="status!=null">
+					STATUS =#{status},
+				</if>
+				<if test="subscriptionCode!=null">
+					SUBSCRIPTION_CODE =#{subscriptionCode},
+				</if>
+				<if test="supplierCommoditiesId!=null">
+					SUPPLIER_COMMODITIES_ID =#{supplierCommoditiesId},
+				</if>
+				<if test="supplierId!=null">
+					SUPPLIER_ID =#{supplierId},
+				</if>
+				<if test="updateUserCode!=null">
+					UPDATE_USER_CODE =#{updateUserCode},
+				</if>
+				<if test="versionNo!=null">
+					VERSION_NO =#{versionNo},
+				</if>
+				<if test="volumes!=null">
+					VOLUMES =#{volumes},
+				</if>
+				<if test="yunhanId!=null">
+					YUNHAN_ID =#{yunhanId},
+				</if>
+				<if test="yunhanOrderCode!=null">
+					YUNHAN_ORDER_CODE =#{yunhanOrderCode},
+				</if>
+				<if test="yunhanSendoutCode!=null">
+					YUNHAN_SENDOUT_CODE =#{yunhanSendoutCode},
+				</if>
+				UPDATE_TIME =sysdate
+		</set>
+		<where>
+				<if test="id!=null">
+					and ID=#{id}   
+				</if>
+				<if test="id==null">
+					<if  test="sendoutGoodsCode!=null">
+						AND SENDOUT_GOODS_CODE = #{sendoutGoodsCode}
+					</if>
+					<if test="bookTitle!=null">
+						and BOOK_TITLE = #{bookTitle}
+					</if>
+					<if test="isbn!=null">
+						and ISBN =#{isbn}
+					</if>
+					<if test="price!=null">
+						and PRICE = #{price}
+					</if>
+					<if test="purchaseOrderCode!=null">
+						and PURCHASE_ORDER_CODE = #{purchaseOrderCode}
+					</if>
+					<if test="supplierId!=null">
+						and SUPPLIER_ID =#{supplierId}
+					</if>
+					<if test="purchaserId!=null">
+						and PURCHASER_ID = #{purchaserId}
+					</if>
+				</if>
+		</where>
+	</update>
+	
+	
+	
+	
+	
+	 <!-- 整单删除 -发货单细目全部删除  added by wangtao  -->
+	 <update id="updateSendoutItemsDeleteAll" parameterType="ProSendoutItemsBacktoCondition">
+		UPDATE PRO_SENDOUT_ITEMS
+		<set>
+			IS_DELETE ='Y',
+			UPDATE_TIME =sysdate
+		</set>
+		<where>
+			SENDOUT_GOODS_CODE = #{sendoutGoodsCode}
+			and SUPPLIER_ID =#{supplierId}
+			and PURCHASER_ID = #{purchaserId}
+		</where>
+	</update>
+	
+	
+	<!-- 发货单细目单细目删除  added by wangtao  -->
+	 <update id="updateSendoutItemsDeleteByid" parameterType="ProSendoutItemsBacktoCondition">
+		UPDATE PRO_SENDOUT_ITEMS
+		<set>
+			IS_DELETE ='Y',
+			UPDATE_TIME =sysdate
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	<!-- 统计发货单下细目还有多少条未删除  -->
+	<select id="findSendOutItemsCount" resultType="java.lang.Integer" parameterType="ProSendoutItemsBacktoDO" >
+		select count(1) from pro_sendout_items t
+		<where>
+			t.is_delete = 'N' 
+			and t.SENDOUT_GOODS_CODE = #{sendoutGoodsCode}
+			and t.SUPPLIER_ID =#{supplierId}
+			and t.PURCHASER_ID = #{purchaserId}
+		</where>
+	</select>
+	
+	
+	
+	<!-- 保存发货单细目  added luohoudong -->
+	<insert id="saveSendoutItems" parameterType="ProSendoutItemsBacktoDO">
+		<selectKey resultType="java.lang.Long" order="BEFORE"
+			keyProperty="id">
+			SELECT PRO_SENDOUT_ITEMS_SEQ.nextval AS 
+															id
+														 FROM dual
+		</selectKey>
+		INSERT INTO  PRO_SENDOUT_ITEMS 
+		(
+<!-- 				<if test="addTime!=null"> -->
+					ADD_TIME,
+<!-- 				</if> -->
+				<if test="addUserCode!=null">
+					ADD_USER_CODE,
+				</if>
+				<if test="affiliateSeries!=null">
+					AFFILIATE_SERIES,
+				</if>
+				<if test="authorEditor!=null">
+					AUTHOR_EDITOR,
+				</if>
+				<if test="bookTitle!=null">
+					BOOK_TITLE,
+				</if>
+				<if test="impression!=null">
+					IMPRESSION,
+				</if>
+				<if test="isbn!=null">
+					ISBN,
+				</if>
+				<if test="isrc!=null">
+					ISRC,
+				</if>
+				<if test="isDelete!=null">
+					IS_DELETE,
+				</if>
+				<if test="isDiffExport!=null">
+					IS_DIFF_EXPORT,
+				</if>
+				<if test="isExport!=null">
+					IS_EXPORT,
+				</if>
+				<if test="isForeverOosExport!=null">
+					IS_FOREVER_OOS_EXPORT,
+				</if>
+				<if test="isInitiative!=null">
+					IS_INITIATIVE,
+				</if>
+				<if test="isSupplierAddProduct!=null">
+					IS_SUPPLIER_ADD_PRODUCT,
+				</if>
+				<if test="notEnoughFlag!=null">
+					NOT_ENOUGH_FLAG,
+				</if>
+				<if test="packageId!=null">
+					PACKAGE_ID,
+				</if>
+				<if test="pakageNum!=null">
+					PAKAGE_NUM,
+				</if>
+				<if test="paperback!=null">
+					PAPERBACK,
+				</if>
+				<if test="price!=null">
+					PRICE,
+				</if>
+				<if test="proPurOrderItemsId!=null">
+					PRO_PUR_ORDER_ITEMS_ID,
+				</if>
+				
+				<if test="purchaserCommoditiesId!=null">
+					PURCHASER_COMMODITIES_ID,
+				</if>
+				<if test="purchaserId!=null">
+					PURCHASER_ID,
+				</if>
+				<if test="purchaseOrderCode!=null">
+					PURCHASE_ORDER_CODE,
+				</if>
+				<if test="receiveDate!=null">
+					RECEIVE_DATE,
+				</if>
+				<if test="receiveQty!=null">
+					RECEIVE_QTY,
+				</if>
+				<if test="remark!=null">
+					REMARK,
+				</if>
+				<if test="responseStatus!=null">
+					RESPONSE_STATUS,
+				</if>
+				<if test="responseType!=null">
+					RESPONSE_TYPE,
+				</if>
+				<if test="rowUniqueNo!=null">
+					ROW_UNIQUE_NO,
+				</if>
+				<if test="salesPrices!=null">
+					SALES_PRICES,
+				</if>
+				<if test="sendoutDiscountrate!=null">
+					SENDOUT_DISCOUNTRATE,
+				</if>
+				<if test="sendoutGoodsCode!=null">
+					SENDOUT_GOODS_CODE,
+				</if>
+				<if test="sendoutPrice!=null">
+					SENDOUT_PRICE,
+				</if>
+				<if test="sendoutQty!=null">
+					SENDOUT_QTY,
+				</if>
+				<if test="seriesTitle!=null">
+					SERIES_TITLE,
+				</if>
+				<if test="sourceType!=null">
+					SOURCE_TYPE,
+				</if>
+				<if test="status!=null">
+					STATUS,
+				</if>
+				<if test="subscriptionCode!=null">
+					SUBSCRIPTION_CODE,
+				</if>
+				<if test="supplierCommoditiesId!=null">
+					SUPPLIER_COMMODITIES_ID,
+				</if>
+				<if test="supplierId!=null">
+					SUPPLIER_ID,
+				</if>
+				<if test="updateTime!=null">
+					UPDATE_TIME,
+				</if>
+				<if test="updateUserCode!=null">
+					UPDATE_USER_CODE,
+				</if>
+				<if test="versionNo!=null">
+					VERSION_NO,
+				</if>
+				<if test="volumes!=null">
+					VOLUMES,
+				</if>
+				<if test="yunhanId!=null">
+					YUNHAN_ID,
+				</if>
+				<if test="yunhanOrderCode!=null">
+					YUNHAN_ORDER_CODE,
+				</if>
+				<if test="yunhanSendoutCode!=null">
+					YUNHAN_SENDOUT_CODE,
+				</if>
+				ID
+		) VALUES (
+				sysdate,
+				<!-- <if test="addTime!=null">
+					#{addTime,jdbcType=DATE},
+				</if> -->
+				<if test="addUserCode!=null">
+					trim(#{addUserCode,jdbcType=VARCHAR}),
+				</if>
+				<if test="affiliateSeries!=null">
+					trim(#{affiliateSeries,jdbcType=VARCHAR}),
+				</if>
+				<if test="authorEditor!=null">
+					trim(#{authorEditor,jdbcType=VARCHAR}),
+				</if>
+				<if test="bookTitle!=null">
+					trim(#{bookTitle,jdbcType=VARCHAR}),
+				</if>
+				<if test="impression!=null">
+					#{impression,jdbcType=NUMERIC},
+				</if>
+				<if test="isbn!=null">
+					trim(#{isbn,jdbcType=VARCHAR}),
+				</if>
+				<if test="isrc!=null">
+					trim(#{isrc,jdbcType=VARCHAR}),
+				</if>
+				<if test="isDelete!=null">
+					trim(#{isDelete,jdbcType=VARCHAR}),
+				</if>
+				<if test="isDiffExport!=null">
+					trim(#{isDiffExport,jdbcType=VARCHAR}),
+				</if>
+				<if test="isExport!=null">
+					trim(#{isExport,jdbcType=VARCHAR}),
+				</if>
+				<if test="isForeverOosExport!=null">
+					trim(#{isForeverOosExport,jdbcType=VARCHAR}),
+				</if>
+				<if test="isInitiative!=null">
+					trim(#{isInitiative,jdbcType=VARCHAR}),
+				</if>
+				<if test="isSupplierAddProduct!=null">
+					trim(#{isSupplierAddProduct,jdbcType=VARCHAR}),
+				</if>
+				<if test="notEnoughFlag!=null">
+					trim(#{notEnoughFlag,jdbcType=VARCHAR}),
+				</if>
+				<if test="packageId!=null">
+					trim(#{packageId,jdbcType=VARCHAR}),
+				</if>
+				<if test="pakageNum!=null">
+					#{pakageNum,jdbcType=NUMERIC},
+				</if>
+				<if test="paperback!=null">
+					trim(#{paperback,jdbcType=VARCHAR}),
+				</if>
+				<if test="price!=null">
+					#{price,jdbcType=NUMERIC},
+				</if>
+				<if test="proPurOrderItemsId!=null">
+					#{proPurOrderItemsId,jdbcType=NUMERIC},
+				</if>
+				<if test="purchaserCommoditiesId!=null">
+					trim(#{purchaserCommoditiesId,jdbcType=VARCHAR}),
+				</if>
+				<if test="purchaserId!=null">
+					trim(#{purchaserId,jdbcType=VARCHAR}),
+				</if>
+				<if test="purchaseOrderCode!=null">
+					trim(#{purchaseOrderCode,jdbcType=VARCHAR}),
+				</if>
+				<if test="receiveDate!=null">
+					#{receiveDate,jdbcType=DATE},
+				</if>
+				<if test="receiveQty!=null">
+					#{receiveQty,jdbcType=NUMERIC},
+				</if>
+				<if test="remark!=null">
+					trim(#{remark,jdbcType=VARCHAR}),
+				</if>
+				<if test="responseStatus!=null">
+					trim(#{responseStatus,jdbcType=VARCHAR}),
+				</if>
+				<if test="responseType!=null">
+					trim(#{responseType,jdbcType=VARCHAR}),
+				</if>
+				<if test="rowUniqueNo!=null">
+					trim(#{rowUniqueNo,jdbcType=VARCHAR}),
+				</if>
+				<if test="salesPrices!=null">
+					#{salesPrices,jdbcType=NUMERIC},
+				</if>
+				<if test="sendoutDiscountrate!=null">
+					#{sendoutDiscountrate,jdbcType=NUMERIC},
+				</if>
+				<if test="sendoutGoodsCode!=null">
+					trim(#{sendoutGoodsCode,jdbcType=VARCHAR}),
+				</if>
+				<if test="sendoutPrice!=null">
+					#{sendoutPrice,jdbcType=NUMERIC},
+				</if>
+				<if test="sendoutQty!=null">
+					#{sendoutQty,jdbcType=NUMERIC},
+				</if>
+				<if test="seriesTitle!=null">
+					trim(#{seriesTitle,jdbcType=VARCHAR}),
+				</if>
+				<if test="sourceType!=null">
+					trim(#{sourceType,jdbcType=VARCHAR}),
+				</if>
+				<if test="status!=null">
+					trim(#{status,jdbcType=VARCHAR}),
+				</if>
+				<if test="subscriptionCode!=null">
+					trim(#{subscriptionCode,jdbcType=VARCHAR}),
+				</if>
+				<if test="supplierCommoditiesId!=null">
+					trim(#{supplierCommoditiesId,jdbcType=VARCHAR}),
+				</if>
+				<if test="supplierId!=null">
+					trim(#{supplierId,jdbcType=VARCHAR}),
+				</if>
+				<if test="updateTime!=null">
+					#{updateTime,jdbcType=DATE},
+				</if>
+				<if test="updateUserCode!=null">
+					trim(#{updateUserCode,jdbcType=VARCHAR}),
+				</if>
+				<if test="versionNo!=null">
+					trim(#{versionNo,jdbcType=VARCHAR}),
+				</if>
+				<if test="volumes!=null">
+					#{volumes,jdbcType=NUMERIC},
+				</if>
+				<if test="yunhanId!=null">
+					trim(#{yunhanId,jdbcType=VARCHAR}),
+				</if>
+				<if test="yunhanOrderCode!=null">
+					trim(#{yunhanOrderCode,jdbcType=VARCHAR}),
+				</if>
+				<if test="yunhanSendoutCode!=null">
+					trim(#{yunhanSendoutCode,jdbcType=VARCHAR}),
+				</if>
+					${id}
+		)
+	</insert>
+	
+	
+	
+	 <!-- 查询发货单详情 -->
+	<select id="querySendItemsToDetail" resultMap="proSendoutItemsResult" 
+		parameterType="ProSendoutItemsBacktoCondition">
+		SELECT 
+		    IT.ID,
+		    IT.PURCHASE_ORDER_CODE,
+		    IT.ISBN ,
+		    IT.BOOK_TITLE ,
+		    IT.SENDOUT_PRICE,
+		    IT.SENDOUT_DISCOUNTRATE,
+		    IT.SENDOUT_QTY,
+		    IT.SENDOUT_GOODS_CODE,
+		    IT.IS_INITIATIVE,
+		    IT.PRO_PUR_ORDER_ITEMS_ID,
+		    O.ORDER_TYPE,
+		    O.URGENT_FLAG,
+		    OIT.PRICE AS PRICE,
+		    OIT.DISCOUNTRATE,
+		    OIT.ORDER_QTY,
+		    OIT.IS_SUIT_BOOK,
+		    IT.IS_SUPPLIER_ADD_PRODUCT
+		FROM PRO_SENDOUT_ITEMS  IT
+		left JOIN PRO_PUR_ORDER_SUMMARY O
+		ON  IT.PURCHASE_ORDER_CODE = O.PURCHASE_ORDER_CODE and o.purchaser_id = IT.purchaser_id
+		left JOIN PRO_PUR_ORDER_ITEMS  OIT
+		ON IT.PRO_PUR_ORDER_ITEMS_ID = OIT.ID
+		<where>
+				 IT.IS_DELETE='N'
+			<if  test="sendoutGoodsCode!=null">
+				AND IT.SENDOUT_GOODS_CODE = #{sendoutGoodsCode}
+			</if>
+			<if  test="supplierId!=null">
+				AND IT.SUPPLIER_ID = #{supplierId}
+			</if>
+			<if test="purchaserId!=null">
+				AND IT.PURCHASER_ID =#{purchaserId}
+				</if>
+		</where>
+		ORDER BY IT.PURCHASE_ORDER_CODE DESC
+	 </select>
+	 
+	<select id="querySendItemsToDetail_count" resultType="java.lang.Integer" 
+		parameterType="ProSendoutItemsBacktoCondition">
+		SELECT COUNT(1) 
+		FROM PRO_SENDOUT_ITEMS  IT
+		left JOIN PRO_PUR_ORDER_SUMMARY O
+		ON  IT.PURCHASE_ORDER_CODE = O.PURCHASE_ORDER_CODE and o.purchaser_id = IT.purchaser_id
+		left JOIN PRO_PUR_ORDER_ITEMS  OIT
+		ON IT.PRO_PUR_ORDER_ITEMS_ID = OIT.ID
+		<where>
+				 IT.IS_DELETE='N'
+			<if  test="sendoutGoodsCode!=null">
+				AND IT.SENDOUT_GOODS_CODE = #{sendoutGoodsCode}
+			</if>
+			<if  test="supplierId!=null">
+				AND IT.SUPPLIER_ID = #{supplierId}
+			</if>
+			<if test="purchaserId!=null">
+				AND IT.PURCHASER_ID =#{purchaserId}
+				</if>
+		</where>
+	</select>
+	
+	<select id="queryProSendoutItems" resultMap="proSendoutItemsResult" 
+		parameterType="ProSendoutItemsBacktoCondition">
+		SELECT 
+		    IT.ID ,
+		    IT.PURCHASE_ORDER_CODE,
+		    IT.ISBN ,
+		    IT.BOOK_TITLE ,
+		    IT.SENDOUT_PRICE,
+		    IT.SENDOUT_DISCOUNTRATE,
+		    IT.SENDOUT_QTY,
+		    IT.SENDOUT_GOODS_CODE ,
+		    IT.IS_INITIATIVE,
+		    IT.PRO_PUR_ORDER_ITEMS_ID,
+		    IT.YUNHAN_ORDER_CODE,
+		    it.price,
+		    IT.STATUS,
+		    IT.IS_SUPPLIER_ADD_PRODUCT,
+		    TPPOS.ORDER_TYPE,
+		    TPPOS.URGENT_FLAG,
+		    IT.SUPPLIER_ID,
+		    IT.PURCHASER_ID
+		FROM PRO_SENDOUT_ITEMS  IT
+		left JOIN PRO_PUR_ORDER_SUMMARY TPPOS
+		ON  IT.PURCHASE_ORDER_CODE = TPPOS.PURCHASE_ORDER_CODE and TPPOS.purchaser_id = IT.purchaser_id
+		WHERE 
+		IT.IS_DELETE='N'
+		<if  test="id!=null">
+			AND IT.ID = ${id}
+		</if>
+		<if  test="sendoutGoodsCode!=null">
+			AND IT.SENDOUT_GOODS_CODE = '${sendoutGoodsCode}'
+		</if>
+		<if test="supplierId!=null">
+			and it.supplier_Id =#{supplierId}
+		</if>
+			<if test="purchaserId!=null">
+			and it.PURCHASER_ID =#{purchaserId}
+		</if>
+		 <!-- <include refid="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao.isExists"></include> -->
+		ORDER BY IT.PURCHASE_ORDER_CODE DESC	
+	 </select>
+	
+	<select id="queryProSendoutItems_count" resultType="java.lang.Integer" 
+		parameterType="ProSendoutItemsBacktoCondition">
+		SELECT count(1) 
+		FROM PRO_SENDOUT_ITEMS  IT
+		WHERE    IT.IS_DELETE='N'
+				<if  test="id!=null">
+					AND IT.ID = ${id}
+				</if>
+				<if  test="sendoutGoodsCode!=null">
+					AND IT.SENDOUT_GOODS_CODE = '${sendoutGoodsCode}'
+				</if>	
+					<if test="purchaserId!=null">
+					and it.PURCHASER_ID =#{purchaserId}
+				</if>
+				<if test="supplierId!=null">
+				and it.supplier_Id =#{supplierId}
+				</if>
+<!-- 		<include refid="com.yunhan.scc.backto.web.dao.mapper.system.SystemBacktoDao.isExists"></include> -->
+	</select>
+	
+	<!-- 发货单细目导出 -->
+	<select id="queryExportProSendoutItems" resultMap="proSendoutItemsResult" 
+		parameterType="ProSendoutItemsBacktoCondition">
+		SELECT 
+		    IT.ID ,
+		    IT.PURCHASE_ORDER_CODE,
+		    IT.ISBN ,
+		    IT.BOOK_TITLE ,
+		    IT.SENDOUT_PRICE,
+		    IT.SENDOUT_DISCOUNTRATE,
+		    IT.SENDOUT_QTY,
+		    IT.SENDOUT_GOODS_CODE ,
+		    IT.IS_INITIATIVE,
+		    IT.PRO_PUR_ORDER_ITEMS_ID,
+		    IT.YUNHAN_ORDER_CODE
+		FROM PRO_SENDOUT_ITEMS  IT
+		<where>
+				  IT.IS_DELETE='N'
+				<if  test="id!=null">
+					AND IT.ID = ${id}
+				</if>
+				<if  test="sendoutGoodsCode!=null">
+					AND IT.SENDOUT_GOODS_CODE = '${sendoutGoodsCode}'
+				</if>	
+				<if test="proPurOrderItemsId!=null">
+					and PRO_PUR_ORDER_ITEMS_ID = #{proPurOrderItemsId}
+				</if>
+				<!-- edit by yangtao 2016-5-6 导出增加供应商和采购商ID -->
+				<if test="supplierId!=null">
+					and IT.SUPPLIER_ID = #{supplierId}
+				</if>
+				<if test="purchaserId!=null">
+					and IT.PURCHASER_ID = #{purchaserId}
+				</if>
+				<!-- end -->
+		</where>
+	 </select>
+</mapper>

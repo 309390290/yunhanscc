@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	@author wangtao
+	@version 2016年7月21日16:53:53
+-->
+<mapper namespace="com.yunhan.scc.backto.interfaceEntrance.dao.mapper.sendgoods.SendSendGoodsDao">
+	
+	<!-- 子查询细目 -->
+	<resultMap type="SendSendoutSummaryDO" id="send_sendoutSummaryAndItmes">
+			<result property="addTime" column="ADD_TIME" />
+			<result property="addUserCode" column="ADD_USER_CODE" />
+			<result property="destination" column="DESTINATION" />
+			<result property="followNo" column="FOLLOW_NO" />
+			<result property="id" column="ID" />
+			<result property="isInitiative" column="IS_INITIATIVE" />
+			<result property="isSupplierAddProduct" column="IS_SUPPLIER_ADD_PRODUCT" />
+			<result property="pakagesQty" column="PAKAGES_QTY" />
+			<result property="purchaserId" column="PURCHASER_ID" />
+			<result property="purchaseOrderCode" column="PURCHASE_ORDER_CODE" />
+			<result property="receiveAddress" column="RECEIVE_ADDRESS" />
+			<result property="receiveCompany" column="RECEIVE_COMPANY" />
+			<result property="receivePhoneno" column="RECEIVE_PHONENO" />
+			<result property="receiveRemark" column="RECEIVE_REMARK" />
+			<result property="receiveUserName" column="RECEIVE_USER_NAME" />
+			<result property="receiveWarehouse" column="RECEIVE_WAREHOUSE" />
+			<result property="sendoutDate" column="SENDOUT_DATE" jdbcType="DATE" javaType="java.util.Date" />
+			<result property="sendoutGoodsCode" column="SENDOUT_GOODS_CODE" />
+			<result property="sendoutRemark" column="SENDOUT_REMARK" />
+			<result property="sendoutStation" column="SENDOUT_STATION" />
+			<result property="sendoutStatus" column="SENDOUT_STATUS" />
+			<result property="supplierContactPhoneno" column="SUPPLIER_CONTACT_PHONENO" />
+			<result property="supplierContactUser" column="SUPPLIER_CONTACT_USER" />
+			<result property="supplierId" column="SUPPLIER_ID" />
+			<result property="totalBookQty" column="TOTAL_BOOK_QTY" />
+			<result property="totalPrice" column="TOTAL_PRICE" />
+			<result property="totalRealityPrice" column="TOTAL_REALITY_PRICE" />
+			<result property="totalVarietyQty" column="TOTAL_VARIETY_QTY" />
+			<result property="transportCompany" column="TRANSPORT_COMPANY" />
+			<result property="transportMode" column="TRANSPORT_MODE" />
+			<result property="transportNo" column="TRANSPORT_NO" />
+			<result property="transportPhoneno" column="TRANSPORT_PHONENO" />
+			<result property="updateTime" column="UPDATE_TIME" />
+			<result property="updateUserCode" column="UPDATE_USER_CODE" />
+			<result property="yunhanOrderCode" column="YUNHAN_ORDER_CODE" />
+			<result property="yunhanSendoutCode" column="YUNHAN_SENDOUT_CODE" />
+			<result property="isDelete" column="IS_DELETE"/>
+			<collection property="sendOutItems"  column="{sendoutGoodsCode=sendout_Goods_Code,supplierId=supplier_Id,purchaserId=purchaser_Id}" select="send_sendOutSummaryByItems"/>
+	</resultMap>
+	<resultMap type="SendSendoutItemsDO" id="send_sendoutSummaryAndItmesByItmes">
+			<result property="addTime" column="ADD_TIME" />
+			<result property="addUserCode" column="ADD_USER_CODE" />
+			<result property="bookTitle" column="BOOK_TITLE" />
+			<result property="id" column="ID" />
+			<result property="isbn" column="ISBN" />
+			<result property="isDiffExport" column="IS_DIFF_EXPORT" />
+			<result property="isForeverOosExport" column="IS_FOREVER_OOS_EXPORT" />
+			<result property="isInitiative" column="IS_INITIATIVE" />
+			<result property="isSupplierAddProduct" column="IS_SUPPLIER_ADD_PRODUCT" />
+			<result property="notEnoughFlag" column="NOT_ENOUGH_FLAG" />
+			<result property="price" column="PRICE" />
+			<result property="proPurOrderItemsId" column="PRO_PUR_ORDER_ITEMS_ID" />
+			<result property="purchaserCommoditiesId" column="PURCHASER_COMMODITIES_ID" />
+			<result property="purchaseOrderCode" column="PURCHASE_ORDER_CODE" />
+			<result property="responseStatus" column="RESPONSE_STATUS" />
+			<result property="responseType" column="RESPONSE_TYPE" />
+			<result property="rowUniqueNo" column="ppoi_row_unique_no" />
+			<result property="sendoutDiscountrate" column="SENDOUT_DISCOUNTRATE" />
+			<result property="sendoutGoodsCode" column="SENDOUT_GOODS_CODE" />
+			<result property="sendoutPrice" column="SENDOUT_PRICE" />
+			<result property="sendoutQty" column="SENDOUT_QTY" />
+			<result property="supplierCommoditiesId" column="SUPPLIER_COMMODITIES_ID" />
+			<result property="supplierId" column="SUPPLIER_ID" />
+			<result property="updateTime" column="UPDATE_TIME" />
+			<result property="updateUserCode" column="UPDATE_USER_CODE" />
+			<result property="yunhanId" column="YUNHAN_ID" />
+			<result property="yunhanOrderCode" column="YUNHAN_ORDER_CODE" />
+			<result property="yunhanSendoutCode" column="YUNHAN_SENDOUT_CODE" />
+			<result property="orderType" column="ORDER_TYPE" />
+			<result property="urgentFlag" column="URGENT_FLAG" />
+			<result property="discountrate" column="DISCOUNTRATE" />
+			<result property="orderQty" column="ORDER_QTY" />
+			<result property="authorEditor" column="AUTHOR_EDITOR" />
+			<result property="affiliateSeries" column="AFFILIATE_SERIES" />
+			<result property="impression" column="IMPRESSION" />
+			<result property="paperback" column="PAPERBACK" />
+			<result property="publisher" column="PUBLISHER" />
+			<result property="salePrice" column="SALE_PRICE" />
+			<result property="seriesTitle" column="SERIES_TITLE" />
+			<result property="versionNo" column="VERSION_NO" />
+			<result property="isDelete" column="IS_DELETE"/>
+			<result property="purchaserId" column="PURCHASER_ID" /><!-- 采购商id  added by luohoudong -->
+	</resultMap>
+	<!--查询发货单总目和发货单细目之总目 -->
+	<select id="send_sendOutSummaryAndItems" resultMap="send_sendoutSummaryAndItmes"
+		parameterType="ProSendoutSummaryBacktoCondition">
+		select * from (select t.*
+		from PRO_SENDOUT_SUMMARY t
+		<where>
+<!-- 			t.IS_DELETE='N' -->
+			and t.purchaser_id = #{purchaserId}
+			and t.supplier_id = #{supplierId}
+			and t.sendout_goods_code=#{sendoutGoodsCode}
+		</where>
+		order by t.id desc)
+		where rownum = 1
+	</select>
+	<!-- 根据发货总目查询细目 -->
+	<select id="send_sendOutSummaryByItems" resultMap="send_sendoutSummaryAndItmesByItmes"
+		parameterType="ProSendoutSummaryBacktoCondition">
+		select send.*,ppoi.row_unique_no ppoi_row_unique_no
+    	from pro_sendout_items send,pro_pur_order_items ppoi
+		<where>
+			send.pro_pur_order_items_id = ppoi.id(+)
+			and send.sendout_goods_code = #{sendoutGoodsCode}
+			and send.purchaser_id = #{purchaserId}
+			and send.supplier_id = #{supplierId}
+<!-- 			and send.IS_DELETE='N' -->
+		</where>
+	</select>
+	
+	
+	
+	<!--  接口的发货单处理之后调用存储过程写回告的数据 -->
+	<update id="instPesponseItemsCall" statementType="CALLABLE" parameterType="java.util.Map" >
+		{call Pur_Order_Manage_Pkg.INST_RESPONSE_ITEMS_NEW_P(
+			#{sendoutGoodsCode,jdbcType=VARCHAR,mode=IN}, 
+           	#{purchaserId,jdbcType=VARCHAR,mode=IN},
+            #{supplierId,jdbcType=VARCHAR,mode=IN},
+            #{o_RETURN_INT,	jdbcType=INTEGER,mode=OUT},
+			#{o_RETURN_STR,	jdbcType=VARCHAR,mode=OUT}
+		)}
+	</update>
+</mapper>

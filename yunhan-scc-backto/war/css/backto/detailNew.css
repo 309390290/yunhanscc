@@ -1,0 +1,211 @@
+.contBox{
+	border: 1px solid #ccc;
+    padding:  20px 30px;
+    margin: 20px 20px 0;
+}
+
+.contBox .listBoxbottom{
+	   margin-bottom: 20px;
+}
+.contBox .listBox h5{
+	border-left: 4px solid #3c89cd;
+    height: 16px;
+    line-height: 16px;
+    padding-left: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    word-wrap: normal;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+.contBox .listBox ul{
+	margin-top: 10px;
+}
+.contBox .listBox ul:after {
+    content: "020";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.contBox .listBox ul li{
+	float: left;
+	width:25%;
+	height: 22px;
+    line-height: 22px;
+}
+.contBox .listBox ul .specialLi{
+	width:50%;
+}
+.contBox .listBox ul li:after {
+    content: "020";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.contBox .listBox ul li span{
+	float: left;
+	 white-space: nowrap;
+    overflow: hidden;
+    word-wrap: normal;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+        max-width: 210px;
+}
+.contBox .listBox ul li .specialSpan{
+       max-width: 85%;
+}
+
+.contBox .listBox ul li a{
+	float: left;
+	color:#3c89cd;
+}
+.contBox .listBox ul li .name{
+	float: left;
+	color:#666;
+	width: 90px;
+    text-align: right;
+}
+.contBox .listBox ul li .cont{
+	color:#333;
+	    margin: 0 10px;
+}
+
+
+
+.bodyBox .bodyContentBox .Tab .screenBox .left{
+	width:100%;
+	    border-right:none;
+}
+.bodyBox .bodyContentBox .Tab .screenBox .left ul li{
+	width:25%;
+	position: relative;
+}
+.bodyContentBox .Tab .screenBox .left .labe{
+	width: 80px;
+	 float: left;
+    font-size: 12px;
+    color: #333;
+    margin-right: 15px;
+    line-height: 24px;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    word-wrap: normal;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+.btn_so{
+	left: 42px;
+}
+.orderClose{
+    background-color: #3c89cd !important;
+    color:#fff !important;
+}
+.orderClose:hover{
+    color:#000 !important;
+}
+
+.commodityInformation  .left{
+	width:15%;
+	float: left;
+	margin-top: 15px;
+}
+.commodityInformation  .left p{
+	float: left;
+	margin-left: 4px;
+	margin-top: 4px;
+}
+.commodityInformation  .right{
+	width:80%;
+	float: left;
+	margin: 6px 4px;
+}
+.commodityInformation  .right p{
+	text-align: left;
+	width:100%;
+	height:20px;
+	white-space: nowrap;
+    overflow: hidden;
+    word-wrap: normal;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+.commodityInformation  .right .csm{
+	color:#9A9A9A;
+}
+.modalBox{
+	padding-bottom: 20px;
+	display: none;
+}
+.dis_del_btn{
+	padding: 0 8px;
+}
+
+.contBox .listBoxOC{
+	    margin-top: 10px;
+	    text-align: center;
+}
+
+.contBox .listHidden{
+	   display: none;
+}
+.listLi li{
+	    margin-bottom: 8px;
+}
+.mark{
+	width:444px;
+}
+.contBox .listBoxOC .more-btn{
+	padding:1px 6px;
+	color:#3c89cd;
+	border: 1px solid #3c89cd;
+	text-align: center;
+	cursor: pointer;
+}
+.contBox .listBox ul li #orderType{
+	width: 137px;
+}
+
+.addProduct{
+	max-height:350px;
+	overflow-y: auto;
+
+}
+.addProduct .title{
+	overflow: hidden;
+}
+
+
+.addProduct .title label{
+	    float: left;
+}
+.addProduct .title input{
+	width: 110px;
+	    float: left;
+	        margin-right: 20px;
+}
+.addProduct .title a{
+	    float: right;
+}
+.addProduct .suppfont{
+	font-weight: bold;
+	padding: 6px 0;
+	border-bottom: 1px dashed #cacaca;
+	
+}
+.addProduct .addToOrder{
+	text-align: right;
+	padding: 10px 0;
+}
+.btn_white{
+	padding: 0 5px;
+    margin: 5px;
+     color: #333 !important;
+}
+
+
+

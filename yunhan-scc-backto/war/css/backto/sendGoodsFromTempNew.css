@@ -1,0 +1,801 @@
+.bodyBox .contentBox {
+  overflow: hidden;
+}
+.bodyBox .contentBox .left12 {
+  float: left;
+  width: 12%;
+  height: 100%;
+  background-color: #cce6ff;
+}
+.bodyBox .contentBox .left12 ul {
+  float: right;
+  width: 90%;
+  text-align: right;
+  margin-left: 10%;
+  padding-top: 20px;
+}
+.bodyBox .contentBox .left12 ul li {
+  height: 24px;
+  color: #3c89cd;
+  text-decoration: underline;
+  cursor: pointer;
+  padding-right: 10px;
+  border: 1px solid #cce6ff;
+  border-right: none;
+}
+.bodyBox .contentBox .left12 ul li:hover {
+  background-color: #ffffff;
+  text-decoration: none;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-top-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: #ccc;
+  border-bottom-color: #ccc;
+  border-left-color: #ccc;
+}
+.bodyBox .contentBox .left12 ul li.active {
+  background-color: #ffffff;
+  text-decoration: none;
+  color: #333;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-top-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: #ccc;
+  border-bottom-color: #ccc;
+  border-left-color: #ccc;
+}
+.bodyBox .contentBox .left12 ul a {
+  height: 24px;
+  color: #3c89cd;
+  white-space: nowrap;
+  overflow: hidden;
+  word-wrap: normal;
+  text-overflow: ellipsis;
+  display: block;
+  line-height: 24px;
+}
+.bodyBox .contentBox .left12 ul a:hover {
+  color: #333;
+}
+.bodyBox .contentBox .left12 ul a.active {
+  background-color: #ffffff;
+  text-decoration: none;
+  color: #333;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-top-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: #ccc;
+  border-bottom-color: #ccc;
+  border-left-color: #ccc;
+}
+.bodyBox .contentBox .right88 {
+  float: left;
+  width: 88%;
+  padding-left: 20px;
+  padding-right: 20px;
+    box-sizing: border-box;
+}
+.bodyBox .contentBox .right88 .list_box {
+  display: none;
+}
+.bodyBox .contentBox .right88 .active {
+  display: block;
+}
+.bodyBox .contentBox .right88 .searchBox {
+  min-height: 1px;
+  zoom: 1;
+  border: 1px solid #ccc;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 10px;
+  max-height: 166px;
+}
+.bodyBox .contentBox .right88 .searchBox:after {
+  content: "020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.bodyBox .contentBox .right88 .searchBox .left {
+  float: left;
+  width: 90%;
+  border-right: 1px solid #ccc;
+  box-sizing: border-box;
+}
+.bodyBox .contentBox .right88 .searchBox .left input {
+  box-sizing: border-box;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul {
+  min-height: 1px;
+  zoom: 1;
+  padding-left: 20px;
+  padding-top: 10px;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul:after {
+  content: "020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li {
+  float: left;
+  width: 33%;
+  height: 24px;
+  margin-bottom: 10px;
+  min-height: 1px;
+  zoom: 1;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .choice {
+  padding-top: 5px;
+  min-height: 1px;
+  zoom: 1;
+  float: left;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .choice:after {
+  content: "020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .choice input {
+  float: left;
+  margin-right: 2px;
+  -webkit-appearance: none;
+  display: block;
+  width: 12px;
+  height: 12px;
+  background-position: 0 24px;
+  cursor: pointer;
+  vertical-align: middle;
+  border: 1px solid #ccc;
+  position: relative;
+  background-color: #fff;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .choice input:checked {
+  background-position: 0 0;
+  border: 1px solid #4d99db;
+  background-color: #4d99db;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .choice input::before,
+.bodyBox .contentBox .right88 .searchBox .left ul li .choice input::after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  height: 2px;
+  background-color: #fff;
+  left: 3px;
+  top: 8px;
+  display: inline-block;
+  -moz-transform-origin: left top;
+  -ms-transform-origin: left top;
+  -o-transform-origin: left top;
+  -webkit-transform-origin: left top;
+  transform-origin: left top;
+  content: ' ';
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .choice input::before {
+  width: 4px;
+  transform: rotate(-135deg);
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .choice input::after {
+  width: 9px;
+  transform: rotate(-50deg);
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .choice label {
+  float: left;
+  font-size: 12px;
+  line-height: 16px;
+  cursor: pointer;
+  margin-right: 20px;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li:after {
+  content: "020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .name {
+  float: left;
+  font-size: 12px;
+  color: #333;
+  margin-right: 15px;
+  line-height: 24px;
+  width: 85px;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  word-wrap: normal;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .com {
+  float: left;
+  width: 194px;
+  position: relative;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .com input {
+  width: 194px;
+  border: 1px solid #ccc;
+  height: 24px;
+  line-height: 24px;
+  padding: 0 2px;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .com input:hover {
+  border: 1px solid #92c6f5;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .com select {
+  width: 194px;
+  height: 24px;
+  line-height: 24px;
+  border: 1px solid #ccc;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .com select:hover {
+  border: 1px solid #92c6f5;
+}
+
+.bodyBox .contentBox .right88 .searchBox .left ul li .com .time_box {
+  position: absolute;
+  right: -118px;
+  top: 2px;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .com .time_box a {
+  height: 20px;
+  line-height: 18px;
+  text-align: center;
+  white-space: nowrap;
+  float: left;
+  border: 1px solid #3c89cd;
+  color: #3c89cd;
+  cursor: pointer;
+  padding-right: 2px;
+  padding-left: 2px;
+  margin-left: 5px;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .com .time_box a.active {
+  background-color: #3c89cd;
+  border: 1px solid #3c89cd;
+  color: #fff;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .gys {
+  min-height: 1px;
+  zoom: 1;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .gys:after {
+  content: "020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .gys input {
+  width: 144px;
+  float: left;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .gys span {
+  text-align: center;
+  float: left;
+  display: inline-block;
+  height: 24px;
+  line-height: 24px;
+  width: 26px;
+  border: 1px solid #ccc;
+  margin-left: -1px;
+  cursor: pointer;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .gys .add {
+  background: url("/img/glyphicons-halflings_hui.png") no-repeat -403px -92px;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .gys .del {
+  background: url("/img/glyphicons-halflings_hui.png") no-repeat -307px 5px;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .gys:hover input {
+  border: 1px solid #92c6f5;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .gys:hover span {
+  border: 1px solid #92c6f5;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .time {
+  min-height: 1px;
+  zoom: 1;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .time:after {
+  content: "020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .time input {
+  width: 194px;
+  float: left;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .time span {
+  float: left;
+  width: 14px;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .time .u-icon {
+  background: url("/img/glyphicons-halflings_hui.png") no-repeat -192px -120px;
+}
+.bodyBox .contentBox .right88 .searchBox .left ul li .time .u-icon-date {
+  margin-left: -16px;
+  margin-top: 5px;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+.bodyBox .contentBox .right88 .searchBox .right {
+	float: right;
+    width: 10%;
+    height: 112px;
+    position: relative;
+    text-align: center;
+    margin-top: 43px;
+}
+.bodyBox .contentBox .right88 .searchBox .right span{
+    float: right;
+    padding-right: 26px;
+    text-align: right;
+}
+.bodyBox .contentBox .right88 .searchBox .right .send{
+	padding-bottom: 14px;
+}
+.bodyBox .contentBox .right88 .searchBox .right a.top_10 {
+  margin-top: 10px;
+}
+.bodyBox .contentBox .right88 .searchBox .right .btn_back {
+  position: absolute;
+  top: 40%;
+  left: 28%;
+}
+.bodyBox .contentBox .right88 .searchBox .right .btn_back .fontleft {
+  float: left;
+  position: relative;
+  top: -15px;
+  left: 15px;
+  cursor: pointer;
+}
+.bodyBox .contentBox .right88 .searchBox .right .btn_back span {
+  display: block;
+  width: 80px;
+  height: 24px;
+  line-height: 24px;
+  color: #fff;
+  cursor: pointer;
+  margin-left: -40px;
+  text-align: center;
+  background-color: #3c89cd;
+}
+.bodyBox .contentBox .right88 .searchBox .right .btn_back .span1:hover {
+  background-color: #57a1e3;
+}
+.bodyBox .contentBox .right88 .searchBox .right .btn_back .span1:active {
+  background-color: #2370b5;
+}
+.bodyBox .contentBox .right88 .searchBox .right .btn_back .span1 i {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  margin-right: 2px;
+  line-height: 14px;
+  vertical-align: text-top;
+  background: url("/img/glyphicons-halflings-white.png") -48px 0;
+}
+.bodyBox .contentBox .right88 .searchBox .right .btn_back .span2 {
+  background-color: #fff;
+  color: #3c89cd;
+}
+.bodyBox .contentBox .right88 .searchBox .right .btn_back .span2 i {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  margin-right: 2px;
+  line-height: 14px;
+  vertical-align: text-top;
+  background: url("/img/glyphicons-halflings-white.png") -48px 0;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox {
+  padding: 0 20px;
+  height: 53px;
+  background-color: #eeeded;
+  border-bottom: 1px solid #dedede;
+  border-top: 1px solid #dedede;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .choice {
+  padding-left: 65px;
+  padding-top: 20px;
+  min-height: 1px;
+  zoom: 1;
+  float: left;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .choice:after {
+  content: "020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .choice input {
+  float: left;
+  margin-right: 2px;
+  -webkit-appearance: none;
+  display: block;
+  width: 12px;
+  height: 12px;
+  background-position: 0 24px;
+  cursor: pointer;
+  vertical-align: middle;
+  border: 1px solid #ccc;
+  position: relative;
+  background-color: #fff;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .choice input:checked {
+  background-position: 0 0;
+  border: 1px solid #4d99db;
+  background-color: #4d99db;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .choice input::before,
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .choice input::after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  height: 2px;
+  background-color: #fff;
+  left: 3px;
+  top: 8px;
+  display: inline-block;
+  -moz-transform-origin: left top;
+  -ms-transform-origin: left top;
+  -o-transform-origin: left top;
+  -webkit-transform-origin: left top;
+  transform-origin: left top;
+  content: ' ';
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .choice input::before {
+  width: 4px;
+  transform: rotate(-135deg);
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .choice input::after {
+  width: 9px;
+  transform: rotate(-50deg);
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .choice label {
+  float: left;
+  line-height: 100%;
+  cursor: pointer;
+  margin-right: 20px;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle {
+  float: right;
+  padding-top: 20px;
+  min-height: 1px;
+  zoom: 1;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle:after {
+  content: "020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .name {
+  float: left;
+  line-height: 100%;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .com {
+  float: left;
+  margin-left: 15px;
+  min-height: 1px;
+  zoom: 1;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .com:after {
+  content: "020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .com input {
+  float: left;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .com .setSyle {
+  -webkit-appearance: none;
+  display: block;
+  width: 12px;
+  height: 12px;
+  background-position: 0 24px;
+  cursor: pointer;
+  vertical-align: middle;
+  border: 1px solid #ccc;
+  position: relative;
+  background-color: #fff;
+  border-radius: 50%;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .com .setSyle:before {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #fff;
+  left: 2px;
+  top: 2px;
+  display: inline-block;
+  -moz-transform-origin: left top;
+  -ms-transform-origin: left top;
+  -o-transform-origin: left top;
+  -webkit-transform-origin: left top;
+  transform-origin: left top;
+  content: ' ';
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .com .setSyle:checked {
+  background-position: 0 0;
+  border: 1px solid #4d99db;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .com .setSyle:checked:before {
+  background-color: #4d99db;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .com .text,
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .com .select {
+  float: left;
+  width: 108px;
+  height: 24px;
+  line-height: 24px;
+  border: 1px solid #ccc;
+  margin-top: -6px;
+  padding: 0 2px;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .com label {
+  line-height: 100%;
+  float: left;
+  margin-left: 5px;
+  margin-right: 10px;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .com .cg {
+  cursor: pointer;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .del {
+  margin-top: -6px;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .del span {
+  display: inline-block;
+  width: 80px;
+  height: 24px;
+  text-align: center;
+  line-height: 23px;
+  border: 1px solid #999;
+  background-color: #fff;
+  cursor: pointer;
+  color: #333;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .del span:hover {
+  border: 1px solid #3c89cd;
+  background-color: #c9e2f8;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .conditionBox .handle .del span:active {
+  border: 1px solid #3c89cd;
+  background-color: #2370b5;
+}
+.bodyBox .contentBox .right88 .searchBox .gridBox .jqGrid {
+  padding: 10px;
+}
+.bodyBox .contentBox .right88 .sortBox {
+  padding: 0 20px;
+  margin-top: 10px;
+  min-height: 1px;
+  zoom: 1;
+}
+.bodyBox .contentBox .right88 .sortBox:after {
+  content: "020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.bodyBox .contentBox .right88 .sortBox .left {
+  float: left;
+  width: 30%;
+  min-height: 1px;
+}
+.bodyBox .contentBox .right88 .sortBox .left ul {
+  min-height: 1px;
+  zoom: 1;
+  float: left;
+}
+.bodyBox .contentBox .right88 .sortBox .left ul:after {
+  content: "020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.bodyBox .contentBox .right88 .sortBox .left ul li {
+  width: 78px;
+  height: 22px;
+  line-height: 21px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  word-wrap: normal;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  float: left;
+  border: 1px solid #ccc;
+  color: #333;
+  cursor: pointer;
+}
+.bodyBox .contentBox .right88 .sortBox .left ul li.active {
+  background-color: #3c89cd;
+  border: 1px solid #3c89cd;
+  color: #fff;
+}
+.bodyBox .contentBox .right88 .sortBox .left ul li:hover {
+  border: 1px solid #3c89cd;
+  color: #3c89cd;
+}
+.bodyBox .contentBox .right88 .sortBox .left ul li.active:hover {
+  background-color: #3c89cd;
+  border: 1px solid #3c89cd;
+  color: #fff;
+}
+.bodyBox .contentBox .right88 .sortBox .right {
+  float: right;
+  width: 53%;
+}
+.bodyBox .contentBox .right88 .sortBox .right span {
+  padding-right: 9px;
+}
+.bodyBox .contentBox .right88 .sortBox .right ul {
+  min-height: 1px;
+  zoom: 1;
+  float: right;
+}
+.bodyBox .contentBox .right88 .sortBox .right ul:after {
+  content: "020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.bodyBox .contentBox .right88 .sortBox .right ul li {
+  height: 22px;
+  line-height: 21px;
+  text-align: center;
+  margin-right: 30px;
+  white-space: nowrap;
+  overflow: hidden;
+  word-wrap: normal;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  float: left;
+  color: #333;
+  cursor: pointer;
+}
+.bodyBox .contentBox .right88 .GdBox {
+  margin-top: 20px;
+
+}
+.bodyBox .contentBox .right88 .GdBox .iconBox {
+  width: 100%;
+  position: relative;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+.bodyBox .contentBox .right88 .GdBox .iconBox .right {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.bodyBox .contentBox .right88 .GdBox .iconBox ul {
+  min-height: 1px;
+  zoom: 1;
+  text-align: center;
+  display: inline-block;
+}
+.bodyBox .contentBox .right88 .GdBox .iconBox ul:after {
+  content: "020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.bodyBox .contentBox .right88 .GdBox .iconBox ul li {
+  margin-right: 6px;
+  float: left;
+}
+.bodyBox .contentBox .right88 .GdBox .iconBox .left15 {
+  float: left;
+  width: 15%;
+  position: relative;
+  top: -3px;
+  left: 3px;
+}
+.bodyBox .contentBox .right88 .GdBox .iconBox .left15 ul {
+  text-align: center;
+  display: inline;
+}
+.bodyBox .contentBox .right88 .GdBox .iconBox .left15 ul li {
+  height: 22px;
+  margin-right: 6px;
+}
+.bodyBox .contentBox .right88 .GdBox .iconBox .right85 {
+  float: left;
+  width: 85%;
+  padding-bottom: 10px;
+}
+.bodyBox .contentBox .right88 .GdBox .iconBox .right85 ul {
+  text-align: left;
+  display: inline;
+}
+.bodyBox .contentBox .right88 .GdBox .iconBox .right85 ul li {
+  margin-left: 10px;
+  height: 18px;
+}
+.bodyBox .contentBox .right88 .GdBox .iconBox .right85 ul li.fontfui {
+  margin-left: 10px;
+  height: 18px;
+  color: #999;
+}
+.bodyBox .contentBox .right88 .infoBox {
+  padding: 15px 20px;
+  border: 1px solid #dedede;
+  margin-top: 20px;
+ overflow: hidden;
+}
+.bodyBox .contentBox .right88 .infoBox span {
+  float: right;
+  margin-top: 3px;
+  margin-right: 130px;
+}
+.bodyBox .contentBox .right88 .infoBox span i {
+ 	color:red;
+}
+.bodyBox .contentBox .right88 .infoBox div {
+  float: right;
+  
+}
+.JGtab input.b80 {
+    width: 80%;
+    height: 20px;
+    line-height:20px;
+}
+.JGtab input.b90 {
+    width: 90%;
+    height: 20px;
+    line-height:20px;
+}
+.deleteBtn{
+   padding:0 5px;
+}
+.fontred {
+    color: #ff0000;
+}
+.cancelBtn{
+	display: inline-block;
+    padding: 0 19px;
+    height: 22px;
+    line-height: 22px;
+    color: #333;
+    cursor: pointer;
+    background-color: #fff;
+    border: 1px solid #999;
+    font-size: 12px;
+}

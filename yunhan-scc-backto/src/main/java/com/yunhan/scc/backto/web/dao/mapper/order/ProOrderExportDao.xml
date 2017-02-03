@@ -1,0 +1,915 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+	@订单导出XML
+	@author zhuwenjie 
+	@version 2016-7-21 17:39:29 
+-->
+<mapper namespace="com.yunhan.scc.backto.web.dao.mapper.order.ProOrderExportDao">
+	<!-- 订单总目实体映射 -->
+	<resultMap type="ProPurOrderSummaryBacktoDO" id="ProPurOrderSummaryBacktoResult">
+		<result property="addDate" column="ADD_DATE" />
+		<result property="addTime" column="ADD_TIME" />
+		<result property="addUser" column="ADD_USER" />
+		<result property="addUserCode" column="ADD_USER_CODE" />
+		<result property="addUserPhoneno" column="ADD_USER_PHONENO" />
+		<result property="availableQty" column="AVAILABLE_QTY" />
+		<result property="availableRate" column="AVAILABLE_RATE" />
+		<result property="businessType" column="BUSINESS_TYPE" />
+		<result property="closeReason" column="CLOSE_REASON" />
+		<result property="destination" column="DESTINATION" />
+		<result property="expiryDate" column="EXPIRY_DATE" />
+		<result property="id" column="ID" />
+		<result property="isDeal" column="IS_DEAL" />
+		<result property="isExport" column="IS_EXPORT" />
+		<result property="isNew" column="IS_NEW" />
+		<result property="isOrderComplete" column="IS_ORDER_COMPLETE" />
+		<result property="isSupplement" column="IS_SUPPLEMENT" />
+		<result property="isView" column="IS_VIEW" />
+		<result property="orderDifference" column="ORDER_DIFFERENCE" />
+		<result property="orderRemark" column="ORDER_REMARK" />
+		<result property="orderStatus" column="ORDER_STATUS" />
+		<result property="orderType" column="ORDER_TYPE" />
+		<result property="purchaserId" column="PURCHASER_ID" />
+		<result property="purchaseOrderCode" column="PURCHASE_ORDER_CODE" />
+		<result property="receiveAddress" column="RECEIVE_ADDRESS" />
+		<result property="receiveContactUser" column="RECEIVE_CONTACT_USER" />
+		<result property="receiveDept" column="RECEIVE_DEPT" />
+		<result property="receivePhoneno" column="RECEIVE_PHONENO" />
+		<result property="receiveQty" column="RECEIVE_QTY" />
+		<result property="receiveRate" column="RECEIVE_RATE" />
+		<result property="reqArriveDate" column="REQ_ARRIVE_DATE" />
+		<result property="sendoutGoodsCode" column="SENDOUT_GOODS_CODE" />
+		<result property="sendoutQty" column="SENDOUT_QTY" />
+		<result property="sendoutRate" column="SENDOUT_RATE" />
+		<result property="sendDate" column="SEND_DATE" />
+		<result property="sendGoodsType" column="SEND_GOODS_TYPE" />
+		<result property="sendUser" column="SEND_USER" />
+		<result property="sourceType" column="SOURCE_TYPE" />
+		<result property="supplierId" column="SUPPLIER_ID" />
+		<result property="totalBookQty" column="TOTAL_BOOK_QTY" />
+		<result property="totalPrice" column="TOTAL_PRICE" />
+		<result property="totalRealityPrice" column="TOTAL_REALITY_PRICE" />
+		<result property="totalVarietyQty" column="TOTAL_VARIETY_QTY" />
+		<result property="updateTime" column="UPDATE_TIME" />
+		<result property="updateUserCode" column="UPDATE_USER_CODE" />
+		<result property="urgentFlag" column="URGENT_FLAG" />
+		<result property="warehouse" column="WAREHOUSE" />
+		<result property="yunhanOrderCode" column="YUNHAN_ORDER_CODE" />
+		<result property="untreated" column="UNTREATED" />
+		<result property="alreadyProcessed" column="ALREADYPROCESSED" />
+		<result property="purchaserName" column="purchaserName" />
+		<result property="addPhone" column="addPhone" />
+		
+		<result property="execlName" column="execlName" /> <!-- added by luohoudong -->
+		<result property="sortOrderField"  column="sortOrderField"/><!-- added by luohoudong -->
+		<result property="sortOrderRule"  column="sortOrderRule"/><!-- added by luohoudong -->
+	</resultMap>
+	<!-- 订单细目实体映射 -->
+	<resultMap type="ProPurOrderItemsBacktoDO" id="ProPurOrderItemsBacktoResult">
+			<result property="addDate" column="ADD_DATE" />
+			<result property="addTime" column="ADD_TIME" />
+			<result property="addUserCode" column="ADD_USER_CODE" />
+			<result property="affiliateSeries" column="AFFILIATE_SERIES" />
+			<result property="authorEditor" column="AUTHOR_EDITOR" />
+			<result property="bookTitle" column="BOOK_TITLE" />
+			<result property="closeCounter" column="CLOSE_COUNTER" />
+			<result property="closeReason" column="CLOSE_REASON" />
+			<result property="closeStatus" column="CLOSE_STATUS" />
+			<result property="controlFlag" column="CONTROL_FLAG" />
+			<result property="discountrate" column="DISCOUNTRATE" />
+			<result property="id" column="ID" />
+			<result property="impression" column="IMPRESSION" />
+			<result property="isbn" column="ISBN" />
+			<result property="isDeal" column="IS_DEAL" />
+			<result property="isExport" column="IS_EXPORT" />
+			<result property="isImportent" column="IS_IMPORTENT" />
+			<result property="isSuitBook" column="IS_SUIT_BOOK" />
+			<result property="isValid" column="IS_VALID" />
+			<result property="isView" column="IS_VIEW" />
+			<result property="marketingCategories" column="MARKETING_CATEGORIES" />
+			<result property="notSendoutQty" column="NOT_SENDOUT_QTY" />
+			<result property="orderQty" column="ORDER_QTY" />
+			<result property="orderTermNo" column="ORDER_TERM_NO" />
+			<result property="paperback" column="PAPERBACK" />
+			<result property="price" column="PRICE" />
+			<result property="publisher" column="PUBLISHER" />
+			<result property="purchaserCommoditiesId" column="PURCHASER_COMMODITIES_ID" />
+			<result property="purchaserId" column="PURCHASER_ID" />
+			<result property="purchaseOrderCode" column="PURCHASE_ORDER_CODE" />
+			<result property="realitySalePrice" column="REALITY_SALE_PRICE" />
+			<result property="receiveDate" column="RECEIVE_DATE" />
+			<result property="receiveQty" column="RECEIVE_QTY" />
+			<result property="remark" column="REMARK" />
+			<result property="rowUniqueNo" column="ROW_UNIQUE_NO" />
+			<result property="salesPrices" column="SALES_PRICES" />
+			<result property="salePrice" column="SALE_PRICE" />
+			<result property="sendoutDate" column="SENDOUT_DATE" />
+			<result property="sendoutGoodsCode" column="SENDOUT_GOODS_CODE" />
+			<result property="sendoutQty" column="SENDOUT_QTY" />
+			<result property="sendDate" column="SEND_DATE" />
+			<result property="sendScheme" column="SEND_SCHEME" />
+			<result property="seriesTitle" column="SERIES_TITLE" />
+			<result property="sourceType" column="SOURCE_TYPE" />
+			<result property="status" column="STATUS" />
+			<result property="subscriptionCode" column="SUBSCRIPTION_CODE" />
+			<result property="supplierCommoditiesId" column="SUPPLIER_COMMODITIES_ID" />
+			<result property="supplierId" column="SUPPLIER_ID" />
+			<result property="updateTime" column="UPDATE_TIME" />
+			<result property="updateUserCode" column="UPDATE_USER_CODE" />
+			<result property="urgentFlag" column="URGENT_FLAG" />
+			<result property="versionNo" column="VERSION_NO" />
+			<result property="warehouse" column="WAREHOUSE" />
+			<result property="yunhanId" column="YUNHAN_ID" />
+			<result property="yunhanOrderCode" column="YUNHAN_ORDER_CODE" />
+			<result property="notEnoughReason" column="notEnoughReason" />
+			<result property="availableReason" column="availableReason" /><!-- 其余满足情况 -->
+			<result property="preSendDateStr" column="preSendDateStr" /><!-- 预计发货时间 -->
+			<result property="thisSendQty" column="thisSendQty" /><!-- 本次发货数 -->
+	</resultMap>
+	
+	<!-- 已处理品种导出实体映射 add by zhuwenjie 2016-7-21 -->
+	<resultMap type="ProOrderExportDO" id="ProOrderExportDoResult">
+		<result property="orderItemsIds" column="orderItemsIds"/>
+		<result property="receiptAddress"  column="receiptAddress"/>
+		<result property="consignee"  column="consignee"/>
+		<result property="telephone"  column="telephone"/>
+		<result property="excelName"  column="excelName"/>
+		<result property="sortOrderField"  column="sortOrderField"/>
+		<result property="sortOrderRule"  column="sortOrderRule"/>
+		<result property="purchaserName"  column="purchaserName"/>
+	</resultMap>
+	
+ 	<resultMap type="ProOrderExcelToolDo" id="proOrderExcelToolDo">
+ 		<result property="orderItemsIds" column="orderItemsIds"/>
+ 		<result property="sortOrderField"  column="sortOrderField"/>
+		<result property="sortOrderRule"  column="sortOrderRule"/>
+		<result property="purchaseOrderCodesString" column="orderCodes"/>
+		<result property="orderType"  column="ORDER_TYPE"/>
+		<result property="excelName"  column="excelName"/>
+		<result property="wareHouse"  column="wareHouse"/>
+		<result property="purchaserId"  column="PURCHASER_ID"/>
+		<result property="supplierId"  column="SUPPLIER_ID"/>
+		<result property="name"  column="NAME"/>
+		<result property="purchaserName"  column="purchaserName"/>
+	</resultMap> 
+	
+	<!-- 已处理品种导出  add by zhuwenjie 2016-7-21-->
+	<!-- 已处理品种导出  add by zhuwenjie 2016-7-21-->
+<!-- 	<select id="findProcessedVarietiesExport" resultMap="ProOrderExportDoResult" parameterType="ProOrderExportCondition">
+				select 
+				 #{orderItemsIds} as orderItemsIds
+				
+				,#{excelName} as excelName
+				<if test="sortOrderField!=null">
+				,#{sortOrderField} as sortOrderField,
+				#{sortOrderRule} as sortOrderRule
+				</if>
+				,t.name as purchaserName
+				from T_DEPARTMENT t 
+      			where t.SAPVENDORID=#{purchaserId}
+	</select> -->
+	
+	<select id="findProcessedVarietiesExport" resultMap="proOrderExcelToolDo" parameterType="ProOrderExportCondition">
+      	SELECT to_char(wm_concat(ID)) orderItemsIds, ORDER_TYPE,NAME AS purchaserName,
+			NAME || '_' || WAREHOUSE || '_' || ORDER_TYPE || '_' || TO_CHAR(SYSDATE, 'YY-MM-DD-HH24-mm-ss') AS execlName,
+			WAREHOUSE,
+			SUPPLIER_ID,
+			PURCHASER_ID,
+			 #{orderItemsIds} as orderItemsIds,
+			 <if test="sortOrderField!=null">
+				#{sortOrderField} as sortOrderField,
+				#{sortOrderRule} as sortOrderRule
+				</if>
+		from ( select case ORDER_TYPE
+         when 0 then
+          '一般零售'
+         when 5 then
+          '文教订单'
+         when 10 then
+          '电商订单'
+         when 15 then
+          '大中专订单'
+         when 20 then
+          '团购订单'
+         when 25 then
+          '馆配订单'
+         when 30 then
+          '活动订书'
+         else
+          '其他'
+       end as ORDER_TYPE,
+		case TPPOS.SEND_GOODS_TYPE when '2' then rownum else 0 end SEND_GOODS_TYPE,
+		i.ID,
+		L.NAME as WAREHOUSE,
+		PUR.NAME,
+		TPPOS.PURCHASER_ID ,
+		TPPOS.SUPPLIER_ID
+		FROM PRO_PUR_ORDER_SUMMARY TPPOS
+		left join T_DEPARTMENT PUR
+			on  TPPOS.PURCHASER_ID=PUR.SAPVENDORID
+			LEFT JOIN dc_location l on TPPOS.warehouse=l.code
+			left join pro_pur_order_items i on i.purchase_order_code = TPPOS.purchase_order_code and i.purchaser_id=TPPOS.purchaser_id 
+		<where>	
+				<if  test="itemsIds!=null">
+							  AND i.id in
+								<foreach collection="itemsIds" separator="," item="id"
+										open="(" close=")">
+										#{id}
+								</foreach>
+						</if>
+		</where> 
+		)
+		group by SEND_GOODS_TYPE,ORDER_TYPE,name,wareHouse,PURCHASER_ID,SUPPLIER_ID
+	</select> 
+	
+	
+	<select id="findProcessedVarietiesExport_count" resultType="java.lang.Integer" parameterType="ProOrderExportCondition">
+          		select count(1) from T_DEPARTMENT t   where t.SAPVENDORID=#{purchaserId}<!-- 导出count -->
+	</select>
+	<!-- 已处理品种导出第一个总目列表List add by zhuwenjie 2016-7-21 -->
+	<select id="findProcessedVarietiesExportOne"  resultMap="ProPurOrderSummaryBacktoResult"  parameterType="ProOrderExportCondition">
+		select * from (select s.purchase_order_code,case s.Urgent_Flag  when '1' then '急单' else '普通单 ' end as Urgent_Flag , s.Req_Arrive_Date,s.Order_Remark,d.name as warehouse , 
+		 case s.SEND_GOODS_TYPE
+			WHEN '2' THEN
+				case s.RECEIVE_PHONENO
+                 when null then
+                  s.Receive_Address
+                 else
+                 s.Receive_Address || '('|| s.RECEIVE_CONTACT_USER || ':' || s.RECEIVE_PHONENO ||')'
+               end
+               ELSE
+               d.PADDR || '(' || d.CONTACT || ':' || d.CONTACT_NUMBER || ')'
+               end
+                as addPhone
+		from  pro_pur_order_summary s 
+		left join pro_pur_order_items i on i.purchase_order_code = s.purchase_order_code and i.purchaser_id=s.purchaser_id 
+		left join dc_location d on s.warehouse=d.code
+		where i.id in
+		 <foreach collection="itemsIds" separator="," item="id"
+				open="(" close=")">
+				#{id}
+			</foreach>
+			<!-- 排序条件部分 -->
+		<if test="sortOrderField == 'sendDate'">
+			ORDER BY s.SEND_DATE ${sortOrderRule},
+			s.URGENT_FLAG ASC,
+			s.ORDER_TYPE DESC,
+			s.PURCHASE_ORDER_CODE ASC
+		</if>
+		<if test="sortOrderField == 'urgentFlag'">
+			ORDER BY s.URGENT_FLAG ${sortOrderRule},
+			s.SEND_DATE DESC,
+			s.ORDER_TYPE DESC,
+			s.PURCHASE_ORDER_CODE ASC
+		</if>
+		<if test="sortOrderField == 'orderType'">
+			ORDER BY s.ORDER_TYPE ${sortOrderRule},
+			s.SEND_DATE DESC,
+			s.URGENT_FLAG ASC,
+			s.PURCHASE_ORDER_CODE ASC
+		</if>
+		<if test="sortOrderField == 'purchaseOrderCode'">
+			ORDER BY s.PURCHASE_ORDER_CODE ${sortOrderRule},
+			s.SEND_DATE DESC,
+			s.URGENT_FLAG ASC,
+			s.ORDER_TYPE DESC
+		</if>
+		   ) t
+ 		group by t.purchase_order_code,t.Urgent_Flag,t.Req_Arrive_Date,t.Order_Remark,t.warehouse,t.addPhone
+	</select>
+	<select id="findProcessedVarietiesExportOne_count" resultType="java.lang.Integer" parameterType="ProOrderExportCondition">
+		select count(1) from  pro_pur_order_summary s 
+		left join pro_pur_order_items i on i.yunhan_order_code = s.yunhan_order_code and i.purchaser_id=s.purchaser_id
+		where i.id in 
+		 <foreach collection="itemsIds" separator="," item="id"
+				open="(" close=")">
+				#{id}
+			</foreach>
+			<!-- select count(1) from (select null  from pro_pur_order_items )  where rownum &lt;=1 --><!-- 导出count -->
+	</select>
+	<!-- 已处理品种导出第二个细目列表List add by zhuwenjie 2016-7-21 -->
+	<select id="findProcessedVarietiesExportTwo"  resultMap="ProPurOrderItemsBacktoResult"  parameterType="ProOrderExportCondition">
+		select 
+			   i.id,
+			   i.purchase_order_code,
+		       i.isbn,
+		       i.book_title,
+		       nvl(nvl(przc.available_price,pri.available_price),i.price) as price,
+		       nvl(nvl(przc.available_discountrate,pri.available_discountrate),i.discountrate) as discountrate,
+		       i.order_qty,
+		       CASE
+		         WHEN i.is_deal = 'Y' THEN
+		           0
+		         WHEN przc.this_send_qty is null THEN
+		          (i.order_qty - i.sendout_qty)
+		         ELSE
+		          przc.this_send_qty
+		       END as thisSendQty,
+		      <!--  CASE
+		         WHEN nvl(przc.other_available_reason,pri.other_available_reason) = 0 then
+		           '预计可发'
+		         WHEN nvl(przc.other_available_reason,pri.other_available_reason) = 1 then
+		           '暂时缺货'
+		         WHEN nvl(przc.other_available_reason,pri.other_available_reason) = 2 then
+		           '已停产'
+		         WHEN nvl(przc.other_available_reason,pri.other_available_reason) = 3 then  
+		           '改版'
+		         WHEN nvl(przc.other_available_reason,pri.other_available_reason) = 4 then
+		           '版权到期'
+		         WHEN nvl(przc.other_available_reason,pri.other_available_reason) = 5 then
+		           '商品无效'
+		         WHEN nvl(przc.other_available_reason,pri.other_available_reason) = 6 then
+		           '销售受限'
+		         else
+		          ''
+		       end as availableReason, -->
+		   case when przc.id is null then
+           (select pr.other_available_reason
+              from pro_response_items pr
+             where i.isbn = pr.isbn
+               and i.book_title = pr.book_title
+               and i.price = pr.price
+               and i.purchaser_id = pr.purchaser_id
+               and i.supplier_id = pr.supplier_id
+<!--                and pr.OTHER_AVAILABLE_REASON in ('2', '3', '4', '5', '6') -->
+<!--                and pr.RESPONSE_STATUS = 5 -->
+               and pr.id = (select max(re.id)
+                              from pro_response_items re
+                             where re.isbn = pr.isbn 
+                               and re.book_title = pr.book_title
+                               and re.price = pr.price
+                               and re.purchaser_id = pr.purchaser_id
+                               and re.supplier_id = pr.supplier_id
+                               and re.response_status = 5
+                               and re.IS_VALID = 'Y'
+                               and re.OTHER_AVAILABLE_REASON in ('2', '3', '4', '5', '6')
+                               )) else przc.OTHER_AVAILABLE_REASON end as availableReason,
+		       to_char(przc.PRE_SEND_DATE,'yyyy-MM-dd') as preSendDateStr,
+		       przc.RESPONSE_REMARK as remark,
+		       i.sendout_qty,
+		       i.receive_qty,
+		       '' as sendout_goods_code
+		 from pro_pur_order_items i
+		 left join pro_response_items pri
+		    on i.id = pri.pro_pur_order_items_id and pri.response_status = 5
+		 left join pro_response_items przc
+		    on przc.pro_pur_order_items_id = i.id and przc.response_status = 0
+		 left join  PRO_PUR_ORDER_SUMMARY TPPOS on TPPOS.purchase_order_code = i.purchase_order_code and TPPOS.Purchaser_Id=i.Purchaser_Id
+		  where i.id in
+		  <foreach collection="itemsIds" separator="," item="id"
+				open="(" close=")">
+				#{id}
+			</foreach>
+				 and NVL(pri.ID, 0) =
+                       NVL((SELECT MAX(PS.ID) ID
+                             FROM PRO_RESPONSE_ITEMS PS
+                            WHERE PS.PRO_PUR_ORDER_ITEMS_ID = i.ID
+                              and PS.response_status = 5),
+                           0)
+			<!-- 排序条件部分 -->
+		<if test="sortOrderField == 'sendDate'">
+			ORDER BY TPPOS.SEND_DATE ${sortOrderRule},
+			TPPOS.URGENT_FLAG ASC,
+			TPPOS.ORDER_TYPE DESC,
+			TPPOS.PURCHASE_ORDER_CODE ASC
+		</if>
+		<if test="sortOrderField == 'urgentFlag'">
+			ORDER BY TPPOS.URGENT_FLAG ${sortOrderRule},
+			TPPOS.SEND_DATE DESC,
+			TPPOS.ORDER_TYPE DESC,
+			TPPOS.PURCHASE_ORDER_CODE ASC
+		</if>
+		<if test="sortOrderField == 'orderType'">
+			ORDER BY TPPOS.ORDER_TYPE ${sortOrderRule},
+			TPPOS.SEND_DATE DESC,
+			TPPOS.URGENT_FLAG ASC,
+			TPPOS.PURCHASE_ORDER_CODE ASC
+		</if>
+		<if test="sortOrderField == 'purchaseOrderCode'">
+			ORDER BY TPPOS.PURCHASE_ORDER_CODE ${sortOrderRule},
+			TPPOS.SEND_DATE DESC,
+			TPPOS.URGENT_FLAG ASC,
+			TPPOS.ORDER_TYPE DESC
+		</if>
+	</select>
+	<select id="findProcessedVarietiesExportTwo_count" resultType="java.lang.Integer" parameterType="ProOrderExportCondition">
+		select  count(1) from pro_pur_order_items i
+		 where i.id in 
+		 <foreach collection="itemsIds" separator="," item="id"
+				open="(" close=")">
+				#{id}
+			</foreach>
+			<!-- select count(1) from (select null  from pro_pur_order_items )  where rownum &lt;=1 --><!-- 导出count -->
+	</select>
+	
+	
+	<!-- 订单详情勾选导出 added by luohoudong  2016-9-30 -->
+	<select id="backtoOrderDetailExportOne"  resultMap="ProPurOrderSummaryBacktoResult"  parameterType="ProOrderExportCondition">
+		select 
+			wm_concat(t.id) orderItemsIds,
+			t.purchase_order_code,
+			t.Urgent_Flag,
+			t.Req_Arrive_Date,
+			t.Order_Remark,
+			t.warehouse,
+			t.addPhone,
+			t.purchaserName,
+			t.excelName as execlName
+			<if test="sortOrderField!=null">
+				,t.sortOrderField,t.sortOrderRule
+			</if>
+		 from (
+		select 
+			 i.id,
+		 	 d.name as purchaserName,
+			 #{excelName} as excelName,
+			 <if test="sortOrderField!=null">
+				#{sortOrderField} as sortOrderField,
+				#{sortOrderRule} as sortOrderRule,
+			</if>
+			 s.purchase_order_code,case s.Urgent_Flag  when '1' then '急单' else '普通单 ' end as Urgent_Flag ,
+			 s.Req_Arrive_Date,
+			 s.Order_Remark,
+			 dl.name as warehouse , 
+			 case s.SEND_GOODS_TYPE
+			WHEN '2' THEN
+				case s.RECEIVE_PHONENO
+                 when null then
+                  s.Receive_Address
+                 else
+                 s.Receive_Address || '('|| s.RECEIVE_CONTACT_USER || ':' || s.RECEIVE_PHONENO ||')'
+               end
+               ELSE
+               dl.PADDR || '(' || dl.CONTACT || ':' || dl.CONTACT_NUMBER || ')'
+               end
+                as addPhone
+		from  pro_pur_order_summary s 
+		left join T_DEPARTMENT d 
+    		on d.sapvendorid=#{purchaserId}
+		left join pro_pur_order_items i on i.purchase_order_code = s.purchase_order_code and i.purchaser_id=s.purchaser_id 
+		left join dc_location dl on s.warehouse=dl.code
+		 where i.id in  
+		 <foreach collection="itemsIds" separator="," item="id"
+				open="(" close=")">
+				${id}
+			</foreach>
+			<!-- 排序条件部分 -->
+		<if test="sortOrderField == 'sendDate'">
+			ORDER BY s.SEND_DATE ${sortOrderRule},
+			s.URGENT_FLAG ASC,
+			s.ORDER_TYPE DESC,
+			s.PURCHASE_ORDER_CODE ASC
+		</if>
+		<if test="sortOrderField == 'urgentFlag'">
+			ORDER BY s.URGENT_FLAG ${sortOrderRule},
+			s.SEND_DATE DESC,
+			s.ORDER_TYPE DESC,
+			s.PURCHASE_ORDER_CODE ASC
+		</if>
+		<if test="sortOrderField == 'orderType'">
+			ORDER BY s.ORDER_TYPE ${sortOrderRule},
+			s.SEND_DATE DESC,
+			s.URGENT_FLAG ASC,
+			s.PURCHASE_ORDER_CODE ASC
+		</if>
+		<if test="sortOrderField == 'purchaseOrderCode'">
+			ORDER BY s.PURCHASE_ORDER_CODE ${sortOrderRule},
+			s.SEND_DATE DESC,
+			s.URGENT_FLAG ASC,
+			s.ORDER_TYPE DESC
+		</if>
+		   ) t
+ 		group by t.purchase_order_code,t.Urgent_Flag,t.Req_Arrive_Date,t.Order_Remark,t.warehouse,t.addPhone,t.purchaserName,t.excelName
+ 		<if test="sortOrderField!=null">
+				,t.sortOrderField,t.sortOrderRule
+		</if>
+	</select>
+	<select id="backtoOrderDetailExportOne_count" resultType="java.lang.Integer" >
+		select count(1) from dual
+	</select>
+	
+	<!-- 订单详情勾选导出   细目列表List add by luohoudong 2016-9-30 -->
+	<select id="backtoOrderDetailExportTwo"  resultMap="ProPurOrderItemsBacktoResult"  parameterType="ProOrderExportCondition">
+		select 
+			   i.id,
+			   i.purchase_order_code,
+		       i.isbn,
+		       i.book_title,
+		       nvl(nvl(przc.available_price,pri.available_price),i.price) as price,
+		       nvl(nvl(przc.available_discountrate,pri.available_discountrate),i.discountrate) as discountrate,
+		       i.order_qty,
+		       CASE
+		         WHEN i.is_deal = 'Y' THEN
+		           0
+		         WHEN przc.this_send_qty is null THEN
+		          (i.order_qty - i.sendout_qty)
+		         ELSE
+		          przc.this_send_qty
+		       END as thisSendQty,
+		   case when przc.id is null then
+           (select pr.other_available_reason
+              from pro_response_items pr
+             where i.isbn = pr.isbn
+               and i.book_title = pr.book_title
+               and i.price = pr.price
+               and i.purchaser_id = pr.purchaser_id
+               and i.supplier_id = pr.supplier_id
+               and pr.id = (select max(re.id)
+                              from pro_response_items re
+                             where re.isbn = pr.isbn 
+                               and re.book_title = pr.book_title
+                               and re.price = pr.price
+                               and re.purchaser_id = pr.purchaser_id
+                               and re.supplier_id = pr.supplier_id
+                               and re.response_status = 5
+                               and re.IS_VALID = 'Y'
+                               and re.OTHER_AVAILABLE_REASON in ('2', '3', '4', '5', '6')
+                               )) else przc.OTHER_AVAILABLE_REASON end as availableReason,
+		       to_char(przc.PRE_SEND_DATE,'yyyy-MM-dd') as preSendDateStr,
+		       przc.RESPONSE_REMARK as remark,
+		       i.sendout_qty,
+		       i.receive_qty,
+		       '' as sendout_goods_code
+		 from pro_pur_order_items i
+		 left join pro_response_items pri
+		    on i.id = pri.pro_pur_order_items_id and pri.response_status = 5
+		 left join pro_response_items przc
+		    on przc.pro_pur_order_items_id = i.id and przc.response_status = 0
+		 left join  PRO_PUR_ORDER_SUMMARY TPPOS on TPPOS.purchase_order_code = i.purchase_order_code and TPPOS.Purchaser_Id=i.Purchaser_Id
+		   where i.id in
+		  <foreach collection="itemsIds" separator="," item="id"
+				open="(" close=")">
+				#{id}
+			</foreach> 
+					and NVL(pri.ID, 0) =
+                       NVL((SELECT MAX(PS.ID) ID
+                             FROM PRO_RESPONSE_ITEMS PS
+                            WHERE PS.PRO_PUR_ORDER_ITEMS_ID = i.ID
+                              and PS.response_status = 5),
+                           0)
+			<!-- 排序条件部分 -->
+		<if test="sortOrderField == 'sendDate'">
+			ORDER BY TPPOS.SEND_DATE ${sortOrderRule},
+			TPPOS.URGENT_FLAG ASC,
+			TPPOS.ORDER_TYPE DESC,
+			TPPOS.PURCHASE_ORDER_CODE ASC
+		</if>
+		<if test="sortOrderField == 'urgentFlag'">
+			ORDER BY TPPOS.URGENT_FLAG ${sortOrderRule},
+			TPPOS.SEND_DATE DESC,
+			TPPOS.ORDER_TYPE DESC,
+			TPPOS.PURCHASE_ORDER_CODE ASC
+		</if>
+		<if test="sortOrderField == 'orderType'">
+			ORDER BY TPPOS.ORDER_TYPE ${sortOrderRule},
+			TPPOS.SEND_DATE DESC,
+			TPPOS.URGENT_FLAG ASC,
+			TPPOS.PURCHASE_ORDER_CODE ASC
+		</if>
+		<if test="sortOrderField == 'purchaseOrderCode'">
+			ORDER BY TPPOS.PURCHASE_ORDER_CODE ${sortOrderRule},
+			TPPOS.SEND_DATE DESC,
+			TPPOS.URGENT_FLAG ASC,
+			TPPOS.ORDER_TYPE DESC
+		</if>
+	</select>
+	<select id="backtoOrderDetailExportTwo_count" resultType="java.lang.Integer" >
+			select count(1) from dual
+	</select>
+	<!-- ***********************************************订单方式导出SQL 包含逐单和合单导出***************************************** -->
+	<!-- add by yangtao 201609027  订单方式之逐单导出  合单方式导出查询总目  -->
+	<select id="queryExportOrderSingleSummary" resultMap="ProPurOrderSummaryBacktoResult"  parameterType="ProOrderExportCondition">
+		SELECT 
+			P.AVAILABLE_QTY ,
+			P.AVAILABLE_RATE ,
+			P.DESTINATION ,
+			P.EXPIRY_DATE ,
+			P.ID ,
+			P.IS_ORDER_COMPLETE ,
+			P.IS_SUPPLEMENT ,
+			P.ORDER_REMARK ,
+			P.ORDER_STATUS ,
+			case P.ORDER_TYPE
+			when 0 then '一般零售'
+			when 5 then '文教订单'
+			when 10 then '电商订单'
+			when 15 then '大中专订单'
+			when 20 then '团购订单'
+			when 25 then '馆配订单'
+			when 30 then '活动订书'
+			else '其他'
+			end as orderTypeString,
+			P.PURCHASER_ID ,
+			P.PURCHASE_ORDER_CODE ,
+			P.RECEIVE_CONTACT_USER ,
+			P.RECEIVE_DEPT,
+			case p.SEND_GOODS_TYPE
+			WHEN '2' THEN
+				case P.RECEIVE_PHONENO
+                 when null then
+                  P.Receive_Address
+                 else
+                 P.Receive_Address || '('|| P.RECEIVE_CONTACT_USER || ':' || P.RECEIVE_PHONENO ||')'
+               end
+               ELSE
+               l.PADDR || '(' || l.CONTACT || ':' || l.CONTACT_NUMBER || ')'
+               end
+                as addPhone,
+			P.RECEIVE_QTY ,
+			P.RECEIVE_RATE ,
+			P.REQ_ARRIVE_DATE ,
+			P.SENDOUT_GOODS_CODE ,
+			P.SENDOUT_QTY ,
+			P.SENDOUT_RATE ,
+			P.SEND_DATE ,
+			P.SEND_GOODS_TYPE ,
+			P.SEND_USER ,
+			P.SOURCE_TYPE ,
+			P.SUPPLIER_ID ,
+			L.NAME as WAREHOUSE,
+			D.NAME as purchaserName,		
+			case P.URGENT_FLAG  when '1' then '急单' else '普通单 ' end as URGENT_FLAG,
+			D.NAME || '_' || nvl(l.NAME,'其它') || '_' || P.PURCHASE_ORDER_CODE || '_' || TO_CHAR(SYSDATE, 'YY-MM-DD') AS execlName
+		 FROM PRO_PUR_ORDER_SUMMARY P 
+		LEFT JOIN  T_DEPARTMENT D  
+		 ON  P.PURCHASER_ID = D.SAPVENDORID
+		 LEFT JOIN dc_location l on p.warehouse=l.code
+		<where>	
+			<trim prefixOverrides="AND">
+				<!--订单方式 合单使用条件 -->
+				<if test="supplierId!=null">
+					AND p.SUPPLIER_ID = #{supplierId}
+				</if>
+				<if test="purchaserId!=null">
+					AND p.PURCHASER_ID = #{purchaserId}
+				</if> 
+				<if test="purchaseOrderCodes!=null"> 	AND P.PURCHASE_ORDER_CODE in
+					 <foreach collection="purchaseOrderCodes" item="purchaseOrderCode"  open="(" separator="," close=")">  
+				           '${purchaseOrderCode}'
+				     </foreach>	
+				</if>
+				<!-- 合单使用条件结束 -->
+				<!-- 逐单使用条件 -->
+				<if  test="itemsIds!=null">
+					  AND p.id in
+						<foreach collection="itemsIds" separator="," item="id"
+								open="(" close=")">
+								#{id}
+						</foreach>
+				</if> 
+				<!-- 逐单使用条件结束 -->
+			</trim>
+		</where>
+	</select >
+	<select id="queryExportOrderSingleSummary_count" resultType="java.lang.Integer" parameterType="ProOrderExportCondition">
+		select  count(1) from PRO_PUR_ORDER_SUMMARY p
+		<where>	
+			<trim prefixOverrides="AND">
+				
+				<!-- 合单使用条件 -->
+				<if test="supplierId!=null">
+					AND p.SUPPLIER_ID = #{supplierId}
+				</if>
+				<if test="purchaserId!=null">
+					AND p.PURCHASER_ID = #{purchaserId}
+				</if> 
+				<if test="purchaseOrderCodes=null"> 	AND P.PURCHASE_ORDER_CODE in
+					 <foreach collection="purchaseOrderCodes" item="purchaseOrderCode"  open="(" separator="," close=")">  
+				           '${purchaseOrderCode}'
+				     </foreach>	
+				</if>
+				<!-- 合单使用条件结束 -->
+				<if  test="itemsIds!=null">
+							  AND p.id in
+								<foreach collection="itemsIds" separator="," item="id"
+										open="(" close=")">
+										#{id}
+								</foreach>
+				</if>
+				
+				</trim>
+		</where>
+	</select>
+	<select id="queryExportOrderSingleItems" resultMap="ProPurOrderItemsBacktoResult"  parameterType="ProPurOrderItemsBacktoCondition">
+		SELECT PPOI.ID,
+        PPOI.YUNHAN_ORDER_CODE,
+        PPOI.PURCHASE_ORDER_CODE,
+        PPOI.ROW_UNIQUE_NO,
+        PPOI.ORDER_TERM_NO,
+        PPOI.YUNHAN_ID,
+        PPOI.PURCHASER_COMMODITIES_ID,
+        PPOI.SUPPLIER_ID,
+        PPOI.PURCHASER_ID,
+        PPOI.ISBN,
+        PPOI.BOOK_TITLE,
+        PPOI.PRICE,
+        PPOI.MARKETING_CATEGORIES,
+        nvl(nvl(przc.available_discountrate, pri.available_discountrate),
+           PPOI.discountrate) as discountrate,
+        PPOI.ORDER_QTY,
+        PPOI.STATUS,
+        PPOI.IS_IMPORTENT,
+        PPOI.IS_VALID,
+        NVL(PPOI.SENDOUT_QTY, 0) SENDOUT_QTY,
+        PPOI.CLOSE_REASON,
+        PPOI.RECEIVE_QTY,
+        PPOI.SUPPLIER_COMMODITIES_ID,
+        PPOI.CLOSE_STATUS,
+        PPOI.SERIES_TITLE,
+        PPOI.AFFILIATE_SERIES,
+        PPOI.AUTHOR_EDITOR,
+        PPOI.PUBLISHER,
+        PPOI.VERSION_NO,
+        PPOI.IMPRESSION,
+        PPOI.PAPERBACK,
+        PPOI.CONTROL_FLAG,
+        PPOI.IS_SUIT_BOOK,
+        PPOI.IS_DEAL,
+        nvl(nvl(przc.available_price, pri.available_price), PPOI.price) as price,
+        PPOI.discountrate,
+         CASE
+         WHEN PPOI.is_deal = 'Y' THEN
+          0
+         WHEN przc.this_send_qty is null THEN
+          (PPOI.order_qty - PPOI.sendout_qty)
+         ELSE
+          przc.this_send_qty
+       END as thisSendQty,
+        case
+         when przc.id is null then
+          (select pr.other_available_reason
+             from pro_response_items pr
+            where PPOI.isbn = pr.isbn
+              and PPOI.book_title = pr.book_title
+              and PPOI.price = pr.price
+              and PPOI.purchaser_id = pr.purchaser_id
+              and PPOI.supplier_id = pr.supplier_id
+              and pr.id = (select max(re.id)
+                             from pro_response_items re
+                            where re.isbn = pr.isbn
+                              and re.book_title = pr.book_title
+                              and re.price = pr.price
+                              and re.purchaser_id = pr.purchaser_id
+                              and re.supplier_id = pr.supplier_id
+                              and re.response_status = 5
+                              and re.IS_VALID = 'Y'
+                              and re.OTHER_AVAILABLE_REASON in
+                                  ('2', '3', '4', '5', '6')))
+         else
+          przc.OTHER_AVAILABLE_REASON
+       end as availableReason,
+       to_char(przc.PRE_SEND_DATE, 'yyyy-MM-dd') as preSendDateStr,
+       przc.RESPONSE_REMARK as remark
+   FROM PRO_PUR_ORDER_ITEMS PPOI 
+    left join pro_response_items pri
+      on PPOI.id = pri.pro_pur_order_items_id
+      and pri.response_status = 5
+    left join pro_response_items przc
+      on przc.pro_pur_order_items_id = PPOI.id
+     and przc.response_status = 0
+      left join PRO_PUR_ORDER_SUMMARY TPPOS
+    on TPPOS.purchase_order_code = PPOI.purchase_order_code
+   and TPPOS.Purchaser_Id = PPOI.Purchaser_Id
+	       <where>
+	      	 PPOI.IS_DEAL = 'N'
+	      	 and PPOI.STATUS != 50
+	      	  and NVL(pri.ID, 0) = NVL((SELECT MAX(PS.ID) ID
+                              FROM PRO_RESPONSE_ITEMS PS
+                             WHERE PS.PRO_PUR_ORDER_ITEMS_ID =PPOI.ID
+                               and PS.response_status = 5),
+                            0)
+	       		<if test="purchaseOrderCodes!=null"> 	AND PPOI.PURCHASE_ORDER_CODE in
+					 <foreach collection="purchaseOrderCodes" item="purchaserOrderCode"  open="(" separator="," close=")">  
+				           '${purchaserOrderCode}'
+				     </foreach>	
+				</if>
+			        <if test="purchaseOrderCode!=null">
+			             AND PPOI.PURCHASE_ORDER_CODE = #{purchaseOrderCode}
+			        </if>
+			        <if test="purchaserId!=null">
+			             AND PPOI.PURCHASER_ID = #{purchaserId}
+			        </if>
+			        <if test="supplierId!=null">
+						AND PPOI.SUPPLIER_ID = #{supplierId}
+				</if>
+			</where>
+	</select>
+		<select id="queryExportOrderSingleItems_count" resultType="java.lang.Integer" parameterType="ProPurOrderItemsBacktoCondition">
+		select  count(1) from PRO_PUR_ORDER_ITEMS i
+		   <where>
+			    PPOI.IS_DEAL = 'N'
+			    and NVL(pri.ID, 0) = NVL((SELECT MAX(PS.ID) ID
+                              FROM PRO_RESPONSE_ITEMS PS
+                             WHERE PS.PRO_PUR_ORDER_ITEMS_ID =PPOI.ID
+                               and PS.response_status = 5),
+                            0)
+		       		<if test="purchaseOrderCodes!=null"> 	AND PPOI.PURCHASE_ORDER_CODE in
+						 <foreach collection="purchaseOrderCodes" item="purchaseOrderCode"  open="(" separator="," close=")">  
+					           '${purchaseOrderCode}'
+					     </foreach>	
+					</if>
+			        <if test="purchaserOrderCode!=null">
+			             AND PPOI.PURCHASE_ORDER_CODE = #{purchaseOrderCode}
+			        </if>
+			        <if test="purchaserId!=null">
+			             AND PPOI.PURCHASER_ID = #{purchaserId}
+			        </if>
+			        <if test="supplierId!=null">
+						AND PPOI.SUPPLIER_ID = #{supplierId}
+				</if>
+			</where>
+	</select>
+	
+	<!-- 订单方式导出合单方式 -->
+	
+	<!-- 合单导出类型分组 -->
+	 <select id="findExportOrdersGroup" resultMap="proOrderExcelToolDo" parameterType="ProOrderExportCondition">
+		SELECT to_char(wm_concat(PURCHASE_ORDER_CODE)) orderCodes, ORDER_TYPE,NAME,
+			NAME || '_' || WAREHOUSE || '_' || ORDER_TYPE || '_' || TO_CHAR(SYSDATE, 'YY-MM-DD-HH24-mm-ss') AS execlName,
+			WAREHOUSE,
+			SUPPLIER_ID,
+			PURCHASER_ID
+		from ( select case ORDER_TYPE
+         when 0 then
+          '一般零售'
+         when 5 then
+          '文教订单'
+         when 10 then
+          '电商订单'
+         when 15 then
+          '大中专订单'
+         when 20 then
+          '团购订单'
+         when 25 then
+          '馆配订单'
+         when 30 then
+          '活动订书'
+         else
+          '其他'
+       end as ORDER_TYPE,
+		case TPPOS.SEND_GOODS_TYPE when '2' then rownum else 0 end SEND_GOODS_TYPE,
+		TPPOS.PURCHASE_ORDER_CODE,
+		L.NAME as WAREHOUSE,
+		PUR.NAME,
+		TPPOS.PURCHASER_ID ,
+		TPPOS.SUPPLIER_ID
+		FROM PRO_PUR_ORDER_SUMMARY TPPOS
+		left join T_DEPARTMENT PUR
+			on  TPPOS.PURCHASER_ID=PUR.SAPVENDORID
+			LEFT JOIN dc_location l on TPPOS.warehouse=l.code
+		<where>	
+				<if  test="itemsIds!=null">
+							  AND TPPOS.id in
+								<foreach collection="itemsIds" separator="," item="id"
+										open="(" close=")">
+										#{id}
+								</foreach>
+						</if>
+					<if test="purchaseOrderCodes!=null"> 	AND TPPOS.PURCHASE_ORDER_CODE in
+					 <foreach collection="purchaseOrderCodes" item="purchaseOrderCode"  open="(" separator="," close=")">  
+				           '${purchaseOrderCode}'
+				     </foreach>	
+				</if>
+			        <if test="purchaserId!=null">
+			             AND TPPOS.PURCHASER_ID = #{purchaserId}
+			        </if>
+			        <if test="supplierId!=null">
+						AND TPPOS.SUPPLIER_ID = #{supplierId}
+				</if>
+		</where> 
+		)
+		group by SEND_GOODS_TYPE,ORDER_TYPE,name,wareHouse,PURCHASER_ID,SUPPLIER_ID
+	</select>
+	<select id="findExportOrdersGroup_count" resultType="java.lang.Integer" parameterType="ProPurOrderSummaryBacktoCondition">
+		SELECT count(1) from (
+		select 1
+		FROM PRO_PUR_ORDER_SUMMARY TPPOS
+		<where>	
+				<if  test="itemsIds!=null">
+							  AND TPPOS.id in
+								<foreach collection="itemsIds" separator="," item="id"
+										open="(" close=")">
+										#{id}
+								</foreach>
+						</if> 
+				<if test="purchaseOrderCodes!=null"> 	AND TPPOS.PURCHASE_ORDER_CODE in
+					 <foreach collection="purchaseOrderCodes" item="purchaseOrderCode"  open="(" separator="," close=")">  
+				           '${purchaseOrderCode}'
+				     </foreach>	
+				</if>
+			        <if test="purchaserId!=null">
+			             AND TPPOS.PURCHASER_ID = #{purchaserId}
+			        </if>
+			        <if test="supplierId!=null">
+						AND TPPOS.SUPPLIER_ID = #{supplierId}
+				</if>
+		</where> 
+		group by TPPOS.ORDER_TYPE
+		)
+	</select>
+	
+	
+	<!-- -*********************************************订单方式导出SQL 结束*************************************************** -->
+	
+</mapper>

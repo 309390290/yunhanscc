@@ -1,0 +1,175 @@
+
+.sendProductsBox .infoBox {
+  border: 1px solid #dedede;
+  padding: 15px 10px;
+  margin-bottom: 10px;
+}
+.sendProductsBox .infoBox ul {
+ overflow: hidden;
+ margin-right: -10px;
+}
+.sendProductsBox .infoBox ul li {
+  float: left;
+  width: 24%;
+  margin-right: 7px;
+}
+.sendProductsBox .infoBox ul li .name{
+   float: left;
+  color: #000;
+
+ }
+.sendProductsBox .infoBox ul li .con{
+  float: left;
+  max-width: 116px;
+  word-wrap: break-word;
+}
+.sendProductsBox .infoBox .connect{
+	overflow: hidden;
+	margin: 5px 0;
+}
+.sendProductsBox .infoBox .connect .left{
+	float: left;
+	width:50%;
+}
+.sendProductsBox .infoBox .connect .left .name{
+	float: left;
+	
+}
+.sendProductsBox .infoBox .connect .left .con{
+	float: left;
+    width: 88%;
+}
+.sendProductsBox .infoBox .connect .right{
+	float: left;
+	width:50%;
+}
+.sendProductsBox .infoBox .add {
+	overflow: hidden;
+}
+.sendProductsBox .infoBox .add  .name{
+	float: left;
+	
+}
+.sendProductsBox .infoBox .add  .con{
+	float: left;
+    width: 88%;
+}
+
+
+
+.sendProductsBox .inputBox {
+ 
+  border: 1px solid #dedede;
+  padding: 10px 10px 0;
+  margin-bottom: 10px;
+}
+.sendProductsBox .inputBox ul {
+  overflow: hidden;
+  width: 100%;
+}
+.sendProductsBox .inputBox ul li {
+  float: left;
+  width: 33%;
+  height: 24px;
+  margin-bottom: 10px;
+}
+.sendProductsBox .inputBox ul li.w67 {
+  float: left;
+  width: 67%;
+  height: 24px;
+}
+.sendProductsBox .inputBox ul li span.name {
+  float: left;
+  font-size: 12px;
+  color: #333;
+  margin-right: 10px;
+  line-height: 24px;
+  width: 80px;
+  text-align: right;
+  white-space: nowrap;
+  word-wrap: normal;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+}
+
+
+
+.sendProductsBox .inputBox input {
+  float: left;
+  width: 52%;
+}
+
+
+.sendProductsBox .inputBox select {
+  float: left;
+  width: 52%;
+ 
+}
+.sendProductsBox .inputBox select :hover {
+  border: 1px solid #92c6f5;
+}
+.sendProductsBox .inputBox select :after {
+  border: 1px solid #92c6f5;
+}
+.sendProductsBox .row_1 {
+  height: 44px;
+}
+.sendProductsBox .percent .btn {
+     overflow: hidden;
+}
+.sendProductsBox .percent .btn span {
+ 	float:left;
+}
+.sendProductsBox .percent .btn #icon {
+       margin-top: 5px;
+    margin-left: 372px;
+    margin-right: 3px;
+}
+.sendProductsBox .percent .btn .fontleft {
+    cursor: pointer;
+}
+
+
+.sendProductsBox .percent .JGtab {
+  width: 100%;
+  margin-top: 8px;
+  margin-bottom: 20px;
+}
+.sendProductsBox .percent .JGtab .right {
+  float: right;
+  margin-bottom: 10px;
+}
+
+
+.unfold {
+    display: block;
+    width: 11px;
+    height: 10px;
+    cursor: pointer;
+    background-image: url(/img/open.gif);
+    background-repeat: no-repeat;
+}
+
+.fontB {
+    font-weight: bold;
+}
+.fold {
+    display: block;
+    width: 11px;
+    height: 10px;
+    cursor: pointer;
+    background-image: url(/img/close.gif);
+    background-repeat: no-repeat;
+}
+.fontred {
+    color: #ff0000;
+}
+
+
+.sendProductsBox .actiBtn{
+    text-align: right;
+    margin-bottom: 10px;
+     margin-right: 10px;
+}
+
+

@@ -1,0 +1,781 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	@author luohoudong
+	@version 2016-7-18 15:43:58 
+-->
+<mapper namespace="com.yunhan.scc.backto.web.dao.mapper.backreport.ProResponseItemsDao">
+
+	<resultMap type="ProResponseItemsBacktoDO" id="ProResponseItemsResult">
+			<result property="addTime" column="ADD_TIME" />
+			<result property="addUserCode" column="ADD_USER_CODE" />
+			<result property="availableDiscountrate" column="AVAILABLE_DISCOUNTRATE" />
+			<result property="availablePrice" column="AVAILABLE_PRICE" />
+			<!-- <result property="availableQty" column="AVAILABLE_QTY" /> -->
+			<result property="bookTitle" column="BOOK_TITLE" />
+			<result property="diffType" column="DIFF_TYPE" />
+			<result property="discountrate" column="DISCOUNTRATE" />
+			<result property="id" column="ID" />
+			<result property="isbn" column="ISBN" />
+			<result property="isDiffExport" column="IS_DIFF_EXPORT" />
+			<result property="isForeverOosExport" column="IS_FOREVER_OOS_EXPORT" />
+			<result property="isValid" column="IS_VALID" />
+			<!-- <result property="notEnoughReason" column="NOT_ENOUGH_REASON" /> -->
+			<result property="orderQty" column="ORDER_QTY" />
+			<result property="otherAvailableReason" column="OTHER_AVAILABLE_REASON" />
+			<result property="preSendDate" column="PRE_SEND_DATE" />
+			<result property="price" column="PRICE" />
+			<result property="proPurOrderItemsId" column="PRO_PUR_ORDER_ITEMS_ID" />
+			<result property="proSendoutItemsId" column="PRO_SENDOUT_ITEMS_ID" />
+			<result property="purchaserCommoditiesId" column="PURCHASER_COMMODITIES_ID" />
+			<result property="purchaserId" column="PURCHASER_ID" />
+			<result property="purchaseOrderCode" column="PURCHASE_ORDER_CODE" />
+			<result property="responseDate" column="RESPONSE_DATE" />
+			<result property="responseRemark" column="RESPONSE_REMARK" />
+			<result property="responseStatus" column="RESPONSE_STATUS" />
+			<result property="responseType" column="RESPONSE_TYPE" />
+			<result property="responseUserCode" column="RESPONSE_USER_CODE" />
+			<result property="rowUniqueNo" column="ROW_UNIQUE_NO" />
+			<result property="sourceType" column="SOURCE_TYPE" />
+			<result property="supplierCommoditiesId" column="SUPPLIER_COMMODITIES_ID" />
+			<result property="supplierId" column="SUPPLIER_ID" />
+			<result property="thisSendQty" column="THIS_SEND_QTY" />
+			<result property="updateTime" column="UPDATE_TIME" />
+			<result property="updateUserCode" column="UPDATE_USER_CODE" />
+			<result property="yunhanId" column="YUNHAN_ID" />
+			<result property="yunhanOrderCode" column="YUNHAN_ORDER_CODE" />
+			
+			<result property="isSupplierAddProduct" column="isSupplierAddProduct" /><!-- 是否供应商添加 added by luohoudong  -->
+			<result property="historyOrderQty" column="historyOrderQty" /><!-- 已发数 added by luohoudong  -->
+			
+			<!-- 发货单号  add by lumin @20160907 -->
+			<result property="sendoutGoodsCode" column="SENDOUT_GOODS_CODE" />
+			 
+	</resultMap>
+	
+	<!--  发货页面  >>查询发货商品明细列表     added by luohoudong  -->
+	<select id="findProResponseItems" resultMap="ProResponseItemsResult" 
+		parameterType="ProResponseItemsBacktoCondition">
+		SELECT 
+			nvl(pi.sendout_qty,0) as historyOrderQty,
+			resp.ADD_TIME ,
+			resp.ADD_USER_CODE ,
+			resp.AVAILABLE_DISCOUNTRATE ,
+			resp.AVAILABLE_PRICE ,
+			<!-- resp.AVAILABLE_QTY , -->
+			resp.BOOK_TITLE ,
+			resp.DIFF_TYPE ,
+			resp.DISCOUNTRATE ,
+			resp.ID ,
+			resp.ISBN ,
+			resp.IS_DIFF_EXPORT ,
+			resp.IS_FOREVER_OOS_EXPORT ,
+			resp.IS_VALID ,
+			<!-- resp.NOT_ENOUGH_REASON , -->
+			resp.ORDER_QTY ,
+			resp.OTHER_AVAILABLE_REASON ,
+			resp.PRE_SEND_DATE ,
+			resp.PRICE ,
+			resp.PRO_PUR_ORDER_ITEMS_ID ,
+			resp.PRO_SENDOUT_ITEMS_ID ,
+			resp.PURCHASER_COMMODITIES_ID ,
+			resp.PURCHASER_ID ,
+			resp.PURCHASE_ORDER_CODE ,
+			resp.RESPONSE_DATE ,
+			resp.RESPONSE_REMARK ,
+			resp.RESPONSE_STATUS ,
+			resp.RESPONSE_TYPE ,
+			resp.RESPONSE_USER_CODE ,
+			resp.ROW_UNIQUE_NO ,
+			resp.SOURCE_TYPE ,
+			resp.SUPPLIER_COMMODITIES_ID ,
+			resp.SUPPLIER_ID ,
+			resp.THIS_SEND_QTY ,
+			resp.UPDATE_TIME ,
+			resp.UPDATE_USER_CODE ,
+			resp.YUNHAN_ID ,
+			resp.YUNHAN_ORDER_CODE,
+			'N'   as isSupplierAddProduct
+		FROM PRO_RESPONSE_ITEMS  resp join pro_pur_order_items pi
+    		on resp.pro_pur_order_items_id = pi.id
+		<where>
+				resp.this_send_qty>0
+				and resp.id in 
+				<foreach collection="ids"  separator="," item="itemsId" open="(" close=")">
+		    		${itemsId}
+			    </foreach>
+		</where>   		
+	</select>
+	
+	
+	<!--  发货页面  >>查询发货商品明细列表 统计    added by luohoudong  -->
+	<select id="findProResponseItems_count" resultType="java.lang.Integer" 
+		parameterType="ProResponseItemsBacktoCondition">
+		SELECT 
+			count(1)
+		FROM PRO_RESPONSE_ITEMS  resp join pro_pur_order_items pi
+    		on resp.pro_pur_order_items_id = pi.id
+		<where>
+				resp.this_send_qty>0
+				and resp.id in 
+				<foreach collection="ids"  separator="," item="itemsId" open="(" close=")">
+		    		${itemsId}
+			    </foreach>
+		</where>   		
+	</select>
+	
+	
+	<update id="updateResponseItems" parameterType="ProResponseItemsBacktoDO">
+		UPDATE PRO_RESPONSE_ITEMS
+		<set>
+			<trim suffixOverrides=",">
+				<if test="availableDiscountrate!=null">
+					AVAILABLE_DISCOUNTRATE =#{availableDiscountrate,jdbcType=NUMERIC},
+				</if>
+				<if test="availablePrice!=null">
+					AVAILABLE_PRICE =#{availablePrice,jdbcType=NUMERIC},
+				</if>
+				<!-- <if test="availableQty!=null">
+					AVAILABLE_QTY =#{availableQty,jdbcType=NUMERIC},
+				</if> -->
+				<if test="discountrate!=null">
+					DISCOUNTRATE =#{discountrate,jdbcType=NUMERIC},
+				</if>
+				<if test="isDiffExport!=null">
+					IS_DIFF_EXPORT =#{isDiffExport,jdbcType=VARCHAR},
+				</if>
+				<if test="isForeverOosExport!=null">
+					IS_FOREVER_OOS_EXPORT =#{isForeverOosExport,jdbcType=VARCHAR},
+				</if>
+				<if test="isValid!=null">
+					IS_VALID =#{isValid,jdbcType=VARCHAR},
+				</if>
+				<!-- <if test="notEnoughReason!=null">
+					NOT_ENOUGH_REASON =#{notEnoughReason,jdbcType=VARCHAR},
+				</if> -->
+				<if test="otherAvailableReason!=null">
+					OTHER_AVAILABLE_REASON =#{otherAvailableReason,jdbcType=VARCHAR},
+				</if>
+				<if test="otherAvailableReason==null">
+					OTHER_AVAILABLE_REASON =null,
+				</if>
+				<if test="preSendDate!=null">
+					PRE_SEND_DATE =#{preSendDate,jdbcType=DATE},
+				</if>
+				<if test="preSendDate==null">
+					PRE_SEND_DATE = null,
+				</if>
+				<if test="price!=null">
+					PRICE =#{price,jdbcType=NUMERIC},
+				</if>
+				<!-- <if test="proPurOrderItemsId!=null">
+					PRO_PUR_ORDER_ITEMS_ID =#{proPurOrderItemsId,jdbcType=NUMERIC},
+				</if>-->
+				<if test="proSendoutItemsId!=null">
+					PRO_SENDOUT_ITEMS_ID =#{proSendoutItemsId,jdbcType=NUMERIC},
+				</if> 
+				<!-- <if test="purchaserCommoditiesId!=null">
+					PURCHASER_COMMODITIES_ID =#{purchaserCommoditiesId,jdbcType=VARCHAR},
+				</if> -->
+				<!-- <if test="purchaserId!=null">
+					PURCHASER_ID =#{purchaserId,jdbcType=VARCHAR},
+				</if> -->
+				<!-- <if test="purchaseOrderCode!=null">
+					PURCHASE_ORDER_CODE =#{purchaseOrderCode,jdbcType=VARCHAR},
+				</if> -->
+				<if test="responseDate!=null">
+					RESPONSE_DATE =sysdate,
+					<!-- RESPONSE_DATE =#{responseDate,jdbcType=DATE}, -->
+				</if>
+				<if test="responseRemark!=null">
+					RESPONSE_REMARK =#{responseRemark,jdbcType=VARCHAR},
+				</if>
+				<if test="responseRemark==null">
+					RESPONSE_REMARK = null,
+				</if>
+				<if test="responseStatus!=null">
+					RESPONSE_STATUS =#{responseStatus,jdbcType=VARCHAR},
+				</if>
+				<if test="responseType!=null">
+					RESPONSE_TYPE =#{responseType,jdbcType=VARCHAR},
+				</if>
+				<if test="responseUserCode!=null">
+					RESPONSE_USER_CODE =#{responseUserCode,jdbcType=VARCHAR},
+				</if>
+				<if test="rowUniqueNo!=null">
+					ROW_UNIQUE_NO =#{rowUniqueNo,jdbcType=VARCHAR},
+				</if>
+				<if test="sourceType!=null">
+					SOURCE_TYPE =#{sourceType,jdbcType=VARCHAR},
+				</if>
+				<if test="supplierCommoditiesId!=null">
+					SUPPLIER_COMMODITIES_ID =#{supplierCommoditiesId,jdbcType=VARCHAR},
+				</if>
+				<if test="supplierId!=null">
+					SUPPLIER_ID =#{supplierId,jdbcType=VARCHAR},
+				</if>
+				<if test="thisSendQty!=null">
+					THIS_SEND_QTY =#{thisSendQty,jdbcType=NUMERIC},
+				</if>
+				<!-- <if test="updateTime!=null">
+					UPDATE_TIME =#{updateTime,jdbcType=TIMESTAMP},
+				</if> -->
+				<if test="updateUserCode!=null">
+					UPDATE_USER_CODE =#{updateUserCode,jdbcType=VARCHAR},
+				</if>
+				<if test="yunhanId!=null">
+					YUNHAN_ID =#{yunhanId,jdbcType=VARCHAR},
+				</if>
+				<if test="yunhanOrderCode!=null">
+					YUNHAN_ORDER_CODE =#{yunhanOrderCode,jdbcType=VARCHAR},
+				</if>	
+				UPDATE_TIME =sysdate					
+			</trim>
+		</set>
+			
+		<where>
+				ID=#{id}   
+		</where>
+	</update>
+	
+	
+	<!-- 使比自己ID大的回告无效 -->
+	<update id="updateResponseItemsIsValid" parameterType="ProResponseItemsBacktoCondition">
+		UPDATE PRO_RESPONSE_ITEMS pr
+		<set>
+					pr.IS_VALID = 'N',
+					pr.UPDATE_TIME =sysdate
+		</set>
+		<where>
+				pr.PRO_PUR_ORDER_ITEMS_ID=#{proPurOrderItemsId}   
+				and pr.id > #{id}
+				and pr.response_status='5'
+		</where>
+	</update>
+	
+	<!-- 当多次回告对应一次发货，发货发生修改关系。只保留最后一次回告。前面回告删除。-->
+	<update id="updateResponseItemsIsValidForUpdateSend" parameterType="ProResponseItemsBacktoCondition">
+		UPDATE PRO_RESPONSE_ITEMS pr
+		<set>
+					pr.IS_VALID = 'N',
+					pr.UPDATE_TIME =sysdate
+		</set>
+		<where>
+				pr.PRO_SENDOUT_ITEMS_ID=#{proSendoutItemsId}   
+				and pr.id &lt;  #{id}
+		</where>
+	</update>
+	
+	
+	<insert id="saveResponseItems" parameterType="ProResponseItemsBacktoDO" >
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">
+			SELECT PRO_RESPONSE_ITEMS_SEQ.nextval AS id FROM dual
+		</selectKey>
+		INSERT INTO  PRO_RESPONSE_ITEMS 
+		(
+			<trim suffixOverrides=",">
+				<if test="addTime!=null">
+					ADD_TIME,
+				</if>
+				<if test="addUserCode!=null">
+					ADD_USER_CODE,
+				</if>
+				<if test="availableDiscountrate!=null">
+					AVAILABLE_DISCOUNTRATE,
+				</if>
+				<if test="availablePrice!=null">
+					AVAILABLE_PRICE,
+				</if>
+				<!-- <if test="availableQty!=null">
+					AVAILABLE_QTY,
+				</if> -->
+				<if test="bookTitle!=null">
+					BOOK_TITLE,
+				</if>
+				<if test="diffType!=null">
+					DIFF_TYPE,
+				</if>
+				<if test="discountrate!=null">
+					DISCOUNTRATE,
+				</if>
+				<if test="id!=null">
+					ID,
+				</if>
+				<if test="isbn!=null">
+					ISBN,
+				</if>
+				<if test="isDiffExport!=null">
+					IS_DIFF_EXPORT,
+				</if>
+				<if test="isForeverOosExport!=null">
+					IS_FOREVER_OOS_EXPORT,
+				</if>
+				<if test="isValid!=null">
+					IS_VALID,
+				</if>
+				<!-- <if test="notEnoughReason!=null">
+					NOT_ENOUGH_REASON,
+				</if> -->
+				<if test="orderQty!=null">
+					ORDER_QTY,
+				</if>
+				<if test="otherAvailableReason!=null">
+					OTHER_AVAILABLE_REASON,
+				</if>
+				<if test="preSendDate!=null">
+					PRE_SEND_DATE,
+				</if>
+				<if test="price!=null">
+					PRICE,
+				</if>
+				<if test="proPurOrderItemsId!=null">
+					PRO_PUR_ORDER_ITEMS_ID,
+				</if>
+				<if test="proSendoutItemsId!=null">
+					PRO_SENDOUT_ITEMS_ID,
+				</if>
+				<if test="purchaserCommoditiesId!=null">
+					PURCHASER_COMMODITIES_ID,
+				</if>
+				<if test="purchaserId!=null">
+					PURCHASER_ID,
+				</if>
+				<if test="purchaseOrderCode!=null">
+					PURCHASE_ORDER_CODE,
+				</if>
+				<if test="responseDate!=null">
+					RESPONSE_DATE,
+				</if>
+				<if test="responseRemark!=null">
+					RESPONSE_REMARK,
+				</if>
+				<if test="responseStatus!=null">
+					RESPONSE_STATUS,
+				</if>
+				<if test="responseType!=null">
+					RESPONSE_TYPE,
+				</if>
+				<if test="responseUserCode!=null">
+					RESPONSE_USER_CODE,
+				</if>
+				<if test="rowUniqueNo!=null">
+					ROW_UNIQUE_NO,
+				</if>
+				<if test="sourceType!=null">
+					SOURCE_TYPE,
+				</if>
+				<if test="supplierCommoditiesId!=null">
+					SUPPLIER_COMMODITIES_ID,
+				</if>
+				<if test="supplierId!=null">
+					SUPPLIER_ID,
+				</if>
+				<if test="thisSendQty!=null">
+					THIS_SEND_QTY,
+				</if>
+				<if test="updateTime!=null">
+					UPDATE_TIME,
+				</if>
+				<if test="updateUserCode!=null">
+					UPDATE_USER_CODE,
+				</if>
+				<if test="yunhanId!=null">
+					YUNHAN_ID,
+				</if>
+				<if test="yunhanOrderCode!=null">
+					YUNHAN_ORDER_CODE,
+				</if>
+			</trim>
+		) VALUES (
+			<trim suffixOverrides=",">
+				<if test="addTime!=null">
+					#{addTime,jdbcType=TIMESTAMP},
+				</if>
+				<if test="addUserCode!=null">
+					#{addUserCode,jdbcType=VARCHAR},
+				</if>
+				<if test="availableDiscountrate!=null">
+					#{availableDiscountrate,jdbcType=NUMERIC},
+				</if>
+				<if test="availablePrice!=null">
+					#{availablePrice,jdbcType=NUMERIC},
+				</if>
+				<!-- <if test="availableQty!=null">
+					#{availableQty,jdbcType=NUMERIC},
+				</if> -->
+				<if test="bookTitle!=null">
+					#{bookTitle,jdbcType=VARCHAR},
+				</if>
+				<if test="diffType!=null">
+					#{diffType,jdbcType=VARCHAR},
+				</if>
+				<if test="discountrate!=null">
+					#{discountrate,jdbcType=NUMERIC},
+				</if>
+				<if test="id!=null">
+					#{id,jdbcType=NUMERIC},
+				</if>
+				<if test="isbn!=null">
+					#{isbn,jdbcType=VARCHAR},
+				</if>
+				<if test="isDiffExport!=null">
+					#{isDiffExport,jdbcType=VARCHAR},
+				</if>
+				<if test="isForeverOosExport!=null">
+					#{isForeverOosExport,jdbcType=VARCHAR},
+				</if>
+				<if test="isValid!=null">
+					#{isValid,jdbcType=VARCHAR},
+				</if>
+				<!-- <if test="notEnoughReason!=null">
+					#{notEnoughReason,jdbcType=VARCHAR},
+				</if> -->
+				<if test="orderQty!=null">
+					#{orderQty,jdbcType=NUMERIC},
+				</if>
+				<if test="otherAvailableReason!=null">
+					#{otherAvailableReason,jdbcType=VARCHAR},
+				</if>
+				<if test="preSendDate!=null">
+					#{preSendDate,jdbcType=DATE},
+				</if>
+				<if test="price!=null">
+					#{price,jdbcType=NUMERIC},
+				</if>
+				<if test="proPurOrderItemsId!=null">
+					#{proPurOrderItemsId,jdbcType=NUMERIC},
+				</if>
+				<if test="proSendoutItemsId!=null">
+					#{proSendoutItemsId,jdbcType=NUMERIC},
+				</if>
+				<if test="purchaserCommoditiesId!=null">
+					#{purchaserCommoditiesId,jdbcType=VARCHAR},
+				</if>
+				<if test="purchaserId!=null">
+					#{purchaserId,jdbcType=VARCHAR},
+				</if>
+				<if test="purchaseOrderCode!=null">
+					#{purchaseOrderCode,jdbcType=VARCHAR},
+				</if>
+				<if test="responseDate!=null">
+					sysdate,
+					<!-- #{responseDate,jdbcType=TIMESTAMP}, -->
+				</if>
+				<if test="responseRemark!=null">
+					#{responseRemark,jdbcType=VARCHAR},
+				</if>
+				<if test="responseStatus!=null">
+					#{responseStatus,jdbcType=VARCHAR},
+				</if>
+				<if test="responseType!=null">
+					#{responseType,jdbcType=VARCHAR},
+				</if>
+				<if test="responseUserCode!=null">
+					#{responseUserCode,jdbcType=VARCHAR},
+				</if>
+				<if test="rowUniqueNo!=null">
+					#{rowUniqueNo,jdbcType=VARCHAR},
+				</if>
+				<if test="sourceType!=null">
+					#{sourceType,jdbcType=VARCHAR},
+				</if>
+				<if test="supplierCommoditiesId!=null">
+					#{supplierCommoditiesId,jdbcType=VARCHAR},
+				</if>
+				<if test="supplierId!=null">
+					#{supplierId,jdbcType=VARCHAR},
+				</if>
+				<if test="thisSendQty!=null">
+					#{thisSendQty,jdbcType=NUMERIC},
+				</if>
+				<if test="updateTime!=null">
+					#{updateTime,jdbcType=TIMESTAMP},
+				</if>
+				<if test="updateUserCode!=null">
+					#{updateUserCode,jdbcType=VARCHAR},
+				</if>
+				<if test="yunhanId!=null">
+					#{yunhanId,jdbcType=VARCHAR},
+				</if>
+				<if test="yunhanOrderCode!=null">
+					#{yunhanOrderCode,jdbcType=VARCHAR},
+				</if>
+			</trim>
+		)
+	</insert>
+	
+	
+
+	<select id="getProResponseItemsById" parameterType="ProResponseItemsBacktoCondition" resultMap="ProResponseItemsResult">
+		SELECT 
+			RESP.ADD_TIME ,
+			RESP.ADD_USER_CODE ,
+			RESP.AVAILABLE_DISCOUNTRATE ,
+			RESP.AVAILABLE_PRICE ,
+			<!-- RESP.AVAILABLE_QTY , -->
+			RESP.BOOK_TITLE ,
+			RESP.DIFF_TYPE ,
+			RESP.DISCOUNTRATE ,
+			RESP.ID ,
+			RESP.ISBN ,
+			RESP.IS_DIFF_EXPORT ,
+			RESP.IS_FOREVER_OOS_EXPORT ,
+			RESP.IS_VALID ,
+			<!-- RESP.NOT_ENOUGH_REASON , -->
+			RESP.ORDER_QTY ,
+			RESP.OTHER_AVAILABLE_REASON ,
+			RESP.PRE_SEND_DATE ,
+			RESP.PRICE ,
+			RESP.PRO_PUR_ORDER_ITEMS_ID ,
+			RESP.PRO_SENDOUT_ITEMS_ID ,
+			RESP.PURCHASER_COMMODITIES_ID ,
+			RESP.PURCHASER_ID ,
+			RESP.PURCHASE_ORDER_CODE ,
+			RESP.RESPONSE_DATE ,
+			RESP.RESPONSE_REMARK ,
+			RESP.RESPONSE_STATUS ,
+			RESP.RESPONSE_TYPE ,
+			RESP.RESPONSE_USER_CODE ,
+			RESP.ROW_UNIQUE_NO ,
+			RESP.SOURCE_TYPE ,
+			RESP.SUPPLIER_COMMODITIES_ID ,
+			RESP.SUPPLIER_ID ,
+			RESP.THIS_SEND_QTY ,
+			RESP.UPDATE_TIME ,
+			RESP.UPDATE_USER_CODE ,
+			RESP.YUNHAN_ID ,
+			RESP.YUNHAN_ORDER_CODE
+		FROM PRO_RESPONSE_ITEMS RESP
+		<where>
+			RESP.IS_VALID = 'Y'
+			<if test="id!=null">
+				AND RESP.ID = #{id}
+			</if>
+			<if test="proPurOrderItemsId!=null">
+				AND RESP.PRO_PUR_ORDER_ITEMS_ID = #{proPurOrderItemsId}
+			</if>
+			<if test="responseStatus!=null">
+				AND RESP.RESPONSE_STATUS = #{responseStatus}
+			</if>
+			<if test="proSendoutItemsId!=null">
+				AND RESP.PRO_SENDOUT_ITEMS_ID = #{proSendoutItemsId}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 根据回告细目ids修改回告细目状态为5-已回告  added by luohoudong -->	
+	<update id="updateResponStatus" parameterType="java.util.List">
+		update  PRO_RESPONSE_ITEMS  SET  RESPONSE_STATUS='5',RESPONSE_DATE=sysdate
+		  WHERE  ID  in 
+		<foreach collection="list" item="id" index="index"  open="(" close=")" separator=",">
+            ${id}
+        </foreach>
+	</update>
+	<!-- 查询要回告的订单细目ids added by luohoudong -->	
+	<select id="findReportOrderItemsIds" parameterType="java.util.List" resultType="java.lang.String">
+		select 
+			wm_concat(resp.pro_pur_order_items_id) as orderIds 
+		from  pro_response_items resp 
+		WHERE  resp.ID  in 
+		<foreach collection="list" item="id" index="index"  open="(" close=")" separator=",">
+            ${id}
+        </foreach>
+	</select>
+	
+	<!-- 根据回告细目ids查询回告细目信息  added by luohoudong -->
+	<select id="findResponItemsByIds" parameterType="java.util.List"  resultMap="ProResponseItemsResult">
+		select 
+			RESP.*
+		from PRO_RESPONSE_ITEMS RESP WHERE RESP.ID in 
+		<foreach collection="list" item="id" index="index"  open="(" close=")" separator=",">
+            ${id}
+        </foreach>
+	</select>
+	
+	
+	
+	<select id="queryResponseHistory" resultMap="ProResponseItemsResult" parameterType="ProResponseItemsBacktoCondition">
+			select nvl(pri.this_send_qty, psi.sendout_qty) THIS_SEND_QTY,
+				       nvl(pri.AVAILABLE_PRICE, psi.SENDOUT_PRICE) AVAILABLE_PRICE,
+				       nvl(pri.AVAILABLE_DISCOUNTRATE, psi.sendout_discountrate) AVAILABLE_DISCOUNTRATE,
+				       nvl(pri.response_date, pss.sendout_date) as RESPONSE_DATE,
+				       nvl(pri.OTHER_AVAILABLE_REASON, '')as OTHER_AVAILABLE_REASON,
+				       pri.PRE_SEND_DATE,
+				       pri.RESPONSE_REMARK,
+				       psi.SENDOUT_GOODS_CODE,
+				       pri.ORDER_QTY
+				  from pro_sendout_items psi
+				  left join pro_sendout_summary pss
+				    on pss.SENDOUT_GOODS_CODE = psi.SENDOUT_GOODS_CODE
+				   and pss.supplier_id = psi.supplier_id
+				   and pss.purchaser_id = psi.purchaser_id
+				   and pss.IS_DELETE = 'N'
+				  left join PRO_RESPONSE_ITEMS pri
+				    on pri.pro_pur_order_items_id = psi.pro_pur_order_items_id
+				   and pri.pro_sendout_items_id = psi.id
+				   and pri.response_status = 5
+				   and pri.IS_VALID = 'Y'
+				 WHERE psi.status in (5, 10, 15)
+				   and psi.IS_DELETE = 'N'
+				   and psi.pro_pur_order_items_id = #{id}
+				union all
+				select pri.THIS_SEND_QTY,
+				       pri.AVAILABLE_PRICE,
+				       pri.AVAILABLE_DISCOUNTRATE,
+				       pri.RESPONSE_DATE,
+				       pri.OTHER_AVAILABLE_REASON,
+				       pri.PRE_SEND_DATE,
+				       pri.RESPONSE_REMARK,
+				       null SENDOUT_GOODS_CODE,
+				       pri.ORDER_QTY
+				  from PRO_RESPONSE_ITEMS pri
+				 WHERE not exists
+				 (select 1
+				          from pro_sendout_items psi
+				         where pri.pro_pur_order_items_id = psi.pro_pur_order_items_id
+				           and pri.pro_sendout_items_id = psi.id
+				           and psi.status in (5, 10, 15)
+				           and psi.IS_DELETE = 'N')
+				   and pri.response_status = 5
+				   and pri.IS_VALID = 'Y'
+				   and pri.pro_pur_order_items_id = #{id}
+				 order by RESPONSE_DATE DESC
+		<!-- SELECT RESP.AVAILABLE_DISCOUNTRATE,
+		       RESP.AVAILABLE_PRICE,
+		       RESP.ORDER_QTY,
+		       RESP.OTHER_AVAILABLE_REASON,
+		       RESP.PRE_SEND_DATE,
+		       RESP.RESPONSE_DATE,
+		       RESP.RESPONSE_REMARK,
+		       RESP.THIS_SEND_QTY,
+		       PSS.SENDOUT_GOODS_CODE
+		  FROM PRO_RESPONSE_ITEMS RESP
+		  LEFT JOIN PRO_SENDOUT_ITEMS PSS
+		    ON RESP.PRO_SENDOUT_ITEMS_ID = PSS.ID
+		 WHERE RESP.PRO_PUR_ORDER_ITEMS_ID = #{id}
+		   AND RESP.RESPONSE_STATUS = 5
+		   AND RESP.IS_VALID = 'Y'
+		 ORDER BY RESP.RESPONSE_DATE DESC -->
+
+	</select>
+	<select id="queryResponseHistory_count" resultType="java.lang.Integer"  parameterType="ProResponseItemsBacktoCondition">
+			select sum(tmpcount) from (select count(1) as tmpcount
+			  from pro_sendout_items psi
+			  left join PRO_RESPONSE_ITEMS pri
+			    on pri.pro_pur_order_items_id = psi.pro_pur_order_items_id
+			    and pri.pro_sendout_items_id = psi.id
+			    and pri.response_status = 5
+			    and pri.IS_VALID = 'Y'
+			 WHERE psi.status in (5, 10, 15)
+			    and psi.IS_DELETE = 'N'
+			    and psi.pro_pur_order_items_id = #{id}
+			union all
+			select count(1) as tmpcount
+			  from PRO_RESPONSE_ITEMS pri
+			  WHERE not exists
+			 (select 1
+			          from pro_sendout_items psi
+			          where pri.pro_pur_order_items_id = psi.pro_pur_order_items_id
+			           and pri.pro_sendout_items_id = psi.id
+			           and psi.status in (5, 10, 15)
+			           and psi.IS_DELETE = 'N')
+			   and pri.response_status = 5
+			   and pri.IS_VALID = 'Y'
+			   and pri.pro_pur_order_items_id = #{id})
+		<!-- SELECT COUNT(1) FROM PRO_RESPONSE_ITEMS RESP 
+		WHERE PRO_PUR_ORDER_ITEMS_ID=#{id} 
+			AND RESP.RESPONSE_STATUS = 5
+			AND RESP.IS_VALID = 'Y' -->
+	</select>
+	
+	<!-- 根据发货单id查询出回告id wangtao 2016年8月10日13:19:16 -->
+	<select id="findResponseItemsBySendoutId" resultMap="ProResponseItemsResult" parameterType="java.lang.Long">
+		select pri.PRO_SENDOUT_ITEMS_ID,min(id) id,max(pri.PRO_PUR_ORDER_ITEMS_ID) PRO_PUR_ORDER_ITEMS_ID  from pro_response_items pri
+		where pri.PRO_SENDOUT_ITEMS_ID = #{proSendoutItemsId}
+		group by pri.PRO_SENDOUT_ITEMS_ID
+	</select>
+	
+	
+	<!-- 更新回告信息(暂时只更新发货单细目id，如需更新其他信息，请自行添加) added by luohoudong -->
+	<update id="updateResponseItemsDO" parameterType="ProResponseItemsBacktoDO">
+		UPDATE PRO_RESPONSE_ITEMS
+		<set>
+			<trim suffixOverrides=",">
+				<if test="availableDiscountrate!=null">
+					AVAILABLE_DISCOUNTRATE =#{availableDiscountrate,jdbcType=NUMERIC},
+				</if>
+				<if test="availablePrice!=null">
+					AVAILABLE_PRICE =#{availablePrice,jdbcType=NUMERIC},
+				</if>
+				<if test="discountrate!=null">
+					DISCOUNTRATE =#{discountrate,jdbcType=NUMERIC},
+				</if>
+				<if test="isDiffExport!=null">
+					IS_DIFF_EXPORT =#{isDiffExport,jdbcType=VARCHAR},
+				</if>
+				<if test="isForeverOosExport!=null">
+					IS_FOREVER_OOS_EXPORT =#{isForeverOosExport,jdbcType=VARCHAR},
+				</if>
+				<if test="isValid!=null">
+					IS_VALID =#{isValid,jdbcType=VARCHAR},
+				</if>
+				<if test="otherAvailableReason!=null">
+					OTHER_AVAILABLE_REASON =#{otherAvailableReason,jdbcType=VARCHAR},
+				</if>
+				<if test="preSendDate!=null">
+					PRE_SEND_DATE =#{preSendDate,jdbcType=DATE},
+				</if>
+				<if test="price!=null">
+					PRICE =#{price,jdbcType=NUMERIC},
+				</if>
+				<if test="proSendoutItemsId!=null">
+					PRO_SENDOUT_ITEMS_ID =#{proSendoutItemsId,jdbcType=NUMERIC},
+				</if> 
+				<if test="responseDate!=null">
+					RESPONSE_DATE =#{responseDate,jdbcType=DATE},
+				</if>
+				<if test="responseRemark!=null">
+					RESPONSE_REMARK =#{responseRemark,jdbcType=VARCHAR},
+				</if>
+				<if test="responseStatus!=null">
+					RESPONSE_STATUS =#{responseStatus,jdbcType=VARCHAR},
+				</if>
+				<if test="responseType!=null">
+					RESPONSE_TYPE =#{responseType,jdbcType=VARCHAR},
+				</if>
+				<if test="responseUserCode!=null">
+					RESPONSE_USER_CODE =#{responseUserCode,jdbcType=VARCHAR},
+				</if>
+				<if test="rowUniqueNo!=null">
+					ROW_UNIQUE_NO =#{rowUniqueNo,jdbcType=VARCHAR},
+				</if>
+				<if test="sourceType!=null">
+					SOURCE_TYPE =#{sourceType,jdbcType=VARCHAR},
+				</if>
+				<if test="supplierCommoditiesId!=null">
+					SUPPLIER_COMMODITIES_ID =#{supplierCommoditiesId,jdbcType=VARCHAR},
+				</if>
+				<if test="supplierId!=null">
+					SUPPLIER_ID =#{supplierId,jdbcType=VARCHAR},
+				</if>
+				<if test="thisSendQty!=null">
+					THIS_SEND_QTY =#{thisSendQty,jdbcType=NUMERIC},
+				</if>
+				<if test="updateUserCode!=null">
+					UPDATE_USER_CODE =#{updateUserCode,jdbcType=VARCHAR},
+				</if>
+				<if test="yunhanId!=null">
+					YUNHAN_ID =#{yunhanId,jdbcType=VARCHAR},
+				</if>
+				<if test="yunhanOrderCode!=null">
+					YUNHAN_ORDER_CODE =#{yunhanOrderCode,jdbcType=VARCHAR},
+				</if>	
+				UPDATE_TIME =sysdate					
+			</trim>
+		</set>
+			
+		<where>
+				ID=#{id}   
+		</where>
+	</update>
+</mapper>

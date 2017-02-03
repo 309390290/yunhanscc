@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunhan.scc.backto.web.dao.mapper.system.DepartmentBacktoDao" >
+
+	<resultMap type="com.yunhan.scc.trading.web.entities.system.Department" id="departmentResult">
+		<id property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<result property="sapName" column="SAPNAME"/>
+		<result property="level" column="LEVELE" />
+		<result property="sapvendorId" column="SAPVENDORID" />
+		<result property="orgCode" column="ORGCODE" />
+		<result property="taxRegisterNumber" column="TAXREGISTERNUMBER" />
+		<result property="phoneNumber" column="PHONENUMBER" />
+		<result property="address" column="ADDRESS" />
+		<result property="postCode" column="POSTCODE" />
+		<result property="email" column="EMAIL" />
+		<result property="bankAddress" column="BANKADDRESS" />
+		<result property="accountNumber" column="ACCOUNTNUMBER" />
+		<result property="vendorGroup" column="VENDORGROUP" />
+		<result property="groupName" column="GROUPNAME" />
+		<result property="merchantType" column="MERCHANTTYPE" />
+		<result property="mobile" column="MOBILE" />
+		<result property="memo" column="MEMO" />
+		<result property="city" column="CITY" />
+		<result property="area" column="AREA" />
+		<result property="sdSelfId" column="SD_SELF_ID" />
+		<result property="operatorId" column="OPERATORID" />
+		<result property="salerId" column="SALERID" />
+		<result property="parentName" column="parentName" />
+		<result property="procurementType" column="PROCUREMENTTYPE" />
+		<result property="storeChar" column="STORE_CHAR" />
+		<result property="shrtnmNm" column="SHRTNM_NM" />   <!-- 商家简称 -->
+		<result property="strusInd" column="STRUS_IND" />
+		<result property="parentId" column="PARENT_ID" />
+		<result property="stgEcd" column="STG_ECD" />
+		<result property="ctcPsnNm" column="CTC_PSN_NM" />
+		<result property="instCharCd" column="INST_CHAR_CD" />
+		<result property="rqmNum" column="RQM_NUM"/>
+		<result property="storePcsInd" column="STORE_PCS_IND"/>
+		<result property="purCfmNum" column="PUR_CFM_NUM"/>
+		<result property="stoupChgagnNum" column="STOUP_CHGAGN_NUM"/>
+		<result property="rqmTpCd" column="RQM_TP_CD"/>
+		<result property="rqmId" column="rqmId"/>
+		<result property="supplierId" column="supplierId"/>
+		<result property="supplierName" column="supplierName"/>
+		<result property="supplierShortName" column="supplierShortName"/>
+		<result/>
+		
+	</resultMap>
+	<!-- 根据商家ID查询商家信息 -->
+	<select id="getDepartmentBySapverdorId" parameterType="java.lang.String" resultMap="departmentResult">
+		select d.* from T_DEPARTMENT d where d.SAPVENDORID = #{purchaserId}
+	</select>
+	<!-- 查询所有供应商信息 -->
+	<select id="selectSupplierList" parameterType="map" resultMap="departmentResult">
+		select d.* from T_DEPARTMENT d where 1=1
+		<if test="strusInd!=null">
+			AND d.STRUS_IND = ${strusInd}
+		</if>
+		<if test="merchantType!=null">
+			AND d.MERCHANTTYPE = #{merchantType}
+		</if>
+	</select>
+	<!-- 根据供应商ID获取 有商务关系的采购商 -->
+	<select id="selectDepartmentBySupplierId" parameterType="java.lang.String" resultMap="departmentResult">
+		select d.* from T_DEPARTMENT d 
+		where d.id in (select PURCHASER_D_ID from BUSINESS_RELATIONS where SUPPLIER_D_ID =#{supplierId})
+		
+	</select>
+	<!-- 供应商用户查询所管采购商 by wuyounan 20161021 -->
+	<select id="selectMyPur" parameterType="java.lang.String" resultMap="departmentResult">
+    SELECT TDM.ID,
+    		TDM.NAME,
+    		TDM.LEVELE,
+    		TDM.PARENT_ID,
+    		TDM.SAPVENDORID,
+    		TDM.ORGCODE
+	  FROM T_CONFIG_PARAMETER TCP,
+	       T_DEPARTMENT       TDM
+	 WHERE TCP.USER_CODE = #{userCode,jdbcType=VARCHAR}
+	   AND TCP.PARAMETER_CODE1 = 'PURCHASER_ID'
+	   AND TCP.IS_VALID = 'Y'
+	   AND TCP.PARAMETER_VALUE1 = TDM.SAPVENDORID
+	 GROUP BY TDM.ID,
+    		TDM.NAME,
+    		TDM.LEVELE,
+    		TDM.PARENT_ID,
+    		TDM.SAPVENDORID,
+    		TDM.ORGCODE
+	</select>
+	
+	<!-- 供应商模糊查询 权限 -->
+	<select id="findDepartmentBySapvendorIdorNameByUser" resultMap="departmentResult"
+		parameterType="Map">
+		select d.* from t_department d
+		<where>
+			<trim suffixOverrides="and">
+				<if test="supplierID!=null">(upper(d.sapvendorid) like upper('%${supplierID}%') or
+					upper(d.name) like upper('%${supplierName}%')) and</if>
+				<if test="opeId!=null">(upper(d.bill_operatorid) = #{opeId} )and</if>
+				<if test="rownum!=null">
+					ROWNUM
+					<![CDATA[<=]]>#{rownum}
+					and
+				</if>
+			</trim>
+		</where>
+		ORDER BY d.sapvendorid
+	</select>
+	
+</mapper>

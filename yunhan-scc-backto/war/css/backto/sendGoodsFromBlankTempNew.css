@@ -1,0 +1,35 @@
+.fontred {
+    color: #ff0000;
+}
+.bodyBox .Tab .screenBox .left .com .u-icon-date{
+	position: absolute;
+    right: 4px;
+    top: 5px;
+    width: 14px;
+    height: 14px;
+    background: url(/img/glyphicons-halflings_hui.png) no-repeat -192px -120px;
+}
+.bodyBox .Tab .screenBox .left .fhTime{
+	position: relative;
+}
+.bodyBox .Tab .sortBox .right{
+    float: right;
+} 
+.bodyBox .Tab .sortBox .right span{
+	    height: 22px;
+    line-height: 21px;
+    text-align: center;
+    margin-right: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    word-wrap: normal;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    float: left;
+    color: #333;
+    cursor: pointer;
+    margin-right: 30px;
+}
+.JGtab input.b80 {
+    width: 80%;
+}

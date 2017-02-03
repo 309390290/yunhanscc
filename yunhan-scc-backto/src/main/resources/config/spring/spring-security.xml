@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+	<!-- <http auto-config="true" access-denied-page="/403.jsp"> -->
+	<!-- <http  access-denied-page="/403.jsp" authentication-manager-ref="authenticationManager" entry-point-ref="loginEntryPoint"> -->
+	<http pattern="/**/server/**" security="none"/>
+	<http  access-denied-page="/403.jsp" entry-point-ref="loginEntryPoint">
+		<!--use-expressions="true" access-denied-page="/403.html"
+			intercept-url:拦截器,可以设定哪些路径需要哪些权限来访问. filters=none 不使用过滤,也可以理解为忽略
+			ROLE_ANONYMOUS,ROLE_USER,ROLE_ADMIN
+		-->
+		<intercept-url pattern="/" access="ROLE_USER" /> 
+		<intercept-url pattern="/**/page/**" access="ROLE_USER" />
+		<intercept-url pattern="/**/json/**" access="ROLE_USER" />
+		<!-- <intercept-url pattern="/*" filters="none" /> -->
+		<!-- 开启权限 -->
+		<!-- <intercept-url pattern="/**" access="ROLE_USER" /> -->
+		<!-- <custom-filter ref="clientLoginFilter"  before="FIRST" /> -->
+		 <!-- 替换默认的LoginFilter -->
+		<custom-filter ref="clientLoginFilter" position="FORM_LOGIN_FILTER" />
+		<!-- 替换默认的LogoutFilter -->
+		<custom-filter ref="clientLogoutFilter" position="LOGOUT_FILTER" />
+	</http>
+	
+	
+	
+	<!-- <authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="myUserDetailsServiceN" />
+		加入开发人员自定义的Provider
+		<authentication-provider ref="clientProvider" />
+	</authentication-manager> -->
+	
+	<authentication-manager alias="authenticationManager" >
+		<authentication-provider user-service-ref="clientUserService" />
+		<!-- 加入开发人员自定义的Provider -->
+		<!-- <authentication-provider ref="clientProvider" /> -->
+	</authentication-manager>
+	
+	<!-- <beans:bean id="loginEntryPoint"
+		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<beans:constructor-arg value="/login_a" />
+	</beans:bean> -->
+	
+	<beans:bean id="loginEntryPoint"
+		class="com.yunhan.scc.oauth2.web.service.impl.security.MyLoginUrlAuthenticationEntryPoint">
+		<!-- 默认登录页的url -->
+		<beans:constructor-arg value="/login_a" />
+	</beans:bean>
+
+	<beans:bean id="clientLoginFilter" class="com.yunhan.scc.oauth2.web.ClientLoginFilter">
+		<!-- 校验登录是否有效的虚拟url -->
+		<!-- <beans:property name="filterProcessesUrl" value="/checklogin" /> -->
+		<beans:property name="filterProcessesUrl" value="/authorization_code_callback" /> 
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<!-- <beans:property name="usernameParameter" value="username" />
+		<beans:property name="passwordParameter" value="password" /> -->
+		<beans:property name="authenticationSuccessHandler">
+			<!-- 自定义登录成功后的处理handler -->
+			<beans:bean class="com.yunhan.scc.oauth2.web.ClientLoginHandler">
+				<!-- 登录成功后的默认url -->
+				<beans:property name="defaultTargetUrl" value="/welcome" />
+			</beans:bean>
+		</beans:property>
+		<beans:property name="authenticationFailureHandler">
+			<beans:bean
+				class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+				<!-- 登录失败后的默认Url -->
+				<beans:property name="defaultFailureUrl" value="/login?error" />
+			</beans:bean>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="clientLogoutFilter" class="com.yunhan.scc.oauth2.web.ClientLogoutFilter">
+		<!-- 处理退出的虚拟url -->
+		<beans:property name="filterProcessesUrl" value="/logout" />
+		<!-- 退出处理成功后的默认显示url -->
+		<!-- <beans:constructor-arg index="0" value="/login?logout" /> -->
+		<beans:constructor-arg index="0" value="/" />
+		<beans:constructor-arg index="1">
+			<!-- 退出成功后的handler列表 -->
+			<beans:array>
+				<beans:bean id="securityContextLogoutHandler"
+					class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+				<!-- 加入了开发人员自定义的退出成功处理 -->
+				<beans:bean id="clientLogoutSuccessHandler" class="com.yunhan.scc.oauth2.web.ClientLogoutHandler" />
+			</beans:array>
+		</beans:constructor-arg>
+	</beans:bean>
+
+</beans:beans>

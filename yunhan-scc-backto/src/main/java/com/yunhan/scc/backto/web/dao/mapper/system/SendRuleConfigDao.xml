@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	@author xiongmingbao
+	@version 2016-8-24 14:58:59 
+-->
+<mapper namespace="com.yunhan.scc.backto.web.dao.mapper.system.SendRuleConfigDao">
+
+	<resultMap type="SendRuleConfigDo" id="SendRuleConfigResult">
+			<result property="id" column="ID" />
+			<result property="sendoutGoodsLength" column="SENDOUT_GOODS_LENGTH" />
+			<result property="lengthRule" column="LENGTH_RULE" />
+			<result property="regularExpression" column="REGULAR_EXPRESSION" />
+			<result property="sendFormat" column="SEND_FORMAT" />
+			<result property="supplierId" column="SUPPLIER_ID" />
+			<result property="supplierName" column="SUPPLIER_NAME" />
+			<result property="purchaserId" column="PURCHASER_ID" />
+			<result property="purchaserName" column="PURCHASER_NAME" />
+			<result property="isValid" column="IS_VALID" />
+	</resultMap>
+
+	<!-- 通过供应商ID查询当前供应商的发货单规则配置 -->
+	<select id="getSendRuleConfigBySupplierId" resultMap="SendRuleConfigResult" parameterType="SendRuleConfigCondition">
+		SELECT 
+			s.ID ,
+			s.SENDOUT_GOODS_LENGTH ,
+			s.LENGTH_RULE ,
+			s.REGULAR_EXPRESSION ,
+			s.SEND_FORMAT ,
+			s.SUPPLIER_ID ,
+			t1.NAME as SUPPLIER_NAME,
+			s.PURCHASER_ID,
+			t2.NAME as PURCHASER_NAME,
+			s.IS_VALID
+		FROM SEND_RULE_CONFIG s
+		inner join T_DEPARTMENT t1 on t1.SAPVENDORID = s.SUPPLIER_ID
+		inner join T_DEPARTMENT t2 on t2.SAPVENDORID = s.PURCHASER_ID
+		<where>
+			1=1
+			<if test="supplierId!=null&amp;&amp;supplierId!=''">
+				AND s.SUPPLIER_ID =#{supplierId}
+			</if>
+			<if test="purchaserId!=null&amp;&amp;purchaserId!=''">
+				AND s.PURCHASER_ID = #{purchaserId}
+			</if>
+			<if test="supplierIds!=null">
+					AND s.SUPPLIER_ID in
+				<foreach collection="supplierIds"  separator="," item="supplierId" open="(" close=")">
+    					#{supplierId}
+	   			</foreach>
+	   	</if>
+	   	<if test="purchaserIds!=null">
+	   			AND s.PURCHASER_ID in
+			<foreach collection="purchaserIds"  separator="," item="purchaserId" open="(" close=")">
+    			#{purchaserId}
+	   		</foreach>
+			</if>
+			<if test="isValid!=null&amp;&amp;isValid!=''">
+				AND s.IS_VALID = #{isValid}
+			</if>
+		</where>
+		<!-- 排序条件部分 -->
+		<if test="sortOrderField == 'purchaserId'">
+			ORDER BY s.PURCHASER_ID ${sortOrderRule}
+		</if>
+		<if test="sortOrderField == 'supplierId'">
+			ORDER BY s.SUPPLIER_ID ${sortOrderRule}
+		</if>
+		<if test="sortOrderField == 'isValid'">
+			ORDER BY s.IS_VALID ${sortOrderRule}
+		</if>
+	</select>
+	<select id="getSendRuleConfigBySupplierId_count" resultType="long" parameterType="SendRuleConfigCondition">
+		SELECT 
+			count(0)
+		FROM SEND_RULE_CONFIG s
+		inner join T_DEPARTMENT t1 on t1.SAPVENDORID = s.SUPPLIER_ID
+		inner join T_DEPARTMENT t2 on t2.SAPVENDORID = s.PURCHASER_ID
+		<where>
+			1=1
+			<if test="supplierId!=null&amp;&amp;supplierId!=''">
+				AND s.SUPPLIER_ID =#{supplierId}
+			</if>
+			<if test="purchaserId!=null&amp;&amp;purchaserId!=''">
+				AND s.PURCHASER_ID = #{purchaserId}
+			</if>
+			<if test="supplierIds!=null">
+					AND s.SUPPLIER_ID in
+				<foreach collection="supplierIds"  separator="," item="supplierId" open="(" close=")">
+    					#{supplierId}
+	   			</foreach>
+	   	</if>
+	   	<if test="purchaserIds!=null">
+	   			AND s.PURCHASER_ID in
+			<foreach collection="purchaserIds"  separator="," item="purchaserId" open="(" close=")">
+    			#{purchaserId}
+	   		</foreach>
+			</if>
+			<if test="isValid!=null&amp;&amp;isValid!=''">
+				AND s.IS_VALID = #{isValid}
+			</if>
+		</where>
+	</select>
+	<update id="updateSendRuleConfig" parameterType="SendRuleConfigDo">
+		UPDATE SEND_RULE_CONFIG
+		<set>
+			<trim suffixOverrides=",">
+				<if  test="sendoutGoodsLength!=null">
+					SENDOUT_GOODS_LENGTH =#{sendoutGoodsLength},
+				</if>
+				<if  test="lengthRule!=null">
+					LENGTH_RULE =#{lengthRule},
+				</if>
+				<if  test="regularExpression!=null">
+					REGULAR_EXPRESSION =#{regularExpression},
+				</if>
+				<if  test="sendFormat!=null">
+					SEND_FORMAT =#{sendFormat},
+				</if>
+				<if  test="supplierId!=null">
+					SUPPLIER_ID =#{supplierId},
+				</if>
+				<if  test="purchaserId!=null">
+					PURCHASER_ID =#{purchaserId},
+				</if>
+				<if  test="isValid!=null">
+					IS_VALID =#{isValid},
+				</if>
+			</trim>
+		</set>
+		<where>
+			ID =#{id}
+		</where>
+	</update>
+	
+	<insert id="saveSendRuleConfig" parameterType="SendRuleConfigDo">
+		<selectKey resultType="java.lang.Long" order="BEFORE"
+			keyProperty="id">
+			SELECT SEND_RULE_CONFIG_PK_SEQ.nextval AS  FROM dual
+		</selectKey>
+		INSERT INTO  SEND_RULE_CONFIG 
+		(
+			<trim suffixOverrides=",">
+				<if test="id!=null">
+					ID,
+				</if>
+				<if test="sendoutGoodsLength!=null">
+					SENDOUT_GOODS_LENGTH,
+				</if>
+				<if test="lengthRule!=null">
+					LENGTH_RULE,
+				</if>
+				<if test="regularExpression!=null">
+					REGULAR_EXPRESSION,
+				</if>
+				<if test="sendFormat!=null">
+					SEND_FORMAT,
+				</if>
+				<if test="supplierId!=null">
+					SUPPLIER_ID,
+				</if>
+				<if  test="purchaserId!=null">
+					PURCHASER_ID,
+				</if>
+				<if  test="isValid!=null">
+					IS_VALID,
+				</if>
+			</trim>
+		) VALUES (
+			<trim suffixOverrides=",">
+				<if test="id!=null">
+					#{id},
+				</if>
+				<if test="sendoutGoodsLength!=null">
+					#{sendoutGoodsLength},
+				</if>
+				<if test="lengthRule!=null">
+					#{lengthRule},
+				</if>
+				<if test="regularExpression!=null">
+					#{regularExpression},
+				</if>
+				<if test="sendFormat!=null">
+					#{sendFormat},
+				</if>
+				<if test="supplierId!=null">
+					#{supplierId},
+				</if>
+				<if  test="purchaserId!=null">
+					#{purchaserId},
+				</if>
+				<if  test="isValid!=null">
+					#{isValid},
+				</if>
+			</trim>
+		)
+	</insert>
+
+</mapper>

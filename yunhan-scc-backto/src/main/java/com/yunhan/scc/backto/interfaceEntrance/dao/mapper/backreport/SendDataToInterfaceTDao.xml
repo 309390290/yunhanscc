@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	@author luohoudong
+	@version 2016-10-17 10:55:27 
+-->
+<mapper namespace="com.yunhan.scc.backto.interfaceEntrance.dao.mapper.backreport.SendDataToInterfaceTDao">
+
+	<resultMap type="SendDataToInterfaceTDO" id="SendDataToInterfaceTResult">
+			<result property="addDate" column="ADD_DATE" />
+			<result property="id" column="ID" />
+			<result property="sendType" column="SEND_TYPE" />
+			<result property="sourceDataId" column="SOURCE_DATA_ID" />
+	</resultMap>
+	
+	<resultMap type="ProResponseItemsBacktoDO" id="ProResponseItemsResult">
+			<result property="addTime" column="ADD_TIME" />
+			<result property="addUserCode" column="ADD_USER_CODE" />
+			<result property="availableDiscountrate" column="AVAILABLE_DISCOUNTRATE" />
+			<result property="availablePrice" column="AVAILABLE_PRICE" />
+			<result property="bookTitle" column="BOOK_TITLE" />
+			<result property="diffType" column="DIFF_TYPE" />
+			<result property="discountrate" column="DISCOUNTRATE" />
+			<result property="id" column="ID" />
+			<result property="isbn" column="ISBN" />
+			<result property="isDiffExport" column="IS_DIFF_EXPORT" />
+			<result property="isForeverOosExport" column="IS_FOREVER_OOS_EXPORT" />
+			<result property="isValid" column="IS_VALID" />
+			<result property="orderQty" column="ORDER_QTY" />
+			<result property="otherAvailableReason" column="OTHER_AVAILABLE_REASON" />
+			<result property="preSendDate" column="PRE_SEND_DATE" />
+			<result property="price" column="PRICE" />
+			<result property="proPurOrderItemsId" column="PRO_PUR_ORDER_ITEMS_ID" />
+			<result property="proSendoutItemsId" column="PRO_SENDOUT_ITEMS_ID" />
+			<result property="purchaserCommoditiesId" column="PURCHASER_COMMODITIES_ID" />
+			<result property="purchaserId" column="PURCHASER_ID" />
+			<result property="purchaseOrderCode" column="PURCHASE_ORDER_CODE" />
+			<result property="responseDate" column="RESPONSE_DATE" />
+			<result property="responseRemark" column="RESPONSE_REMARK" />
+			<result property="responseStatus" column="RESPONSE_STATUS" />
+			<result property="responseType" column="RESPONSE_TYPE" />
+			<result property="responseUserCode" column="RESPONSE_USER_CODE" />
+			<result property="rowUniqueNo" column="ROW_UNIQUE_NO" />
+			<result property="sourceType" column="SOURCE_TYPE" />
+			<result property="supplierCommoditiesId" column="SUPPLIER_COMMODITIES_ID" />
+			<result property="supplierId" column="SUPPLIER_ID" />
+			<result property="thisSendQty" column="THIS_SEND_QTY" />
+			<result property="updateTime" column="UPDATE_TIME" />
+			<result property="updateUserCode" column="UPDATE_USER_CODE" />
+			<result property="yunhanId" column="YUNHAN_ID" />
+			<result property="yunhanOrderCode" column="YUNHAN_ORDER_CODE" />
+			
+			<result property="isSupplierAddProduct" column="isSupplierAddProduct" /><!-- 是否供应商添加 added by luohoudong  -->
+			<result property="historyOrderQty" column="historyOrderQty" /><!-- 已发数 added by luohoudong  -->
+			
+			<!-- 发货单号  add by lumin @20160907 -->
+			<result property="sendoutGoodsCode" column="SENDOUT_GOODS_CODE" />
+			 
+	</resultMap>
+	
+	
+
+	<insert id="save" parameterType="SendDataToInterfaceTDO">
+		<selectKey resultType="java.lang.Long" order="BEFORE"
+			keyProperty="id">
+			SELECT SEND_DATA_TO_INTERFACE_T_seq.nextval AS  FROM dual
+		</selectKey>
+		INSERT INTO  SEND_DATA_TO_INTERFACE_T 
+		(
+					
+				<if test="sendType!=null">
+					SEND_TYPE,
+				</if>
+				<if test="sourceDataId!=null">
+					SOURCE_DATA_ID,
+				</if>
+				ADD_DATE,
+				ID
+		) VALUES (
+					
+				<if test="sendType!=null">
+					${sendType},
+				</if>
+				<if test="sourceDataId!=null">
+					${sourceDataId},
+				</if>
+				sysdate,
+				${id}
+				
+		)
+	</insert>
+	
+	<delete id="delete" parameterType="java.lang.Long">
+		DELETE FROM  SEND_DATA_TO_INTERFACE_T  WHERE 
+		SOURCE_DATA_ID = #{sourceDataId}
+	</delete>
+	
+	
+	<!-- 查询需要发送的回告新  added by luohoudong -->
+	<select id="findSendResponItems" parameterType="java.util.List"  resultMap="ProResponseItemsResult">
+		select 
+			RESP.*
+		from PRO_RESPONSE_ITEMS RESP
+	 	JOIN SEND_DATA_TO_INTERFACE_T ST
+	    ON RESP.ID = ST.SOURCE_DATA_ID
+	   		AND ST.SEND_TYPE = 1
+	</select>
+
+</mapper>

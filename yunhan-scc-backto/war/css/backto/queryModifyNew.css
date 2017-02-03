@@ -1,0 +1,15 @@
+.closeBtn {
+    padding: 2px 5px;
+    border: 1px solid #999999;
+    cursor: pointer;
+}
+.closeBtn:hover {
+    border: 1px solid #3c89cd;
+    background-color: #c9e2f8;
+}
+.closeBtnT {
+    padding: 2px 5px;
+    border: 1px solid #DBDBDB;
+    background-color: #F7F7F7;
+    color: #A5A5A5;
+}

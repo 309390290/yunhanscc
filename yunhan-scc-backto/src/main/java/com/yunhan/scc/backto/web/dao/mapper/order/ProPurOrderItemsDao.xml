@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunhan.scc.backto.web.dao.mapper.order.ProPurOrderItemsDao">
+
+	<resultMap type="ProPurOrderItemsBacktoDO" id="ProPurOrderItemsBacktoResult">
+		<result property="id" column="ID" />
+		<result property="yunhanOrderCode" column="YUNHAN_ORDER_CODE" />
+		<result property="purchaseOrderCode" column="PURCHASE_ORDER_CODE" />
+		<result property="rowUniqueNo" column="ROW_UNIQUE_NO" />
+		<result property="orderTermNo" column="ORDER_TERM_NO" />
+		<result property="yunhanId" column="YUNHAN_ID" />
+		<result property="purchaserCommoditiesId" column="PURCHASER_COMMODITIES_ID" />
+		<result property="supplierId" column="SUPPLIER_ID" />
+		<result property="purchaserId" column="PURCHASER_ID" />
+		<result property="isbn" column="ISBN" />
+		<result property="bookTitle" column="BOOK_TITLE" />
+		<result property="price" column="PRICE" />
+		<result property="marketingCategories" column="MARKETING_CATEGORIES" />
+		<result property="discountrate" column="DISCOUNTRATE" />
+		<result property="orderQty" column="ORDER_QTY" />
+		<result property="salePrice" column="SALE_PRICE" />
+		<result property="realitySalePrice" column="REALITY_SALE_PRICE" />
+		<result property="sendScheme" column="SEND_SCHEME" />
+		<result property="status" column="STATUS" />
+		<result property="remark" column="REMARK" />
+		<result property="isImportent" column="IS_IMPORTENT" />
+		<result property="isValid" column="IS_VALID" />
+		<result property="urgentFlag" column="URGENT_FLAG" />
+		<result property="isView" column="IS_VIEW" />
+		<result property="addUserCode" column="ADD_USER_CODE" />
+		<result property="addTime" column="ADD_TIME" />
+		<result property="updateUserCode" column="UPDATE_USER_CODE" />
+		<result property="updateTime" column="UPDATE_TIME" />
+		<result property="sendoutGoodsCode" column="SENDOUT_GOODS_CODE" />
+		<result property="sendoutQty" column="SENDOUT_QTY" />
+		<result property="sendoutDate" column="SENDOUT_DATE" />
+		<result property="isExport" column="IS_EXPORT" />
+		<result property="sourceType" column="SOURCE_TYPE" />
+		<result property="closeReason" column="CLOSE_REASON" />
+		<result property="receiveQty" column="RECEIVE_QTY" />
+		<result property="receiveDate" column="RECEIVE_DATE" />
+		<result property="supplierCommoditiesId" column="SUPPLIER_COMMODITIES_ID" />
+		<result property="subscriptionCode" column="SUBSCRIPTION_CODE" />
+		<result property="warehouse" column="WAREHOUSE" />
+		<result property="closeStatus" column="CLOSE_STATUS" />
+		<result property="seriesTitle" column="SERIES_TITLE" />
+		<result property="affiliateSeries" column="AFFILIATE_SERIES" />
+		<result property="authorEditor" column="AUTHOR_EDITOR" />
+		<result property="publisher" column="PUBLISHER" />
+		<result property="versionNo" column="VERSION_NO" />
+		<result property="impression" column="IMPRESSION" />
+		<result property="paperback" column="PAPERBACK" />
+		<result property="salesPrices" column="SALES_PRICES" />
+		<result property="closeCounter" column="CLOSE_COUNTER" />
+		<result property="controlFlag" column="CONTROL_FLAG" />
+		<result property="isSuitBook" column="IS_SUIT_BOOK" />
+		<result property="isDeal" column="IS_DEAL" />
+		<result property="orderType" column="ORDER_TYPE" />
+		<result property="sendGoodsType" column="SEND_GOODS_TYPE" />
+		<!-- 回告部分字段 -->
+		<result property="availablePrice" column="AVAILABLE_PRICE" />
+		<result property="availableDiscountrate" column="AVAILABLE_DISCOUNTRATE" />
+		<result property="availableReason" column="OTHER_AVAILABLE_REASON" />
+		<result property="preSendDate" column="PRE_SEND_DATE" />
+		<result property="responseRemark" column="RESPONSE_REMARK" />
+		<result property="responseStatus" column="RESPONSE_STATUS" />
+		<result property="thisSendQty" column="THIS_SEND_QTY" />
+		<result property="historyOtherAvailableReason" column="HISTORY_OTHER_AVAILABLE_REASON" />
+		<result property="historyAvailablePrice" column="history_Available_Price" />
+		<result property="historyAvailableDiscountrate" column="history_Available_Discountrate" />
+		<result property="historyPreSendDate" column="history_Pre_Send_Date" />
+		<result property="historyResponseRemark" column="history_Response_Remark" />
+		
+		
+	</resultMap>
+
+	<select id="queryPendingOrderItemsByPage" resultMap="ProPurOrderItemsBacktoResult" parameterType="ProPurOrderItemsBacktoCondition">
+		SELECT PPOI.ID,
+	       PPOI.YUNHAN_ORDER_CODE,
+	       PPOI.PURCHASE_ORDER_CODE,
+	       PPOI.ROW_UNIQUE_NO,
+	       PPOI.ORDER_TERM_NO,
+	       PPOI.YUNHAN_ID,
+	       PPOI.PURCHASER_COMMODITIES_ID,
+	       PPOI.SUPPLIER_ID,
+	       PPOI.PURCHASER_ID,
+	       PPOI.ISBN,
+	       PPOI.BOOK_TITLE,
+	       PPOI.PRICE,
+	       PPOI.MARKETING_CATEGORIES,
+	       PPOI.DISCOUNTRATE,
+	       PPOI.ORDER_QTY,
+	       PPOI.STATUS,
+	       PPOI.IS_IMPORTENT,
+	       PPOI.IS_VALID,
+	       PPOI.URGENT_FLAG,
+	       NVL(PPOI.SENDOUT_QTY,0) SENDOUT_QTY,
+	       PPOI.CLOSE_REASON,
+	       PPOI.RECEIVE_QTY,
+	       PPOI.SUPPLIER_COMMODITIES_ID,
+	       PPOI.WAREHOUSE,
+	       PPOI.CLOSE_STATUS,
+	       PPOI.SERIES_TITLE,
+	       PPOI.AFFILIATE_SERIES,
+	       PPOI.AUTHOR_EDITOR,
+	       PPOI.PUBLISHER,
+	       PPOI.VERSION_NO,
+	       PPOI.IMPRESSION,
+	       PPOI.PAPERBACK,
+	       PPOI.CONTROL_FLAG,
+	       PPOI.IS_SUIT_BOOK,
+	       PPOI.IS_DEAL,
+	       <!-- PRI.PRO_PUR_ORDER_ITEMS_ID,
+	       PRI.AVAILABLE_PRICE,
+	       PRI.AVAILABLE_DISCOUNTRATE,
+	       PRI.OTHER_AVAILABLE_REASON, -->
+	       <!-- 回告历史数据PRI -->
+	       PRI.AVAILABLE_PRICE HISTORY_AVAILABLE_PRICE,
+	       PRI.AVAILABLE_DISCOUNTRATE HISTORY_AVAILABLE_DISCOUNTRATE,
+	       PRI.PRE_SEND_DATE HISTORY_PRE_SEND_DATE,
+	       PRI.RESPONSE_REMARK HISTORY_RESPONSE_REMARK,
+	       PRI.OTHER_AVAILABLE_REASON HISTORY_OTHER_AVAILABLE_REASON,
+           CASE WHEN PRIZC.ID IS NULL THEN
+           (SELECT PR.OTHER_AVAILABLE_REASON
+              FROM PRO_RESPONSE_ITEMS PR
+             WHERE PPOI.ISBN = PR.ISBN
+               AND PPOI.BOOK_TITLE = PR.BOOK_TITLE
+               AND PPOI.PRICE = PR.PRICE
+               AND PPOI.PURCHASER_ID = PR.PURCHASER_ID
+               AND PPOI.SUPPLIER_ID = PR.SUPPLIER_ID
+               AND PR.ID = (SELECT MAX(RE.ID)
+                              FROM PRO_RESPONSE_ITEMS RE
+                             WHERE RE.BOOK_TITLE = PR.BOOK_TITLE
+                               AND RE.PRICE = PR.PRICE
+                               AND RE.ISBN = PR.ISBN
+                               AND RE.PURCHASER_ID = PR.PURCHASER_ID
+                               AND RE.SUPPLIER_ID = PR.SUPPLIER_ID
+                               AND RE.RESPONSE_STATUS = 5
+                               AND RE.IS_VALID = 'Y'
+                               AND RE.OTHER_AVAILABLE_REASON IN ('2', '3', '4', '5', '6')
+                               )) ELSE PRIZC.OTHER_AVAILABLE_REASON END AS OTHER_AVAILABLE_REASON,
+	       <!-- PRI.PRE_SEND_DATE,
+	       PRI.RESPONSE_REMARK,
+	       PRI.THIS_SEND_QTY, -->
+	       <!-- 暂存部分数据PRIZC -->
+	       PRIZC.RESPONSE_STATUS,
+	       PRIZC.AVAILABLE_PRICE,
+	       PRIZC.THIS_SEND_QTY,
+	       PRIZC.PRE_SEND_DATE,
+	       PRIZC.RESPONSE_REMARK,
+	       PRIZC.AVAILABLE_DISCOUNTRATE,
+<!-- 	       PRIZC.id responseId, -->
+	       <!-- PRI.AVAILABLE_QTY, -->
+           DECODE(NODELOAD.IS_EXPORT,NULL,'N',NODELOAD.IS_EXPORT) IS_EXPORT
+		  	FROM PRO_PUR_ORDER_ITEMS PPOI
+		  	LEFT JOIN PRO_RESPONSE_ITEMS PRI
+			    ON PPOI.ID = PRI.PRO_PUR_ORDER_ITEMS_ID
+			    AND PRI.RESPONSE_STATUS = 5 AND pri.IS_VALID = 'Y'
+			LEFT JOIN PRO_RESPONSE_ITEMS PRIZC
+	    		ON PPOI.ID = PRIZC.PRO_PUR_ORDER_ITEMS_ID  
+	    		AND PRIZC.RESPONSE_STATUS = 0
+		     LEFT JOIN NODE_USER_DATA_REL NODELOAD
+	                   ON TO_CHAR(PPOI.ID) = NODELOAD.DATA_ID
+	                  AND NODELOAD.NODE_BSN_TP_CD = 'HGFH'
+	                  AND NODELOAD.DATA_TYPE ='ORDER'
+		  	<where>
+		  		 PPOI.status not in (0,5,50) 
+		  		and	NVL(PRI.ID,0) = NVL((SELECT MAX(PS.ID) ID
+	               		FROM PRO_RESPONSE_ITEMS PS
+	                	<where>
+	                		PS.PRO_PUR_ORDER_ITEMS_ID = PPOI.ID
+	                		and PS.RESPONSE_STATUS = 5
+	                		AND PS.IS_VALID = 'Y'
+				            <if test="purchaseOrderCode!=null">
+				               	AND PS.PURCHASE_ORDER_CODE = #{purchaseOrderCode}
+				            </if>
+				            <!-- <if test="purchaserId!=null">
+				               	AND PS.PURCHASER_ID = #{purchaserId}
+				            </if> -->
+			     		</where>),0)
+			     		
+			        <if test="purchaseOrderCode!=null">
+			             AND PPOI.PURCHASE_ORDER_CODE = #{purchaseOrderCode}
+			        </if>
+			        <if test="purchaserId!=null">
+			             AND PPOI.PURCHASER_ID = #{purchaserId}
+			        </if>
+			        <!-- <if test="isDeal!=null">
+			             AND PPOI.IS_DEAL = #{isDeal}
+			        </if> -->
+			        <if test="isDeal!=null">
+						AND (
+						<trim prefixOverrides="OR">
+							<if test='isDeal.indexOf("Y") != -1'>
+								OR PPOI.IS_DEAL = 'Y'
+							</if>
+							<if test='isDeal.indexOf("N") != -1'>
+								OR (PPOI.IS_DEAL = 'N' and PPOI.CONTROL_FLAG=0)
+							</if>
+							<if test='isDeal.indexOf("A") != -1'>
+								OR (PPOI.IS_DEAL = 'N' and PPOI.CONTROL_FLAG in (1,2) and nvl(PPOI.SENDOUT_QTY,0) <![CDATA[<]]> nvl(PPOI.ORDER_QTY,0))
+							</if>
+						</trim>
+						)
+					</if>
+			        <if test="isExport!=null">
+			        	<if test="isExport==0">
+			        		AND (NODELOAD.IS_EXPORT = 'N' or NODELOAD.IS_EXPORT is null)
+			        	</if>
+			        	<if test="isExport==1">
+			        		AND NODELOAD.IS_EXPORT = 'Y'
+			        	</if>
+			             <!-- AND NODELOAD.IS_EXPORT = #{isExport} -->
+			        </if>
+			</where>
+			ORDER BY PPOI.IS_DEAL ASC,
+					 PPOI.BOOK_TITLE ASC
+	</select>
+	
+	<select id="queryPendingOrderItemsByPage_count" resultType="java.lang.Integer" parameterType="ProPurOrderItemsBacktoCondition">
+		SELECT 
+	       	count(1)
+		  	FROM PRO_PUR_ORDER_ITEMS PPOI
+		  	LEFT JOIN PRO_RESPONSE_ITEMS PRI
+			    ON PPOI.ID = PRI.PRO_PUR_ORDER_ITEMS_ID
+			    AND PRI.RESPONSE_STATUS = 5 AND pri.IS_VALID = 'Y'
+			LEFT JOIN PRO_RESPONSE_ITEMS PRIZC
+	    		ON PPOI.ID = PRIZC.PRO_PUR_ORDER_ITEMS_ID  
+	    		AND PRIZC.RESPONSE_STATUS = 0
+		     LEFT JOIN NODE_USER_DATA_REL NODELOAD
+	                   ON TO_CHAR(PPOI.ID) = NODELOAD.DATA_ID
+	                  AND NODELOAD.NODE_BSN_TP_CD = 'HGFH'
+	                  AND NODELOAD.DATA_TYPE ='ORDER'
+		  	<where>
+		  		 PPOI.status not in (0,5,50) 
+		  		and	NVL(PRI.ID,0) = NVL((SELECT MAX(PS.ID) ID
+	               		FROM PRO_RESPONSE_ITEMS PS
+	                	<where>
+	                		PS.PRO_PUR_ORDER_ITEMS_ID = PPOI.ID
+	                		and PS.RESPONSE_STATUS = 5
+	                		AND PS.IS_VALID = 'Y'
+				            <if test="purchaseOrderCode!=null">
+				               	AND PS.PURCHASE_ORDER_CODE = #{purchaseOrderCode}
+				            </if>
+				            <!-- <if test="purchaserId!=null">
+				               	AND PS.PURCHASER_ID = #{purchaserId}
+				            </if> -->
+			     		</where>),0)
+			     		
+			        <if test="purchaseOrderCode!=null">
+			             AND PPOI.PURCHASE_ORDER_CODE = #{purchaseOrderCode}
+			        </if>
+			        <if test="purchaserId!=null">
+			             AND PPOI.PURCHASER_ID = #{purchaserId}
+			        </if>
+			        <!-- <if test="isDeal!=null">
+			             AND PPOI.IS_DEAL = #{isDeal}
+			        </if> -->
+			        <if test="isDeal!=null">
+						AND (
+						<trim prefixOverrides="OR">
+							<if test='isDeal.indexOf("Y") != -1'>
+								OR PPOI.IS_DEAL = 'Y'
+							</if>
+							<if test='isDeal.indexOf("N") != -1'>
+								OR (PPOI.IS_DEAL = 'N' and PPOI.CONTROL_FLAG=0)
+							</if>
+							<if test='isDeal.indexOf("A") != -1'>
+								OR (PPOI.IS_DEAL = 'N' and PPOI.CONTROL_FLAG in (1,2) and nvl(PPOI.SENDOUT_QTY,0) <![CDATA[<]]> nvl(PPOI.ORDER_QTY,0))
+							</if>
+						</trim>
+						)
+					</if>
+			        <if test="isExport!=null">
+			        	<if test="isExport==0">
+			        		AND (NODELOAD.IS_EXPORT = 'N' or NODELOAD.IS_EXPORT is null)
+			        	</if>
+			        	<if test="isExport==1">
+			        		AND NODELOAD.IS_EXPORT = 'Y'
+			        	</if>
+			        </if>
+			</where>
+	</select>
+	<!--  根据订单细目id查询订单细目信息 added by luohoudong -->
+	<select id="getProPurOrderItemsBacktoById" parameterType="Long" resultMap="ProPurOrderItemsBacktoResult">
+		select 
+			     PI.ID,
+				 PI.YUNHAN_ORDER_CODE,
+				 PI.PURCHASE_ORDER_CODE,
+				 PI.ROW_UNIQUE_NO,
+				 PI.ORDER_TERM_NO,
+				 PI.YUNHAN_ID,
+				 PI.PURCHASER_COMMODITIES_ID,
+				 PI.SUPPLIER_ID,
+				 PI.PURCHASER_ID,
+				 PI.ISBN,
+				 PI.BOOK_TITLE,
+				 PI.PRICE,
+				 PI.MARKETING_CATEGORIES,
+				 PI.DISCOUNTRATE,
+				 PI.ORDER_QTY,
+				 PI.SALE_PRICE,
+				 PI.REALITY_SALE_PRICE,
+				 PI.SEND_SCHEME,
+				 PI.STATUS,
+				 PI.REMARK,
+				 PI.ADD_DATE,
+				 PI.SEND_DATE,
+				 PI.IS_IMPORTENT,
+				 PI.IS_VALID,
+				 PI.URGENT_FLAG,
+				 PI.IS_VIEW,
+				 PI.ADD_USER_CODE,
+				 PI.ADD_TIME,
+				 PI.UPDATE_USER_CODE,
+				 PI.UPDATE_TIME,
+				 PI.SENDOUT_GOODS_CODE,
+				 nvl(PI.SENDOUT_QTY,0) as SENDOUT_QTY,
+				 PI.SENDOUT_DATE,
+				 PI.IS_EXPORT,
+				 PI.SOURCE_TYPE,
+				 PI.CLOSE_REASON,
+				 PI.RECEIVE_QTY,
+				 PI.RECEIVE_DATE,
+				 PI.SUPPLIER_COMMODITIES_ID,
+				 PI.SUBSCRIPTION_CODE,
+				 PI.WAREHOUSE,
+				 PI.NOT_SENDOUT_QTY,
+				 PI.CLOSE_STATUS,
+				 PI.SERIES_TITLE,
+				 PI.AFFILIATE_SERIES,
+				 PI.AUTHOR_EDITOR,
+				 PI.PUBLISHER,
+				 PI.VERSION_NO,
+				 PI.IMPRESSION,
+				 PI.PAPERBACK,
+				 PI.SALES_PRICES,
+				 PI.CLOSE_COUNTER,
+				 PI.CONTROL_FLAG,
+				 PI.IS_SUIT_BOOK,
+				 PI.IS_DEAL,
+				 PS.ORDER_TYPE
+	       from PRO_PUR_ORDER_ITEMS PI
+	       join PRO_PUR_ORDER_SUMMARY PS 
+	       on PI.PURCHASE_ORDER_CODE=PS.PURCHASE_ORDER_CODE
+	       	AND PI.PURCHASER_ID=PS.PURCHASER_ID
+    		AND PI.SUPPLIER_ID=PS.SUPPLIER_ID
+	      	<where>
+	      		PI.id = #{id}
+	      	</where>
+	</select>
+	
+	<update id="updateOrderItemsForCloseSend" parameterType="java.util.Map">
+		UPDATE PRO_PUR_ORDER_ITEMS SET
+			IS_VALID = 'X',
+			<!-- CLOSE_STATUS = '10', -->
+			<!-- IS_DEAL='Y', -->
+			CLOSE_REASON=#{closeReason}
+		WHERE ID in
+			<foreach collection="orderItemIds" separator="," item="id"
+				open="(" close=")">
+				#{id}
+			</foreach>
+	</update>
+	<update id="updateOrderItemsForOpenSend" parameterType="java.util.Map">
+		UPDATE PRO_PUR_ORDER_ITEMS SET
+			IS_VALID = 'Y',
+			<!-- CLOSE_STATUS = '10', -->
+			<!-- IS_DEAL='Y', -->
+			CLOSE_REASON=#{closeReason}
+		WHERE ID in
+			<foreach collection="orderItemIds" separator="," item="id"
+				open="(" close=")">
+				#{id}
+			</foreach>
+	</update>
+	
+	<!-- 更新订单细目信息 added by luohoudng -->
+	<update id="updateOrderItems" parameterType="ProPurOrderItemsBacktoDO">
+		UPDATE PRO_PUR_ORDER_ITEMS SET
+			IS_VALID = #{isValid},
+			CLOSE_REASON=#{closeReason}
+		WHERE ID = #{id}
+	</update>
+	
+	<select id="getProPurOrderItemsBacktoDOs" resultMap="ProPurOrderItemsBacktoResult" parameterType="ProPurOrderItemsBacktoCondition">
+		SELECT PPOI.ID,
+	       PPOI.YUNHAN_ORDER_CODE,
+	       PPOI.PURCHASE_ORDER_CODE,
+	       PPOI.ROW_UNIQUE_NO,
+	       PPOI.ORDER_TERM_NO,
+	       PPOI.YUNHAN_ID,
+	       PPOI.PURCHASER_COMMODITIES_ID,
+	       PPOI.SUPPLIER_ID,
+	       PPOI.PURCHASER_ID,
+	       PPOI.ISBN,
+	       PPOI.BOOK_TITLE,
+	       PPOI.PRICE,
+	       PPOI.MARKETING_CATEGORIES,
+	       PPOI.DISCOUNTRATE,
+	       PPOI.ORDER_QTY,
+	       PPOI.STATUS,
+	       PPOI.IS_IMPORTENT,
+	       PPOI.IS_VALID,
+	       PPOI.URGENT_FLAG,
+	       PPOI.SENDOUT_QTY,
+	       PPOI.IS_EXPORT,
+	       PPOI.CLOSE_REASON,
+	       PPOI.RECEIVE_QTY,
+	       PPOI.SUPPLIER_COMMODITIES_ID,
+	       PPOI.WAREHOUSE,
+	       PPOI.CLOSE_STATUS,
+	       PPOI.SERIES_TITLE,
+	       PPOI.AFFILIATE_SERIES,
+	       PPOI.AUTHOR_EDITOR,
+	       PPOI.PUBLISHER,
+	       PPOI.VERSION_NO,
+	       PPOI.IMPRESSION,
+	       PPOI.PAPERBACK,
+	       PPOI.CONTROL_FLAG,
+	       PPOI.IS_SUIT_BOOK,
+	       PPOI.IS_DEAL
+		 FROM PRO_PUR_ORDER_ITEMS PPOI 
+		<where>
+			PPOI.PURCHASE_ORDER_CODE=#{purchaseOrderCode}
+			AND PPOI.PURCHASER_ID = #{purchaserId}
+		</where>	
+	</select>
+	
+	
+	<!--  根据采购订单号,订单类型、采购商id,供应商id查询管配的订单细 -->
+	<select id="findProPurOrderItemsBacktoDOs" resultMap="ProPurOrderItemsBacktoResult" parameterType="ProPurOrderSummaryBacktoCondition">
+		select 
+			     PI.ID,
+				 PI.YUNHAN_ORDER_CODE,
+				 PI.PURCHASE_ORDER_CODE,
+				 PI.ROW_UNIQUE_NO,
+				 PI.ORDER_TERM_NO,
+				 PI.YUNHAN_ID,
+				 PI.PURCHASER_COMMODITIES_ID,
+				 PI.SUPPLIER_ID,
+				 PI.PURCHASER_ID,
+				 PI.ISBN,
+				 PI.BOOK_TITLE,
+				 PI.PRICE,
+				 PI.MARKETING_CATEGORIES,
+				 PI.DISCOUNTRATE,
+				 PI.ORDER_QTY,
+				 PI.SALE_PRICE,
+				 PI.REALITY_SALE_PRICE,
+				 PI.SEND_SCHEME,
+				 PI.STATUS,
+				 PI.REMARK,
+				 PI.ADD_DATE,
+				 PI.SEND_DATE,
+				 PI.IS_IMPORTENT,
+				 PI.IS_VALID,
+				 PI.URGENT_FLAG,
+				 PI.IS_VIEW,
+				 PI.ADD_USER_CODE,
+				 PI.ADD_TIME,
+				 PI.UPDATE_USER_CODE,
+				 PI.UPDATE_TIME,
+				 PI.SENDOUT_GOODS_CODE,
+				 nvl(PI.SENDOUT_QTY,0) as SENDOUT_QTY,
+				 PI.SENDOUT_DATE,
+				 PI.IS_EXPORT,
+				 PI.SOURCE_TYPE,
+				 PI.CLOSE_REASON,
+				 PI.RECEIVE_QTY,
+				 PI.RECEIVE_DATE,
+				 PI.SUPPLIER_COMMODITIES_ID,
+				 PI.SUBSCRIPTION_CODE,
+				 PI.WAREHOUSE,
+				 PI.NOT_SENDOUT_QTY,
+				 PI.CLOSE_STATUS,
+				 PI.SERIES_TITLE,
+				 PI.AFFILIATE_SERIES,
+				 PI.AUTHOR_EDITOR,
+				 PI.PUBLISHER,
+				 PI.VERSION_NO,
+				 PI.IMPRESSION,
+				 PI.PAPERBACK,
+				 PI.SALES_PRICES,
+				 PI.CLOSE_COUNTER,
+				 PI.CONTROL_FLAG,
+				 PI.IS_SUIT_BOOK,
+				 PI.IS_DEAL,
+				 PS.ORDER_TYPE
+	       from PRO_PUR_ORDER_ITEMS PI
+	       join PRO_PUR_ORDER_SUMMARY PS 
+	       on PI.PURCHASE_ORDER_CODE=PS.PURCHASE_ORDER_CODE
+		<where>
+			PS.ORDER_TYPE IN 
+			<foreach collection="orderTypes"  separator="," item="orderType" open="(" close=")  ">
+	     		${orderType}
+			</foreach>
+			AND PI.PURCHASE_ORDER_CODE IN 
+           	<foreach collection="purchaserOrderCodes"  separator="," item="purchaserOrderCode" open="(" close=")  ">
+	     		'${purchaserOrderCode}'
+			</foreach>
+			AND PI.PURCHASER_ID = #{purchaserId}
+			AND PI.SUPPLIER_ID = #{supplierId}
+		</where>	
+	</select>
+	
+	
+	<select id="findItemById" resultMap="ProPurOrderItemsBacktoResult"  parameterType="ProPurOrderItemsBacktoCondition">
+		SELECT  PPOI.ID,
+	       PPOI.YUNHAN_ORDER_CODE,
+	       PPOI.PURCHASE_ORDER_CODE,
+	       PPOI.ROW_UNIQUE_NO,
+	       PPOI.ORDER_TERM_NO,
+	       PPOI.YUNHAN_ID,
+	       PPOI.PURCHASER_COMMODITIES_ID,
+	       PPOI.SUPPLIER_ID,
+	       PPOI.PURCHASER_ID,
+	       PPOI.ISBN,
+	       PPOI.BOOK_TITLE,
+	       PPOI.PRICE,
+	       PPOI.MARKETING_CATEGORIES,
+	       PPOI.DISCOUNTRATE,
+	       nvl(PPOI.ORDER_QTY,0) as ORDER_QTY,
+	       PPOI.STATUS,
+	       PPOI.IS_IMPORTENT,
+	       PPOI.IS_VALID,
+	       PPOI.URGENT_FLAG,
+	       nvl(PPOI.SENDOUT_QTY,0) as SENDOUT_QTY,
+	       PPOI.IS_EXPORT,
+	       PPOI.CLOSE_REASON,
+	       PPOI.RECEIVE_QTY,
+	       PPOI.SUPPLIER_COMMODITIES_ID,
+	       PPOI.WAREHOUSE,
+	       PPOI.CLOSE_STATUS,
+	       PPOI.SERIES_TITLE,
+	       PPOI.AFFILIATE_SERIES,
+	       PPOI.AUTHOR_EDITOR,
+	       PPOI.PUBLISHER,
+	       PPOI.VERSION_NO,
+	       PPOI.IMPRESSION,
+	       PPOI.PAPERBACK,
+	       PPOI.CONTROL_FLAG,
+	       PPOI.IS_SUIT_BOOK,
+	       PPOI.IS_DEAL
+		FROM 
+			PRO_PUR_ORDER_ITEMS PPOI 
+		         where PPOI.id = #{id}
+	</select> 
+	
+	
+	
+	<!-- 下面五个SQL用于接口调用  -->
+	
+	<!-- 根据 发货单 供应商商商品ID 查询订单细目  用于接口使用   add by yangtao 2016-4-28-->
+	<select id = "findOrderIdbySendout_scmid" parameterType="ProPurOrderItemsBacktoCondition"  resultMap="ProPurOrderItemsBacktoResult">
+		select  p.*  from pro_pur_order_items p
+			left join  masterdata_markeinfo m on p.purchaser_commodities_id = m.purchasercommoditiesid 
+			and p.PURCHASER_ID = m.purchaserid
+      		and p.SUPPLIER_ID = m.supplierid
+			<where>
+					 m.suppliercommoditiesid  = #{supplierCommoditiesId}
+					 <if test="purchaserId !=null">
+		       			AND p.PURCHASER_ID = #{purchaserId}
+		    		</if>
+		    		<if test="supplierId!=null">
+						and p.SUPPLIER_ID =#{supplierId}
+					</if>
+					<if test="purchaseOrderCode!=null">
+						and p.PURCHASE_ORDER_CODE =#{purchaseOrderCode}
+					</if>
+			</where>
+			order by p.add_date desc
+	</select>
+	
+	<!-- 根据 订单 供应商商商品ID 查询订单细目  用于接口使用   add by yangtao 2016-4-28-->
+	<select id = "findOrderIdbySendout_ppoid" parameterType="ProPurOrderItemsBacktoCondition"  resultMap="ProPurOrderItemsBacktoResult">
+		select p.* from pro_pur_order_items p
+			<where>
+					 p.supplier_commodities_id  = #{supplierCommoditiesId}
+					 <if test="purchaserId !=null">
+		       			AND p.PURCHASER_ID = #{purchaserId}
+		    		</if>
+		    		<if test="supplierId!=null">
+						and p.SUPPLIER_ID =#{supplierId}
+					</if>
+					<if test="purchaseOrderCode!=null">
+						and p.PURCHASE_ORDER_CODE =#{purchaseOrderCode}
+					</if>
+			</where>
+			order by p.add_date desc
+	</select>
+	
+	<!-- 根据 订单ISBN+定价方式 查询订单细目  用于接口使用   add by yangtao 2016-4-28-->
+	<select id = "findOrderIdbySendout_isbn_price" parameterType="ProPurOrderItemsBacktoCondition"  resultMap="ProPurOrderItemsBacktoResult">
+		select 
+			p.*
+		  from pro_pur_order_items p
+			<where>
+				<if  test="isbn!=null">
+					and p.ISBN = #{isbn}
+				</if>
+				<if test="price != null">
+					and p.PRICE = #{price}
+				</if>
+				<if test="purchaserId !=null">
+		       		AND p.PURCHASER_ID = #{purchaserId}
+		    	</if>
+		    	<if test="supplierId!=null">
+					and p.SUPPLIER_ID =#{supplierId}
+				</if>
+				<if test="purchaseOrderCode!=null">
+					and p.PURCHASE_ORDER_CODE =#{purchaseOrderCode}
+				</if>
+			</where>
+			order by p.ADD_DATE desc
+	</select>
+	
+	<!-- 根据 订单ISBN 书名 定价 查询订单细目  用于接口使用   add by yangtao 2016-4-28-->
+	<select id = "findOrderIdbySendout_isbn" parameterType="ProPurOrderItemsBacktoCondition"  resultMap="ProPurOrderItemsBacktoResult">
+		select p.*
+				FROM pro_pur_order_items p
+			<where>
+				<if test="isbn != null">
+					and p.isbn = #{isbn}
+				</if>
+				<if test="price != null">
+					and p.price = #{price}
+				</if>
+				<if test="bookTitle != null">
+					and p.book_title = #{bookTitle}
+				</if>
+				<if test="purchaserId !=null">
+		       		AND p.PURCHASER_ID = #{purchaserId}
+		    	</if>
+		    	<if test="supplierId!=null">
+					and p.SUPPLIER_ID =#{supplierId}
+				</if>
+				<if test="purchaseOrderCode!=null">
+					and p.PURCHASE_ORDER_CODE =#{purchaseOrderCode}
+				</if>
+			</where>
+			order by p.ADD_DATE desc
+	</select>
+	
+	
+	<!-- 根据 订单ISBN 书名 定价 查询订单细目  用于接口使用  （集团公司方式如：上海世纪）  add by wangtao 2016年5月13日13:29:47-->
+	<select id = "findOrderIdbySendout_jtgs_isbn_book_pice" parameterType="ProPurOrderItemsBacktoCondition"  resultMap="ProPurOrderItemsBacktoResult">
+		select p.*
+				FROM pro_pur_order_items p
+			<where>
+				<if test="isbn != null">
+					and p.isbn = #{isbn}
+				</if>
+				<if test="price != null">
+					and p.price = #{price}
+				</if>
+				<if test="bookTitle != null">
+					and trim(p.book_title) = trim(#{bookTitle})
+				</if>
+				<if test="purchaserId !=null">
+		       		AND p.PURCHASER_ID = #{purchaserId}
+		    	</if>
+				and p.SUPPLIER_ID in (
+					select t.sapvendorid from t_department t
+					where t.levele = 2  
+					start with  t.sd_self_id = #{supplierId}<!-- 'SJCB' -->  
+					connect by prior  t.id =t.parent_id
+				)
+				<if test="purchaseOrderCode!=null">
+					and p.PURCHASE_ORDER_CODE =#{purchaseOrderCode}
+				</if>
+			</where>
+			order by p.ADD_DATE desc
+	</select>
+	
+	
+	<!-- 接口调用四个接口 -->
+	
+	<select id="findItemByIds" resultMap="ProPurOrderItemsBacktoResult"  parameterType="ProPurOrderItemsBacktoCondition">
+		SELECT  PPOI.ID,
+	       PPOI.YUNHAN_ORDER_CODE,
+	       PPOI.PURCHASE_ORDER_CODE,
+	       PPOI.ROW_UNIQUE_NO,
+	       PPOI.ORDER_TERM_NO,
+	       PPOI.YUNHAN_ID,
+	       PPOI.PURCHASER_COMMODITIES_ID,
+	       PPOI.SUPPLIER_ID,
+	       PPOI.PURCHASER_ID,
+	       PPOI.ISBN,
+	       PPOI.BOOK_TITLE,
+	       PPOI.PRICE,
+	       PPOI.MARKETING_CATEGORIES,
+	       PPOI.DISCOUNTRATE,
+	       PPOI.ORDER_QTY,
+	       PPOI.STATUS,
+	       PPOI.IS_IMPORTENT,
+	       PPOI.IS_VALID,
+	       PPOI.URGENT_FLAG,
+	       PPOI.SENDOUT_QTY,
+	       PPOI.IS_EXPORT,
+	       PPOI.CLOSE_REASON,
+	       PPOI.RECEIVE_QTY,
+	       PPOI.SUPPLIER_COMMODITIES_ID,
+	       PPOI.WAREHOUSE,
+	       PPOI.CLOSE_STATUS,
+	       PPOI.SERIES_TITLE,
+	       PPOI.AFFILIATE_SERIES,
+	       PPOI.AUTHOR_EDITOR,
+	       PPOI.PUBLISHER,
+	       PPOI.VERSION_NO,
+	       PPOI.IMPRESSION,
+	       PPOI.PAPERBACK,
+	       PPOI.CONTROL_FLAG,
+	       PPOI.IS_SUIT_BOOK,
+	       PPOI.IS_DEAL
+		FROM 
+			PRO_PUR_ORDER_ITEMS PPOI 
+		         where PPOI.id in
+			<foreach collection="ids" separator="," item="id"
+				open="(" close=")">
+				#{id}
+			</foreach>
+	</select> 
+	
+	
+	
+	<!--  查询订单细目信息 -->
+	<select id="findProPurOrderItems" resultMap="ProPurOrderItemsBacktoResult" parameterType="ProPurOrderSummaryBacktoCondition">
+		select 
+			     PI.ID,
+				 PI.YUNHAN_ORDER_CODE,
+				 PI.PURCHASE_ORDER_CODE,
+				 PI.ROW_UNIQUE_NO,
+				 PI.ORDER_TERM_NO,
+				 PI.YUNHAN_ID,
+				 PI.PURCHASER_COMMODITIES_ID,
+				 PI.SUPPLIER_ID,
+				 PI.PURCHASER_ID,
+				 PI.ISBN,
+				 PI.BOOK_TITLE,
+				 PI.PRICE,
+				 PI.MARKETING_CATEGORIES,
+				 PI.DISCOUNTRATE,
+				 PI.ORDER_QTY,
+				 PI.SALE_PRICE,
+				 PI.REALITY_SALE_PRICE,
+				 PI.SEND_SCHEME,
+				 PI.STATUS,
+				 PI.REMARK,
+				 PI.ADD_DATE,
+				 PI.SEND_DATE,
+				 PI.IS_IMPORTENT,
+				 PI.IS_VALID,
+				 PI.URGENT_FLAG,
+				 PI.IS_VIEW,
+				 PI.ADD_USER_CODE,
+				 PI.ADD_TIME,
+				 PI.UPDATE_USER_CODE,
+				 PI.UPDATE_TIME,
+				 PI.SENDOUT_GOODS_CODE,
+				 nvl(PI.SENDOUT_QTY,0) as SENDOUT_QTY,
+				 PI.SENDOUT_DATE,
+				 PI.IS_EXPORT,
+				 PI.SOURCE_TYPE,
+				 PI.CLOSE_REASON,
+				 PI.RECEIVE_QTY,
+				 PI.RECEIVE_DATE,
+				 PI.SUPPLIER_COMMODITIES_ID,
+				 PI.SUBSCRIPTION_CODE,
+				 PI.NOT_SENDOUT_QTY,
+				 PI.CLOSE_STATUS,
+				 PI.SERIES_TITLE,
+				 PI.AFFILIATE_SERIES,
+				 PI.AUTHOR_EDITOR,
+				 PI.PUBLISHER,
+				 PI.VERSION_NO,
+				 PI.IMPRESSION,
+				 PI.PAPERBACK,
+				 PI.SALES_PRICES,
+				 PI.CLOSE_COUNTER,
+				 PI.CONTROL_FLAG,
+				 PI.IS_SUIT_BOOK,
+				 PI.IS_DEAL,
+				 PS.ORDER_TYPE,
+				 PS.WAREHOUSE,
+				 PS.SEND_GOODS_TYPE
+	       from PRO_PUR_ORDER_ITEMS PI
+	       join PRO_PUR_ORDER_SUMMARY PS 
+	       on PI.PURCHASE_ORDER_CODE=PS.PURCHASE_ORDER_CODE
+	        AND PI.PURCHASER_ID=PS.PURCHASER_ID
+    		AND PI.SUPPLIER_ID=PS.SUPPLIER_ID
+		<where>
+			 PI.id in
+			<foreach collection="ids" separator="," item="id"
+				open="(" close=")">
+				#{id}
+			</foreach>
+		</where>	
+	</select>
+	
+</mapper>
